@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Mini-Workshop Panel Data Analysis</title>
+  <meta name="description" content="Material für den Mini-Workshop Panel Data Analysis" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Mini-Workshop Panel Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Material für den Mini-Workshop Panel Data Analysis" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Mini-Workshop Panel Data Analysis" />
+  
+  <meta name="twitter:description" content="Material für den Mini-Workshop Panel Data Analysis" />
+  
+
+<meta name="author" content="Marko Bachl (mit Material von Michael Scharkow)" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="intro.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Panel Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Überblick</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#inhalt-des-virtuellen-mini-workshops"><i class="fa fa-check"></i><b>1.1</b> Inhalt des virtuellen Mini-Workshops</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#welche-inhalte-wir-nicht-behandeln"><i class="fa fa-check"></i><b>1.2</b> Welche Inhalte wir nicht behandeln</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#aufbau-des-workshops"><i class="fa fa-check"></i><b>1.3</b> Aufbau des Workshops</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#material"><i class="fa fa-check"></i><b>1.3.1</b> Material</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>2</b> Einführung</a></li>
+<li class="chapter" data-level="3" data-path="fixed-effects-models.html"><a href="fixed-effects-models.html"><i class="fa fa-check"></i><b>3</b> Fixed effects models</a></li>
+<li class="chapter" data-level="4" data-path="random-effects-models.html"><a href="random-effects-models.html"><i class="fa fa-check"></i><b>4</b> Random effects models</a></li>
+<li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
+<li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mini-Workshop Panel Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Mini-Workshop Panel Data Analysis</h1>
+<p class="author"><em>Marko Bachl (mit Material von Michael Scharkow)</em></p>
+<p class="date"><em>Sommersemester 2020 | IJK Hannover</em></p>
+</div>
+<div id="überblick" class="section level1">
+<h1><span class="header-section-number">Abschnitt 1</span> Überblick</h1>
+<div id="inhalt-des-virtuellen-mini-workshops" class="section level2">
+<h2><span class="header-section-number">1.1</span> Inhalt des virtuellen Mini-Workshops</h2>
+<ul>
+<li><p>Der Mini-Workshop bietet eine <em>pragmatische</em> Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf sogenannten <em>micro panels</em>, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).</p></li>
+<li><p>In der Analyse beschränken uns hier auf Varianten der <em>linearen</em> Regressionsmodelle. Wir beginnen mit den grundlgenden <em>fixed effects</em> und <em>random effects</em> Modellen. Dann betrachten wir das <em>within-between</em> Modell, das als eine Integration des <em>fixed effects</em> Modell in das <em>random effects</em> Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.</p></li>
+<li><p>Wir schätzen die Modelle mit etablierten <em>least-squares</em> und <em>maximum likelihood</em> Methoden. Gerade bei den <em>within-between</em> Modellen sind bayesianische Schätzmethoden, z.B. <em>MCMC sampling</em> (implementiert in <a href="https://mc-stan.org/">Stan</a>), unabhängig von den statistisch-philosophischen, sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.</p></li>
+<li><p>Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir <code>R</code> mit dem <code>tidyverse</code> und eine kleine Zahl speziallisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in <code>R</code>.</p></li>
+</ul>
+</div>
+<div id="welche-inhalte-wir-nicht-behandeln" class="section level2">
+<h2><span class="header-section-number">1.2</span> Welche Inhalte wir nicht behandeln</h2>
+<ul>
+<li><p>Der Workshop ist kein Statistik- oder Ökonometrie-Kurs. Ich bin — wie auch ihr — ausgebildeter Sozialwissenschaftler. Die statistischen Grundlagen, auf denen der Workshop aufbaut, geht aus den Grundlagentexten <span class="citation">(Bell and Jones <a href="#ref-bellExplainingFixedEffects2015">2015</a>; Vaisey and Miles <a href="#ref-vaiseyWhatYouCan2017">2017</a>)</span> hervor.</p></li>
+<li><p>Grundkentnisse in <code>R</code> setze ich voraus, insbesondere Datentransformationen innerhalb des <code>tidyverse</code>.</p></li>
+<li><p>Wir werden nicht viel Zeit auf die verschiedenen Schätzer, deren Effizienz und Bias, die verschiedenen Algorithmen und Datentransformationen verwenden.</p></li>
+<li><p>Wir werden keine Beweise oder Ableitungen besprechen. Wir setzen keine Kenntnisse in Matrixalgebra voraus — weder meiner- noch eurerseits.</p></li>
+<li><p>Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc.</p></li>
+</ul>
+</div>
+<div id="aufbau-des-workshops" class="section level2">
+<h2><span class="header-section-number">1.3</span> Aufbau des Workshops</h2>
+<ul>
+<li>Inhaltlicher Aufbau: Siehe Kapitel-Gliederung</li>
+</ul>
+<div id="material" class="section level3">
+<h3><span class="header-section-number">1.3.1</span> Material</h3>
+<ul>
+<li>Dieses Dokument + R Skripte: (Hoffentlich) mehr oder weniger selbsterklärendes Material
+<ul>
+<li>Kuratierte Form ist dieses HTML-Dokument</li>
+<li>Es gibt auch ein PDF, das ich aber nicht formatiert habe</li>
+</ul></li>
+<li><p>Screencast: Ich gehe über das Material und erkläre es auf der Audio-Spur. Mal sehen, wie hilfreich das ist. Die Screencasts stelle ich über das LMS zur Verfügung.</p></li>
+<li>Übungen: Zu einigen Analysen gibt es Übungsaufgaben.
+<ul>
+<li>Bei der <em>Wiederholung</em> geht es darum, die Modelle leicht zu verändern (durch Anpassen der <code>R</code>-Skripte aus dem Material) und die Ergebnisse der angepassten Modelle zu interpretieren.</li>
+<li>Bei der <em>Anwendung</em> geht es darum, in Anlehung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.</li>
+</ul></li>
+</ul>
+
+</div>
+</div>
+</div>
+<h3>Literatur</h3>
+<div id="refs" class="references">
+<div id="ref-bellExplainingFixedEffects2015">
+<p>Bell, Andrew, and Kelvyn Jones. 2015. “Explaining Fixed Effects: Random Effects Modeling of Time-Series Cross-Sectional and Panel Data.” <em>Political Science Research and Methods</em> 3 (1). Cambridge University Press: 133–53. <a href="https://doi.org/10.1017/psrm.2014.7">https://doi.org/10.1017/psrm.2014.7</a>.</p>
+</div>
+<div id="ref-vaiseyWhatYouCan2017">
+<p>Vaisey, Stephen, and Andrew Miles. 2017. “What You Canand Can’tDo with Three-Wave Panel Data.” <em>Sociological Methods &amp; Research</em> 46 (1): 44–67. <a href="https://doi.org/10.1177/0049124114547769">https://doi.org/10.1177/0049124114547769</a>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["workshop_panel.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
