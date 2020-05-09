@@ -45,11 +45,13 @@ knitr::write_bib(c(
 
 * Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc.
 
+* Fehlende Daten (Panelmortalität, Ausfall von Einheiten in einzelnen Wellen) sind ein großes Thema in der Längsschnittanalyse. Wir werden es hier ignorieren, bis auf den Hinweis, dass alle Fälle, die in mindestens zwei bzw. drei Wellen Daten haben, grundsätzlich Informationen zur Schätzung beitragen.
+
 ## Aufbau des Workshops
 
 * Inhaltlicher Aufbau: Siehe Kapitel-Gliederung
 
-### Material
+### Material {-}
 
 * Dieses Dokument + R Skripte: (Hoffentlich) mehr oder weniger selbsterklärendes Material
   * Kuratierte Form ist dieses HTML-Dokument
@@ -62,4 +64,15 @@ knitr::write_bib(c(
   * Bei der *Anwendung* geht es darum, in Anlehung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.
 
 
+### Pakete {-}
+
+Wir verwenden die folgenden Pakete
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/packages.R")
+```
+
+```{r packages, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
 
