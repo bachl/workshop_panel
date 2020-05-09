@@ -112,5 +112,4 @@ knitr::read_chunk("R/wrong_ols.R")
 * In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment $x$ schon höhere Werte in $y$ haben? _X Evtl. anpassen an Datenbeispiel X_
 * Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.
 
-### Pooled OLS, within und betwee - ein Beispiel {-}
-
+### Pooled OLS, within und between - eine Illustration {-}
