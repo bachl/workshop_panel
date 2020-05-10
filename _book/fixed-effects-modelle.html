@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Mini-Workshop Panel Data Analysis</title>
+  <title>Abschnitt 3 Fixed effects Modelle | Mini-Workshop Panel Data Analysis</title>
   <meta name="description" content="Material für den Mini-Workshop Panel Data Analysis" />
   <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Mini-Workshop Panel Data Analysis" />
+  <meta property="og:title" content="Abschnitt 3 Fixed effects Modelle | Mini-Workshop Panel Data Analysis" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Mini-Workshop Panel Data Analysis" />
+  <meta name="twitter:title" content="Abschnitt 3 Fixed effects Modelle | Mini-Workshop Panel Data Analysis" />
   
   <meta name="twitter:description" content="Material für den Mini-Workshop Panel Data Analysis" />
   
@@ -30,8 +30,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="einführung.html"/>
+<link rel="prev" href="einführung.html"/>
+<link rel="next" href="random-effects-models.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -163,128 +163,84 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Mini-Workshop Panel Data Analysis</h1>
-<p class="author"><em>Marko Bachl (mit Material von Michael Scharkow)</em></p>
-<p class="date"><em>Sommersemester 2020 | IJK Hannover</em></p>
-</div>
-<div id="überblick" class="section level1">
-<h1><span class="header-section-number">Abschnitt 1</span> Überblick</h1>
-<div id="inhalt-des-virtuellen-mini-workshops" class="section level2">
-<h2><span class="header-section-number">1.1</span> Inhalt des virtuellen Mini-Workshops</h2>
+<div id="fixed-effects-modelle" class="section level1">
+<h1><span class="header-section-number">Abschnitt 3</span> Fixed effects Modelle</h1>
+<div id="konzeptionelle-einführung" class="section level2">
+<h2><span class="header-section-number">3.1</span> Konzeptionelle Einführung</h2>
 <ul>
-<li><p>Der Mini-Workshop bietet eine <em>pragmatische</em> Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf sogenannten <em>micro panels</em>, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).</p></li>
-<li><p>In der Analyse beschränken uns hier auf Varianten der <em>linearen</em> Regressionsmodelle. Wir beginnen mit den grundlgenden <em>fixed effects</em> und <em>random effects</em> Modellen. Dann betrachten wir das <em>within-between</em> Modell, das als eine Integration des <em>fixed effects</em> Modell in das <em>random effects</em> Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.</p></li>
-<li><p>Wir schätzen die Modelle mit etablierten <em>least-squares</em> und <em>maximum likelihood</em> Methoden. Gerade bei den <em>within-between</em> Modellen sind bayesianische Schätzmethoden, z.B. <em>MCMC sampling</em> (implementiert in <a href="https://mc-stan.org/">Stan</a>), unabhängig von den statistisch-philosophischen, sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.</p></li>
-<li><p>Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir <code>R</code> mit dem <code>tidyverse</code> und eine kleine Zahl speziallisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in <code>R</code>.</p></li>
+<li>Im ersten Teil des Abschnitts zu <em>fixed effects</em> Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir die bekannte Funktion <code>stats::lm()</code> (übliche OLS-Schätzung linearer Modelle in R).</li>
 </ul>
-</div>
-<div id="welche-inhalte-wir-nicht-behandeln" class="section level2">
-<h2><span class="header-section-number">1.2</span> Welche Inhalte wir nicht behandeln</h2>
+<div id="wie-können-wir-den-kauselen-within-person-effekt-mit-paneldaten-schätzen" class="section level3 unnumbered">
+<h3>Wie können wir den kauselen (within-person) Effekt mit Paneldaten schätzen?</h3>
+<ol style="list-style-type: decimal">
+<li>Separate OLS Modelle für jede Person schätzen und Koeffizeinten mitteln (no pooling).</li>
+<li>Alle <span class="math inline">\(X\)</span> und <span class="math inline">\(Y\)</span> Variablen um die Mittelwerte der Person zentrieren (within transformation).</li>
+<li>Dummy-Variablen für jede Person in das Regressionsmodell aufnehmen (least squares dummy variables [LSDV] estimation).</li>
+</ol>
 <ul>
-<li><p>Der Workshop ist kein Statistik- oder Ökonometrie-Kurs. Ich bin — wie auch ihr — ausgebildeter Sozialwissenschaftler. Die statistischen Grundlagen, auf denen der Workshop aufbaut, gehen aus den Grundlagentexten <span class="citation">(Bell and Jones <a href="#ref-bellExplainingFixedEffects2015">2015</a>; Vaisey and Miles <a href="#ref-vaiseyWhatYouCan2017">2017</a>)</span> hervor.</p></li>
-<li><p>Grundkentnisse in <code>R</code> setze ich voraus, insbesondere Datentransformationen innerhalb des <code>tidyverse</code>. Wir werden aber keine komplizierten Dinge in <code>R</code> tun. Auch ohne weiterführende <code>R</code>-Kenntnisse sollten die Inhalte des Workshops in Bezug auf die datenanalystischen Verfahren klar werden.</p></li>
-<li><p>Wir werden nicht viel Zeit auf die verschiedenen Schätzer, deren Effizienz und Bias, die verschiedenen Algorithmen und Datentransformationen verwenden.</p></li>
-<li><p>Wir werden keine Beweise oder Ableitungen besprechen. Wir setzen keine Kenntnisse in Matrixalgebra voraus — weder meiner- noch eurerseits.</p></li>
-<li><p>Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc.</p></li>
-<li><p>Fehlende Daten (Panelmortalität, Ausfall von Einheiten in einzelnen Wellen) sind ein großes Thema in der Längsschnittanalyse. Wir werden es hier ignorieren, bis auf den Hinweis, dass alle Fälle, die in mindestens zwei bzw. drei Wellen Daten haben, grundsätzlich Informationen zur Schätzung beitragen.</p></li>
-</ul>
-</div>
-<div id="aufbau-des-workshops" class="section level2">
-<h2><span class="header-section-number">1.3</span> Aufbau des Workshops</h2>
+<li>Alle drei Varianten entfernen die (beobachteten und nicht beobachten,) über die Zeit konstanten Unterschiede zwischen den Personen.</li>
+<li>Varianten 2 und 3 entsprechen dem klassischen <em>fixed effects</em> Modell. Die Unterschiede zwischen den Personen werden kontrolliert, indem die personenspezifischen Mittelwerte vor der Schätzung entfernt werden (2) oder für jede Person im Modell geschätzt werden (3).
 <ul>
-<li>Inhaltlicher Aufbau: Siehe Kapitel-Gliederung</li>
-</ul>
-<div id="material" class="section level3 unnumbered">
-<h3>Material</h3>
-<ul>
-<li>Dieses Dokument + R Skripte: (Hoffentlich) mehr oder weniger selbsterklärendes Material
-<ul>
-<li>Kuratierte Form ist dieses HTML-Dokument</li>
-<li>Es gibt auch ein PDF, das ich aber nicht formatiert habe</li>
+<li><span class="math inline">\(y_{it} = \beta&#39; x_{it}&#39; + \alpha_i + u_{it}\)</span> or <span class="math inline">\(y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})&#39;\beta + (u_{it} - \bar{u_{i}})\)</span></li>
 </ul></li>
-<li><p>Screencast: Ich gehe über das Material und erkläre es auf der Audio-Spur. Mal sehen, wie hilfreich das ist. Die Screencasts stelle ich über das LMS zur Verfügung.</p></li>
-<li>Übungen: Zu einigen Analysen gibt es Übungsaufgaben.
+<li>In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme homogener Treatment-Effekte (entspricht der typischen Annahme im randomisierten Between-Subject-Experiment) entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
 <ul>
-<li>Bei der <em>Wiederholung</em> geht es darum, die Modelle leicht zu verändern (durch Anpassen der <code>R</code>-Skripte aus dem Material) und die Ergebnisse der angepassten Modelle zu interpretieren.</li>
-<li>Bei der <em>Anwendung</em> geht es darum, in Anlehung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.</li>
+<li>Der Schätzer ist aber weniger effizient, da zufällige Unterschiede in den Effekten zwischen den Personen aufgegriffen werden.</li>
+<li>Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.</li>
 </ul></li>
 </ul>
-</div>
-<div id="pakete" class="section level3 unnumbered">
-<h3>Pakete</h3>
-<p>Wir verwenden die folgenden Pakete</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse)</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())  <span class="co"># ggplot theme</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">tibble</span>(<span class="dt">package =</span> <span class="kw">c</span>(<span class="st">&quot;R&quot;</span>, <span class="kw">sort</span>(pacman<span class="op">::</span><span class="kw">p_loaded</span>()))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">version =</span> <span class="kw">map_chr</span>(package, </a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="op">~</span><span class="kw">as.character</span>(pacman<span class="op">::</span><span class="kw">p_version</span>(<span class="dt">package =</span> .x)))) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
-<table>
-<thead>
-<tr class="header">
-<th align="left">package</th>
-<th align="left">version</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">R</td>
-<td align="left">3.6.2</td>
-</tr>
-<tr class="even">
-<td align="left">dplyr</td>
-<td align="left">0.8.4</td>
-</tr>
-<tr class="odd">
-<td align="left">forcats</td>
-<td align="left">0.4.0</td>
-</tr>
-<tr class="even">
-<td align="left">ggplot2</td>
-<td align="left">3.2.1</td>
-</tr>
-<tr class="odd">
-<td align="left">pacman</td>
-<td align="left">0.5.1</td>
-</tr>
-<tr class="even">
-<td align="left">purrr</td>
-<td align="left">0.3.3</td>
-</tr>
-<tr class="odd">
-<td align="left">readr</td>
-<td align="left">1.3.1</td>
-</tr>
-<tr class="even">
-<td align="left">stringr</td>
-<td align="left">1.4.0</td>
-</tr>
-<tr class="odd">
-<td align="left">tibble</td>
-<td align="left">2.1.3</td>
-</tr>
-<tr class="even">
-<td align="left">tidyr</td>
-<td align="left">1.0.2</td>
-</tr>
-<tr class="odd">
-<td align="left">tidyverse</td>
-<td align="left">1.3.0</td>
-</tr>
-</tbody>
-</table>
+<!-- ## No pooling  -->
+<!-- ```{r, echo =T} -->
+<!-- nopool = wage10 %>% group_by(nr) %>% do(lm(lwage~union,.) %>%  -->
+<!--                     tidy %>% filter(term=="union"))  -->
+<!-- nopool %>% mutate_each(funs(round(.,2)),-term) -->
+<!-- ``` -->
+<!-- ## Regression using within transformation -->
+<!-- ```{r, echo = T} -->
+<!-- wage10 = wage10 %>% group_by(nr) %>% mutate(union_within = union - mean(union), lwage_within = lwage - mean(lwage)) %>% ungroup -->
+<!-- wage10 %>% select(contains("lwage"), contains("union")) %>% summary -->
+<!-- ``` -->
+<!-- ```{r, echo = T} -->
+<!-- within = lm(lwage_within ~ union_within, data = wage10 )  -->
+<!-- summary(within)$coef %>% round(2) %>% head -->
+<!-- ``` -->
+<!-- This has an intuitive interpretation: deviations from the person-average in $X$ predict deviations from the person-average in $Y$. -->
+<!-- ## Least Squares with Dummy Variables (LSDV) -->
+<!-- ```{r, echo = T} -->
+<!-- lsdv = lm(lwage ~ union + factor(nr), data = wage10) -->
+<!-- summary(lsdv)$coef %>% round(2) %>% head(5) -->
+<!-- ``` -->
+<!-- ## What approach to use? -->
+<!-- 1. Both the LSDV and within-transformed regression yield the same estimates. -->
+<!-- 2. The standard errors for the within-transformed model need to be adjusted for the fact that we are substracting estimates (means). They are too small. -->
+<!-- 3. Practically, the LSDV approach is simpler to implement, but can be slow (and produce a lot of output) in large samples. -->
+<!-- 4. Overall, a large group of scholars (but not all) agree that the FE model is the best way to estimate causal effects from non-experimental data. -->
+<!-- Regardless of approach, all the assumptions of OLS still apply, e.g. you can still have omitted variable bias (only time-varying confounders), heteroskedasticity, etc.  -->
+<!-- ## Multiple fixed effects - time -->
+<!-- * In panel data, heterogeneity can also stem from time-varying variables that are constant across individuals, e.g. specific time points (months, years, specific events, etc.). -->
+<!-- * In order to account for these effects, it is reasonable to include fixed effects for periods or trends. -->
+<!-- * A simple approach is to use time or period dummy variables into the model. -->
+<!-- * @br recommends to **always** include period fixed effects in a FE panel model. -->
+<!-- ## Person and period fixed effects -->
+<!-- ```{r, echo = T} -->
+<!-- lsdv2 = lm(lwage ~ union + factor(nr) + factor(year), data = wage10) -->
+<!-- summary(lsdv2)$coef %>% tidy %>% .[c(1:4, 22:24),] %>% mutate_each(funs(round(., 2)), -`.rownames`) -->
+<!-- ``` -->
+<!-- ## Checking assumptions  -->
+<!-- Visually check regression assumptions using the `sjPlot` package [@R-sjPlot]. -->
+<!-- ```{r, results = "hide", fig.keep='none'} -->
+<!-- p <- sjp.lm(lsdv2, type = "ma") -->
+<!-- ``` -->
+<!-- ```{r, fig.height=5, fig.width=10, echo = F} -->
+<!-- x = plot_grid(p$plot.list) -->
+<!-- ``` -->
+<!-- ## Exercise: FE models using OLS -->
+<!-- 1. Estimate the effect of union membership on an individual's hourly wage. -->
+<!-- 2. Is there a marriage premium on hourly wages? -->
+<!-- 3. How does the within-person effect of marriage compare to the pooled OLS effect? -->
+<!-- 4. Bonus: For either of the two $X$ predictors mentioned above, estimate separate within and between models. -->
 
 </div>
-</div>
-</div>
-<h3>Literatur</h3>
-<div id="refs" class="references">
-<div id="ref-bellExplainingFixedEffects2015">
-<p>Bell, Andrew, and Kelvyn Jones. 2015. “Explaining Fixed Effects: Random Effects Modeling of Time-Series Cross-Sectional and Panel Data.” <em>Political Science Research and Methods</em> 3 (1). Cambridge University Press: 133–53. <a href="https://doi.org/10.1017/psrm.2014.7">https://doi.org/10.1017/psrm.2014.7</a>.</p>
-</div>
-<div id="ref-vaiseyWhatYouCan2017">
-<p>Vaisey, Stephen, and Andrew Miles. 2017. “What You Canand Can’tDo with Three-Wave Panel Data.” <em>Sociological Methods &amp; Research</em> 46 (1): 44–67. <a href="https://doi.org/10.1177/0049124114547769">https://doi.org/10.1177/0049124114547769</a>.</p>
 </div>
 </div>
             </section>
@@ -292,8 +248,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-
-<a href="einführung.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="einführung.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="random-effects-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

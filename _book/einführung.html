@@ -31,7 +31,7 @@
   
   
 <link rel="prev" href="index.html"/>
-<link rel="next" href="fixed-effects-models.html"/>
+<link rel="next" href="fixed-effects-modelle.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -140,7 +140,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.2" data-path="einführung.html"><a href="einführung.html#beispiel-daten"><i class="fa fa-check"></i><b>2.2</b> Beispiel-Daten</a></li>
 <li class="chapter" data-level="2.3" data-path="einführung.html"><a href="einführung.html#pooled-ols-wrong"><i class="fa fa-check"></i><b>2.3</b> Pooled OLS (WRONG!)</a></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="fixed-effects-models.html"><a href="fixed-effects-models.html"><i class="fa fa-check"></i><b>3</b> Fixed effects models</a></li>
+<li class="chapter" data-level="3" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html"><i class="fa fa-check"></i><b>3</b> Fixed effects Modelle</a><ul>
+<li class="chapter" data-level="3.1" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#konzeptionelle-einführung"><i class="fa fa-check"></i><b>3.1</b> Konzeptionelle Einführung</a></li>
+</ul></li>
 <li class="chapter" data-level="4" data-path="random-effects-models.html"><a href="random-effects-models.html"><i class="fa fa-check"></i><b>4</b> Random effects models</a></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
@@ -244,7 +246,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li><p>Kurzer Auszug mit <code>summary</code> und <code>print</code></p></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">d =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>), <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">d =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>), <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>))</a></code></pre></div>
 </div>
 <div id="pooled-ols-wrong" class="section level2">
 <h2><span class="header-section-number">2.3</span> Pooled OLS (WRONG!)</h2>
@@ -252,23 +254,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Untersuchung des Effekts X -&gt; Y</p></li>
 <li><p>Einfachstes Modell: Regression X -&gt; Y</p></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> d) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">show.resid =</span> F)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> d) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">show.resid =</span> F)</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = y ~ x, data = d)
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -1.4804 -0.9398  0.1487  0.6837  1.4827 
+##      Min       1Q   Median       3Q      Max 
+## -0.87173 -0.40222  0.05917  0.22920  1.14254 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)  0.13823    0.36894   0.375    0.718
-## x            0.08899    0.41213   0.216    0.834
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) -0.02223    0.18707  -0.119   0.9084  
+## x            0.69958    0.25806   2.711   0.0266 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 1.132 on 8 degrees of freedom
-## Multiple R-squared:  0.005795,   Adjusted R-squared:  -0.1185 
-## F-statistic: 0.04663 on 1 and 8 DF,  p-value: 0.8344</code></pre>
+## Residual standard error: 0.5899 on 8 degrees of freedom
+## Multiple R-squared:  0.4788, Adjusted R-squared:  0.4136 
+## F-statistic: 7.349 on 1 and 8 DF,  p-value: 0.02662</code></pre>
 <div id="warum-ist-pooled-ols-immer-falsch-statistische-theorie" class="section level3 unnumbered">
 <h3>Warum ist Pooled OLS immer falsch? Statistische Theorie</h3>
 <ol style="list-style-type: decimal">
@@ -306,6 +310,19 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="pooled-ols-within-und-between---eine-illustration" class="section level3 unnumbered">
 <h3>Pooled OLS, within und between - eine Illustration</h3>
+<ul>
+<li><p>Zum Abschluss noch ein imagninäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.</p></li>
+<li><p>In der pooled OLS Analyse wird einfach die Rergressionsgerade durch alle Beobachung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.</p></li>
+</ul>
+<p><img src="workshop_panel_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<ul>
+<li>Wenn wir aber für alle acht Personen separat den Zusammenhang zwischen Bierkonsum und Kater berechnen (so genanntes no pooling Modell), ergibt sich ein anderes Bild. Für alle Personen gilt mehr oder weniger deutlich: Je mehr Bier konsumiert wurde, desto stärker fällt der Hangover aus (within).</li>
+</ul>
+<p><img src="workshop_panel_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<ul>
+<li><p>Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte eine nicht beobachte Drittvariable auf Ebene der Personen sein. Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken. Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: “A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking.”</p></li>
+<li><p>Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber <em>alle</em> Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im <em>fixed effects</em> Modell, das wir im nächsten Abschnitt besprechen.</p></li>
+</ul>
 
 </div>
 </div>
@@ -316,7 +333,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         </div>
       </div>
 <a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="fixed-effects-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="fixed-effects-modelle.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

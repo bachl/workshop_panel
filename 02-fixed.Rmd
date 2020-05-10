@@ -1,3 +1,92 @@
-# Fixed effects models
+# Fixed effects Modelle
 
-XXX
+## Konzeptionelle Einführung
+
+* Im ersten Teil des Abschnitts zu *fixed effects* Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir die bekannte Funktion `stats::lm()` (übliche OLS-Schätzung linearer Modelle in R).
+
+### Wie können wir den kauselen (within-person) Effekt mit Paneldaten schätzen? {-}
+
+1) Separate OLS Modelle für jede Person schätzen und Koeffizeinten mitteln (no pooling).
+1) Alle $X$ und $Y$ Variablen um die Mittelwerte der Person zentrieren (within transformation).
+1) Dummy-Variablen für jede Person in das Regressionsmodell aufnehmen (least squares dummy variables [LSDV] estimation).
+
+
+* Alle drei Varianten entfernen die (beobachteten und nicht beobachten,) über die Zeit konstanten Unterschiede zwischen den Personen.
+* Varianten 2 und 3 entsprechen dem klassischen *fixed effects* Modell. Die Unterschiede zwischen den Personen werden kontrolliert, indem die personenspezifischen Mittelwerte vor der Schätzung entfernt werden (2) oder für jede Person im Modell geschätzt werden (3).
+  * $y_{it} = \beta' x_{it}' + \alpha_i + u_{it}$ or $y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})'\beta + (u_{it} - \bar{u_{i}})$
+* In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme homogener Treatment-Effekte (entspricht der typischen Annahme im randomisierten Between-Subject-Experiment) entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
+  * Der Schätzer ist aber weniger effizient, da zufällige Unterschiede in den Effekten zwischen den Personen aufgegriffen werden.
+  * Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
+
+
+<!-- ## No pooling  -->
+<!-- ```{r, echo =T} -->
+<!-- nopool = wage10 %>% group_by(nr) %>% do(lm(lwage~union,.) %>%  -->
+<!--                     tidy %>% filter(term=="union"))  -->
+<!-- nopool %>% mutate_each(funs(round(.,2)),-term) -->
+<!-- ``` -->
+
+<!-- ## Regression using within transformation -->
+
+<!-- ```{r, echo = T} -->
+<!-- wage10 = wage10 %>% group_by(nr) %>% mutate(union_within = union - mean(union), lwage_within = lwage - mean(lwage)) %>% ungroup -->
+<!-- wage10 %>% select(contains("lwage"), contains("union")) %>% summary -->
+<!-- ``` -->
+<!-- ```{r, echo = T} -->
+<!-- within = lm(lwage_within ~ union_within, data = wage10 )  -->
+<!-- summary(within)$coef %>% round(2) %>% head -->
+<!-- ``` -->
+
+
+<!-- This has an intuitive interpretation: deviations from the person-average in $X$ predict deviations from the person-average in $Y$. -->
+
+<!-- ## Least Squares with Dummy Variables (LSDV) -->
+
+
+<!-- ```{r, echo = T} -->
+<!-- lsdv = lm(lwage ~ union + factor(nr), data = wage10) -->
+<!-- summary(lsdv)$coef %>% round(2) %>% head(5) -->
+<!-- ``` -->
+
+
+<!-- ## What approach to use? -->
+
+<!-- 1. Both the LSDV and within-transformed regression yield the same estimates. -->
+<!-- 2. The standard errors for the within-transformed model need to be adjusted for the fact that we are substracting estimates (means). They are too small. -->
+<!-- 3. Practically, the LSDV approach is simpler to implement, but can be slow (and produce a lot of output) in large samples. -->
+<!-- 4. Overall, a large group of scholars (but not all) agree that the FE model is the best way to estimate causal effects from non-experimental data. -->
+
+<!-- Regardless of approach, all the assumptions of OLS still apply, e.g. you can still have omitted variable bias (only time-varying confounders), heteroskedasticity, etc.  -->
+
+<!-- ## Multiple fixed effects - time -->
+
+<!-- * In panel data, heterogeneity can also stem from time-varying variables that are constant across individuals, e.g. specific time points (months, years, specific events, etc.). -->
+<!-- * In order to account for these effects, it is reasonable to include fixed effects for periods or trends. -->
+<!-- * A simple approach is to use time or period dummy variables into the model. -->
+<!-- * @br recommends to **always** include period fixed effects in a FE panel model. -->
+
+<!-- ## Person and period fixed effects -->
+
+<!-- ```{r, echo = T} -->
+<!-- lsdv2 = lm(lwage ~ union + factor(nr) + factor(year), data = wage10) -->
+<!-- summary(lsdv2)$coef %>% tidy %>% .[c(1:4, 22:24),] %>% mutate_each(funs(round(., 2)), -`.rownames`) -->
+<!-- ``` -->
+
+
+<!-- ## Checking assumptions  -->
+
+<!-- Visually check regression assumptions using the `sjPlot` package [@R-sjPlot]. -->
+
+<!-- ```{r, results = "hide", fig.keep='none'} -->
+<!-- p <- sjp.lm(lsdv2, type = "ma") -->
+<!-- ``` -->
+<!-- ```{r, fig.height=5, fig.width=10, echo = F} -->
+<!-- x = plot_grid(p$plot.list) -->
+<!-- ``` -->
+
+<!-- ## Exercise: FE models using OLS -->
+
+<!-- 1. Estimate the effect of union membership on an individual's hourly wage. -->
+<!-- 2. Is there a marriage premium on hourly wages? -->
+<!-- 3. How does the within-person effect of marriage compare to the pooled OLS effect? -->
+<!-- 4. Bonus: For either of the two $X$ predictors mentioned above, estimate separate within and between models. -->

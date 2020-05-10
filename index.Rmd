@@ -35,9 +35,9 @@ knitr::write_bib(c(
 
 ## Welche Inhalte wir nicht behandeln
 
-* Der Workshop ist kein Statistik- oder Ökonometrie-Kurs. Ich bin --- wie auch ihr --- ausgebildeter Sozialwissenschaftler. Die statistischen Grundlagen, auf denen der Workshop aufbaut, geht aus den Grundlagentexten [@bellExplainingFixedEffects2015; @vaiseyWhatYouCan2017] hervor.
+* Der Workshop ist kein Statistik- oder Ökonometrie-Kurs. Ich bin --- wie auch ihr --- ausgebildeter Sozialwissenschaftler. Die statistischen Grundlagen, auf denen der Workshop aufbaut, gehen aus den Grundlagentexten [@bellExplainingFixedEffects2015; @vaiseyWhatYouCan2017] hervor.
 
-* Grundkentnisse in `R` setze ich voraus, insbesondere Datentransformationen innerhalb des `tidyverse`.
+* Grundkentnisse in `R` setze ich voraus, insbesondere Datentransformationen innerhalb des `tidyverse`. Wir werden aber keine komplizierten Dinge in `R` tun. Auch ohne weiterführende `R`-Kenntnisse sollten die Inhalte des Workshops in Bezug auf die datenanalystischen Verfahren klar werden.
 
 * Wir werden nicht viel Zeit auf die verschiedenen Schätzer, deren Effizienz und Bias, die verschiedenen Algorithmen und Datentransformationen verwenden.
 

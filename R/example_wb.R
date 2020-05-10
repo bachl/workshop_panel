@@ -17,5 +17,41 @@ plt_pool = example_data %>%
   ggplot(aes(beer, hangover)) + geom_point() + stat_smooth(method = "lm", se = FALSE)
 
 plt_nopool = example_data %>% 
-  ggplot(aes(beer, hangover, color = factor(id))) + geom_point() + stat_smooth(method = "lm", se = FALSE)
+  ggplot(aes(beer, hangover, color = factor(id))) + geom_point(show.legend = FALSE) + stat_smooth(method = "lm", se = FALSE, show.legend = FALSE)
 
+# Später löschen
+# # Wrong: pooled OLS
+# example_data %>%
+#   lm(hangover ~ beer, data = .)
+# # True z
+# example_data %>%
+#   lm(hangover ~ beer + z, data = .) %>%
+#   summary() %>% 
+#   coef() %>% 
+#   .[2, ] %>% 
+#   round(3)
+# # Fixed effects 1: dummies
+# example_data %>%
+#   lm(hangover ~ beer + factor(id), data = .) %>%
+#   summary() %>% 
+#   coef() %>% 
+#   .[2, ] %>% 
+#   round(3)
+# # Fixed effecs 2: de-meaning
+# example_data %>%
+#   group_by(id) %>%
+#   mutate(beer = beer - mean(beer),
+#          hangover = hangover - mean(hangover)) %>%
+#   ungroup() %>%
+#   lm(hangover ~ beer, data = .) %>%
+#   summary() %>% 
+#   coef() %>% 
+#   .[2, ] %>% 
+#   round(3)
+# # Fixed effects 3: no pooling
+# example_data %>%
+#   group_by(id) %>%
+#   nest() %>%
+#   mutate(coefs = map_dbl(data, ~coef(lm(hangover ~ beer, data = .x))[2])) %>%
+#   pull(coefs) %>%
+#   summary()
