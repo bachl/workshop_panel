@@ -197,7 +197,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4>Bedingungen</h4>
 <ol style="list-style-type: decimal">
 <li>Kovariation zwischen <span class="math inline">\(X\)</span> und <span class="math inline">\(Y\)</span> (bivariate Korrelation <span class="math inline">\(r_{XY}\)</span> )</li>
-<li><span class="math inline">\(X\)</span> muss logischer vor <span class="math inline">\(Y\)</span> liegen</li>
+<li><span class="math inline">\(X\)</span> muss logisch vor <span class="math inline">\(Y\)</span> liegen</li>
 <li>Keine (nicht beobachteten) Störvariablen (kein <span class="math inline">\(Z\)</span> mit kausalem Effekt auf <span class="math inline">\(X\)</span> und <span class="math inline">\(Y\)</span>)</li>
 </ol>
 </div>
@@ -208,11 +208,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Reliabilität und Konstruktstabilität
 <ul>
 <li>Reliabilität: Bei geringer Reliabilität beobachten wir Veränderungen, die aber auf Rauschen in der Messung zurückgehen.</li>
-<li>Reliabilität: Wenn die Messungen über die Zeit ihre Bedeutung verändern, modellieren wir keine Veränderung des latenten Konstrukts von Interesse.</li>
+<li>Konstruktstabilität: Wenn die Messungen über die Zeit ihre Bedeutung verändern, modellieren wir keine Veränderung des latenten Konstrukts von Interesse.</li>
 </ul></li>
 <li>Panelmortalität und Paneleffekte
 <ul>
-<li>Panelmortalität: Einheiten (Befragte) fallen aus, möglicherweise systematisch mit Bezug auf die Konstrukte von Interesse</li>
+<li>Panelmortalität: Einheiten (Befragte) fallen aus, möglicherweise systematisch mit Bezug auf die Konstrukte oder Effekte, die uns interessieren.</li>
 <li>Paneleffekte: Einheiten (Befragte) verändern sich durch die Messung (z.B. Lernen von Wissensfragen, Anregung durch Fragen zu Medienangeboten)</li>
 </ul></li>
 </ul>
@@ -261,18 +261,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.87173 -0.40222  0.05917  0.22920  1.14254 
+## -0.84149 -0.43816 -0.08292  0.36029  0.88638 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept) -0.02223    0.18707  -0.119   0.9084  
-## x            0.69958    0.25806   2.711   0.0266 *
+## (Intercept)  -0.2462     0.1990  -1.237   0.2511  
+## x             0.6952     0.2148   3.237   0.0119 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 0.5899 on 8 degrees of freedom
-## Multiple R-squared:  0.4788, Adjusted R-squared:  0.4136 
-## F-statistic: 7.349 on 1 and 8 DF,  p-value: 0.02662</code></pre>
+## Residual standard error: 0.6169 on 8 degrees of freedom
+## Multiple R-squared:  0.567,  Adjusted R-squared:  0.5129 
+## F-statistic: 10.48 on 1 and 8 DF,  p-value: 0.01194</code></pre>
 <div id="warum-ist-pooled-ols-immer-falsch-statistische-theorie" class="section level3 unnumbered">
 <h3>Warum ist Pooled OLS immer falsch? Statistische Theorie</h3>
 <ol style="list-style-type: decimal">
@@ -284,7 +284,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li>Annahmen Homoskedastizität und unkorrelierte Residuen sind (wahrscheinlich) verletzt
 <ul>
-<li>Systematische Variaion der Residuen zwischen Einheiten</li>
+<li>Systematische Variation der Residuen zwischen Einheiten</li>
 <li>Wahrscheinlich serielle Korreationen durch die zeitliche Abhängigkeit der Messungen</li>
 </ul></li>
 <li>Annahme der Unabhängigkeit der Bebobachtungen verletzt
@@ -320,8 +320,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <p><img src="workshop_panel_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <ul>
-<li><p>Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte eine nicht beobachte Drittvariable auf Ebene der Personen sein. Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken. Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: “A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking.”</p></li>
-<li><p>Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber <em>alle</em> Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im <em>fixed effects</em> Modell, das wir im nächsten Abschnitt besprechen.</p></li>
+<li>Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte auf eine nicht beobachte Drittvariable auf Ebene der Personen zurück gehen:
+<ul>
+<li>Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken.</li>
+<li>Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: “A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking.”</li>
+</ul></li>
+<li>Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber <em>alle</em> Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im <em>fixed effects</em> Modell, das wir im nächsten Abschnitt besprechen.</li>
 </ul>
 
 </div>

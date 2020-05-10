@@ -181,7 +181,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Alle drei Varianten entfernen die (beobachteten und nicht beobachten,) über die Zeit konstanten Unterschiede zwischen den Personen.</li>
 <li>Varianten 2 und 3 entsprechen dem klassischen <em>fixed effects</em> Modell. Die Unterschiede zwischen den Personen werden kontrolliert, indem die personenspezifischen Mittelwerte vor der Schätzung entfernt werden (2) oder für jede Person im Modell geschätzt werden (3).
 <ul>
-<li><span class="math inline">\(y_{it} = \beta&#39; x_{it}&#39; + \alpha_i + u_{it}\)</span> or <span class="math inline">\(y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})&#39;\beta + (u_{it} - \bar{u_{i}})\)</span></li>
+<li><span class="math inline">\(y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})&#39;\beta + (u_{it} - \bar{u_{i}})\)</span> oder <span class="math inline">\(y_{it} = \beta&#39; x_{it}&#39; + \alpha_i + u_{it}\)</span></li>
 </ul></li>
 <li>In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme homogener Treatment-Effekte (entspricht der typischen Annahme im randomisierten Between-Subject-Experiment) entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
 <ul>
@@ -189,12 +189,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.</li>
 </ul></li>
 </ul>
-<!-- ## No pooling  -->
-<!-- ```{r, echo =T} -->
-<!-- nopool = wage10 %>% group_by(nr) %>% do(lm(lwage~union,.) %>%  -->
-<!--                     tidy %>% filter(term=="union"))  -->
-<!-- nopool %>% mutate_each(funs(round(.,2)),-term) -->
-<!-- ``` -->
+</div>
+<div id="no-pooling" class="section level3 unnumbered">
+<h3>No pooling</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">n =<span class="st"> </span><span class="dv">8</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">t =<span class="st"> </span><span class="dv">6</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">tce =<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">example_data =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">id =</span> <span class="dv">1</span><span class="op">:</span>n, <span class="dt">z =</span> <span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dt">length.out =</span> n), <span class="dt">m_beer =</span> z <span class="op">*</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">    </span><span class="kw">rnorm</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">replicate</span>(t, ., <span class="dt">simplify =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">beer =</span> m_beer <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">    </span><span class="kw">rnorm</span>(n <span class="op">*</span><span class="st"> </span>t), <span class="dt">beer =</span> beer <span class="op">+</span><span class="st"> </span><span class="kw">abs</span>(<span class="kw">min</span>(beer)), <span class="dt">hangover =</span> beer <span class="op">*</span><span class="st"> </span>tce <span class="op">+</span><span class="st"> </span>z <span class="op">*</span><span class="st"> </span><span class="dv">-2</span> <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">    </span><span class="kw">rnorm</span>(n <span class="op">*</span><span class="st"> </span>t))</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">example_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mdls =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">tidy</span>(<span class="kw">lm</span>(hangover <span class="op">~</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">    </span>beer, <span class="dt">data =</span> .x)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(mdls) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">    &quot;beer&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_if</span>(is.numeric, round, <span class="dv">2</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 8 x 6
+##      id term  estimate std.error statistic p.value
+##   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1     1 beer      0.76      0.37      2.04    0.11
+## 2     2 beer      0.02      0.79      0.02    0.98
+## 3     3 beer      1.05      0.2       5.27    0.01
+## 4     4 beer      0.84      0.64      1.31    0.26
+## 5     5 beer      1.14      0.44      2.58    0.06
+## 6     6 beer      0.99      0.52      1.88    0.13
+## 7     7 beer      2.95      0.33      9       0   
+## 8     8 beer      1.64      0.21      7.64    0</code></pre>
 <!-- ## Regression using within transformation -->
 <!-- ```{r, echo = T} -->
 <!-- wage10 = wage10 %>% group_by(nr) %>% mutate(union_within = union - mean(union), lwage_within = lwage - mean(lwage)) %>% ungroup -->

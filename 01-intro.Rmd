@@ -29,7 +29,7 @@ source("R/data.R")
 #### Bedingungen {-}
 
 1.  Kovariation zwischen $X$ und $Y$ (bivariate Korrelation $r_{XY}$ )
-2.  $X$ muss logischer vor $Y$ liegen
+2.  $X$ muss logisch vor $Y$ liegen
 3.  Keine (nicht beobachteten) Störvariablen (kein $Z$ mit kausalem Effekt auf $X$ und $Y$)
 
 #### Herausforderungen (auch bzw. gerade mit Paneldaten) {-}
@@ -37,9 +37,9 @@ source("R/data.R")
 * Entsprechung der zeitlichen Entfalltung des Effekts und des Designs (Abstände, Verläufe)
 * Reliabilität und Konstruktstabilität
   * Reliabilität: Bei geringer Reliabilität beobachten wir Veränderungen, die aber auf Rauschen in der Messung zurückgehen.
-  * Reliabilität: Wenn die Messungen über die Zeit ihre Bedeutung verändern, modellieren wir keine Veränderung des latenten Konstrukts von Interesse.
+  * Konstruktstabilität: Wenn die Messungen über die Zeit ihre Bedeutung verändern, modellieren wir keine Veränderung des latenten Konstrukts von Interesse.
 * Panelmortalität und Paneleffekte
-    * Panelmortalität: Einheiten (Befragte) fallen aus, möglicherweise systematisch mit Bezug auf die Konstrukte von Interesse 
+    * Panelmortalität: Einheiten (Befragte) fallen aus, möglicherweise systematisch mit Bezug auf die Konstrukte oder Effekte, die uns interessieren.
     * Paneleffekte: Einheiten (Befragte) verändern sich durch die Messung (z.B. Lernen von Wissensfragen, Anregung durch Fragen zu Medienangeboten)
 
 ### Format von Datensätzen mit Paneldaten {-}
@@ -95,7 +95,7 @@ knitr::read_chunk("R/wrong_ols.R")
     * Könnte behoben werden, wenn alle $z_i$ im Modell wären; diese Idee wird später wichtig
     
 1) Annahmen Homoskedastizität und unkorrelierte Residuen sind (wahrscheinlich) verletzt
-    * Systematische Variaion der Residuen zwischen Einheiten
+    * Systematische Variation der Residuen zwischen Einheiten
     * Wahrscheinlich serielle Korreationen durch die zeitliche Abhängigkeit der Messungen
     
 1) Annahme der Unabhängigkeit der Bebobachtungen verletzt
@@ -133,6 +133,8 @@ plt_pool
 plt_nopool
 ```
 
-* Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte eine nicht beobachte Drittvariable auf Ebene der Personen sein. Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken. Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: "A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking."
+* Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte auf eine nicht beobachte Drittvariable auf Ebene der Personen zurück gehen:
+  * Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken.
+  * Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: "A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking."
 
 * Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber *alle* Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im *fixed effects* Modell, das wir im nächsten Abschnitt besprechen.

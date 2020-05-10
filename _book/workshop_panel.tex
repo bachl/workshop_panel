@@ -302,7 +302,7 @@ tidyverse & 1.3.0\\
 \item
   Kovariation zwischen \(X\) und \(Y\) (bivariate Korrelation \(r_{XY}\) )
 \item
-  \(X\) muss logischer vor \(Y\) liegen
+  \(X\) muss logisch vor \(Y\) liegen
 \item
   Keine (nicht beobachteten) Störvariablen (kein \(Z\) mit kausalem Effekt auf \(X\) und \(Y\))
 \end{enumerate}
@@ -323,7 +323,7 @@ tidyverse & 1.3.0\\
   \item
     Reliabilität: Bei geringer Reliabilität beobachten wir Veränderungen, die aber auf Rauschen in der Messung zurückgehen.
   \item
-    Reliabilität: Wenn die Messungen über die Zeit ihre Bedeutung verändern, modellieren wir keine Veränderung des latenten Konstrukts von Interesse.
+    Konstruktstabilität: Wenn die Messungen über die Zeit ihre Bedeutung verändern, modellieren wir keine Veränderung des latenten Konstrukts von Interesse.
   \end{itemize}
 \item
   Panelmortalität und Paneleffekte
@@ -331,7 +331,7 @@ tidyverse & 1.3.0\\
   \begin{itemize}
   \tightlist
   \item
-    Panelmortalität: Einheiten (Befragte) fallen aus, möglicherweise systematisch mit Bezug auf die Konstrukte von Interesse
+    Panelmortalität: Einheiten (Befragte) fallen aus, möglicherweise systematisch mit Bezug auf die Konstrukte oder Effekte, die uns interessieren.
   \item
     Paneleffekte: Einheiten (Befragte) verändern sich durch die Messung (z.B. Lernen von Wissensfragen, Anregung durch Fragen zu Medienangeboten)
   \end{itemize}
@@ -413,16 +413,18 @@ tidyverse & 1.3.0\\
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -2.2968 -0.8117 -0.2001  1.1529  1.8300 
+## -1.1811 -0.2609  0.1079  0.4811  0.7554 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)
-## (Intercept)  0.49067    0.49586   0.990    0.351
-## x            0.02564    0.45935   0.056    0.957
+##             Estimate Std. Error t value Pr(>|t|)  
+## (Intercept)   0.4686     0.2344   1.999   0.0806 .
+## x             0.1677     0.4765   0.352   0.7340  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 1.404 on 8 degrees of freedom
-## Multiple R-squared:  0.0003894,  Adjusted R-squared:  -0.1246 
-## F-statistic: 0.003116 on 1 and 8 DF,  p-value: 0.9569
+## Residual standard error: 0.6859 on 8 degrees of freedom
+## Multiple R-squared:  0.01524,    Adjusted R-squared:  -0.1079 
+## F-statistic: 0.1238 on 1 and 8 DF,  p-value: 0.734
 \end{verbatim}
 
 \hypertarget{warum-ist-pooled-ols-immer-falsch-statistische-theorie}{%
@@ -450,7 +452,7 @@ tidyverse & 1.3.0\\
   \begin{itemize}
   \tightlist
   \item
-    Systematische Variaion der Residuen zwischen Einheiten
+    Systematische Variation der Residuen zwischen Einheiten
   \item
     Wahrscheinlich serielle Korreationen durch die zeitliche Abhängigkeit der Messungen
   \end{itemize}
@@ -514,8 +516,17 @@ tidyverse & 1.3.0\\
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-8-1.pdf}
 
 \begin{itemize}
+\tightlist
 \item
-  Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte eine nicht beobachte Drittvariable auf Ebene der Personen sein. Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken. Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: ``A kid once said to me ``Do you get hangovers?'' I said, ``To get hangovers you have to stop drinking.''
+  Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte auf eine nicht beobachte Drittvariable auf Ebene der Personen zurück gehen:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken.
+  \item
+    Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: ``A kid once said to me ``Do you get hangovers?'' I said, ``To get hangovers you have to stop drinking.''
+  \end{itemize}
 \item
   Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber \emph{alle} Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im \emph{fixed effects} Modell, das wir im nächsten Abschnitt besprechen.
 \end{itemize}

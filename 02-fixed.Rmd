@@ -1,5 +1,10 @@
 # Fixed effects Modelle
 
+```{r, include=FALSE}
+source("R/packages.R")
+source("R/data.R")
+```
+
 ## Konzeptionelle Einführung
 
 * Im ersten Teil des Abschnitts zu *fixed effects* Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir die bekannte Funktion `stats::lm()` (übliche OLS-Schätzung linearer Modelle in R).
@@ -13,18 +18,21 @@
 
 * Alle drei Varianten entfernen die (beobachteten und nicht beobachten,) über die Zeit konstanten Unterschiede zwischen den Personen.
 * Varianten 2 und 3 entsprechen dem klassischen *fixed effects* Modell. Die Unterschiede zwischen den Personen werden kontrolliert, indem die personenspezifischen Mittelwerte vor der Schätzung entfernt werden (2) oder für jede Person im Modell geschätzt werden (3).
-  * $y_{it} = \beta' x_{it}' + \alpha_i + u_{it}$ or $y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})'\beta + (u_{it} - \bar{u_{i}})$
+  * $y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})'\beta + (u_{it} - \bar{u_{i}})$ oder $y_{it} = \beta' x_{it}' + \alpha_i + u_{it}$
 * In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme homogener Treatment-Effekte (entspricht der typischen Annahme im randomisierten Between-Subject-Experiment) entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
   * Der Schätzer ist aber weniger effizient, da zufällige Unterschiede in den Effekten zwischen den Personen aufgegriffen werden.
   * Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
 
 
-<!-- ## No pooling  -->
-<!-- ```{r, echo =T} -->
-<!-- nopool = wage10 %>% group_by(nr) %>% do(lm(lwage~union,.) %>%  -->
-<!--                     tidy %>% filter(term=="union"))  -->
-<!-- nopool %>% mutate_each(funs(round(.,2)),-term) -->
-<!-- ``` -->
+### No pooling {-}
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/no_pooling.R")
+```
+
+```{r no-pooling, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
 
 <!-- ## Regression using within transformation -->
 
