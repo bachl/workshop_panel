@@ -7,6 +7,7 @@ bookdown::gitbook:
         <li><a href="./">Panel Data Analysis</a></li>
     download: ["pdf"]
   split_by: chapter
+  self_contained: no
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex

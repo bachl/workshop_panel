@@ -99,7 +99,7 @@ knitr::read_chunk("R/period_fe.R")
 * Die $b_{wave_t}$ zeigen den Kontrast zur ersten Welle. In diesem Fall sind liegen in der dritten und vierten Welle die Häufigkeiten des Rausgehens höher als noch in den ersten beiden Wellen.
 * Die $b_{id_i}$ zeigen weiterhin den Kontrast zu Person 1 (substantiell nicht sonderlich interessant).
 
-### Übungsaufgaben zur grundsätzlichen Spezifikation von *fixed effects* Modellen {-}
+## Übungsaufgaben 1
 
 1) Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (`med2`) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`).
     * Schätze zuerst das *falsche* pooled OLS Modell.
@@ -108,11 +108,11 @@ knitr::read_chunk("R/period_fe.R")
 
 2) Spezifiziere, schätze und interpretiere ein eigenes bivariates *fixed effects* Modell mit Daten aus dem Beipsieldatensatz.
 
-## Fixed effects Modelle in der praktischen Anwendung
+## *Fixed effects* Modelle in der praktischen Anwendung
 
 * Auch wenn wir das *fixed effects* Modell nur mit `stats::lm()` und der LSDV-Spezifikation schätzen können, ist die weitere Arbeit mit diesen Modellen nicht ideal - besonders, wenn wir tiefer in Detail-Anpassungen einsteigen.
-* Zudem wird das Schätzen bei großen Datensätzen mit vielen *fixed effects* langsam.
-* `plm` [@R-plm] ist das etablierte Paket für das Schätzen von ökonometrischen Panel-Modellen in `R`. Es bietet ein einfaches Interface zu allen Standardmodellen.
+* Zudem wird das Schätzen mit `stats::lm()` und LSDV bei großen Datensätzen und mit vielen *fixed effects* langsam.
+* `plm` [@R-plm] ist das etablierte Paket für das Schätzen von ökonometrischen Panel-Modellen in `R`. Es bietet ein einfaches Interface zu allen Standardmodellen (und zu den übrigen Klassikern der Ökonometrie, instrumental variables, differences in differences).
 * Das Schätzen der Modelle basiert auf OLS mit Datentransformationen im Hintergrund. Dadurch ist das Schätzen wesentlich schneller als mit einer LSDV-Spezifikation. Die notwendigen Anpassungen der Standardfehler werden ebenfalls vorgenommen.
 
 ### Spezifikation eines einfachen *fixed effects* Modells mit `plm` {-}
@@ -149,3 +149,101 @@ knitr::read_chunk("R/plm_twoway.R")
 ```{r plm-twoway, eval=TRUE, tidy=TRUE, message=FALSE}
 
 ```
+
+### Robuste Standardfehler {-}
+
+* In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Autokorrelation oder Heteroskedastizität.
+* Das `lmtest` Paket [@R-lmtest] ist kompatibel mit Modellen aus `plm`. Es stellt zahlreiche robuste Standardfehler zur Verfügung.
+
+* Hier die "normalen" Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.
+
+* Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle unter anderem @kingHowRobustStandard2015 zur kritischen Lektüre.
+ 
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/lmtest-demo.R")
+```
+
+```{r lmtest-demo, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+### Aufnahme weiterer über die Zeit variierender Prädiktoren {-}
+
+* Die Aufnahme weiterer Prädiktoren, die über die Zeit variieren, erfolgt prinzipiell wie im bekannten OLS Modell.
+
+* Wichtig ist, dass es bei *fixed effects* Modellen explizit um das Schätzen von kausalen Effekten geht. Entsprechend bedacht sollte die Auswahl von weiteren Prädiktoren sein. Ein "kitchen sink" Ansatz, den man vor allem in OLS mit Querschnittsdaten sieht, ist hier nicht angebracht. Es muss (wie eigentlich immer) darauf geachtet werden, welche Koeffizienten eines Regressionsmodells kausal interpretiert werden dürfen [@keeleCausalInterpretationEstimated2019]. Im *fixed effects* Modell müssen wir uns das ganz explizit vergegenwärtigen und in der Ergebnisdarstellung berücksichtigen, da die Modellklasse kausale Effekte impliziert.
+
+* Nach der TPB dürfen wir dieses Modell annehmen, da die drei Prädiktoren auf derselben kausalen Stufe stehen: Verhaltensintention ~ Einstellung + Deskriptive Norm + Injunktive Norm. Hier schätzen wir das Modell für die Verhaltensintention *Rausgehen ohne triftigen Grund*.
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/plm_twopreds.R")
+```
+
+```{r plm-twopreds, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Vor allem die Einstellung zum Verhalten und die wahrgenommenen normativen Erwartungen haben stärkere kausale Effekte auf die Verhaltensintention.
+
+### Aufnahme eines Personenmerkmals (funktioniert nicht, ohne Warnung!) {-}
+
+```{r, eval=TRUE, tidy=TRUE, message=FALSE}
+d %>% plm(verh1 ~ verhint1 + C_sex + factor(wave), data = ., index = "IDsosci", model = "within") %>% summary
+```
+
+* Geschlecht wird nicht in das Modell aufgenommen. Vorsicht: Es taucht einfach nicht im Ergebnis auf, obwohl es in der Formel steht (siehe `Call` in der Summary)
+
+### Warum wird das Personenmerkmal nicht ins Modell aufgenomen? {-}
+
+* Within-person Transformation entfernt die gesamte between-person Varianz aus den Daten: $\bar{y_{i}} = 0$.
+* Daher können innerhalb der Personen invariante Mermmale keine Unterschiede erklären.
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/vis_ex2.R")
+```
+
+```{r vis-ex2, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Die Abbildung verdeutlicht dies ahand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level der Verhaltensintention zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
+
+* Das gleiche gilt für Prädiktoren, die als Merkmale anderer Einheiten, die wir als *fixed effects* spezifiziert haben, konstant sind. In diesem Beispiel wären dies Eigenschaften der Perioden, also z.B. neue Schutzmaßnahmen bzw. deren Lockerung, soweit sie alle Personen gleichermaßen im gleichen Zeitraum betreffen.
+
+### Interaktionen mit Personenmerkmalen
+
+* Wir können jedoch Interaktionen zwischen über die Zeit variierenden Prädiktoren und Personenmerkmalen (oder Merkmalen anderer *fixed effects* Einheiten) ins Modell aufnehmen.
+* Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der gruppenspezifischen Effekte, z.B. den den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.
+* Bei kontinierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist.
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/plm_mod.R")
+```
+
+```{r plm-mod, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Der Effekt ist in der Stichprobe für Frauen minimal schwächer als für Männer. Der Unterschied ist jedoch weder substantiell noch statistisch bedeutsam.
+
+## Conclusio: Vor- und Nachteile des *fixed effects* Modells
+
+> In many applications the whole point of using panel data is to allow for $a_i$ to be arbitrarily correlated with the $x_{it}$. A fixed effects analysis achieves this purpose explicitly. --- @wooldridge10, p. 300
+
+> By controlling out context, FE models effectively cut out much of what is going on — goings-on that are usually of interest to the researcher, the reader and the policy maker. We contend that models that control out, rather than explicitly model, context and heterogeneity offer overly simplistic and impoverished results that can lead to misleading interpretations. --- @bellExplainingFixedEffects2015, p. 134
+
+
+* Das *fixed effects* Modell ist nützlich, wenn wir einen kausalen Effekt, der sich innerhalb von Einheiten (Personen) abspielt, schätzen wollen.
+* Das *fixed effects* Modell kann keine Mermale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die *fixed effects* erklärt werden.
+* Wir interessieren uns aber häufig (auch) für die Unterschiede zwischen Einheiten (Personen). Das *fixed effects* Modell macht Antworten auf solche Fragen unmöglich.
+
+* Ein weiterer, damit unverbundener Nachteil des *fixed effects* Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie sind nicht personenspezifisch).
+
+## Übungsaufgaben 2
+
+1) Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (`med2`) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`). Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
+    * Verwende jetzt `plm` für die Schätzung.
+    * Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (`med1`) in das Modell auf.
+    * Prüfe, ob sich der Effekt der Information aus Zeitungen und Zeitschriften nach Geschlecht (`C_sex`) unterscheidet.
+
+2) Spezifiziere, schätze und interpretiere ein eigenes *fixed effects* Modell mit Daten aus dem Beipsieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.

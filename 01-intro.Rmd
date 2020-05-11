@@ -12,7 +12,7 @@ source("R/packages.R")
 * Zeitreihe: Eine Einheit mit vielen Messzeitpunkten ($n = 1$, $t > 30$).
 * Paneldaten: Dieselben Einheiten mit wiederholten Messungen ($n > 30$, $t \ge 2$)
     * Macro panel: $n$ klein, $t$ groß (z.B. jährliche Untersuchung von Staaten, 1950--2015)
-    * Micro panel $n$ groß, $t$ klein (typisches Befragungspanel)
+    * Micro panel: $n$ groß, $t$ klein (typisches Befragungspanel)
 * In diesem Workshop geht es um *micro panels* mit $t > 2$
 
 ### Vorteile von Paneldaten {-}

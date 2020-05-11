@@ -142,7 +142,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html"><i class="fa fa-check"></i><b>3</b> Fixed effects Modelle</a><ul>
 <li class="chapter" data-level="3.1" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#konzeptionelle-einführung"><i class="fa fa-check"></i><b>3.1</b> Konzeptionelle Einführung</a></li>
-<li class="chapter" data-level="3.2" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#fixed-effects-modelle-in-der-praktischen-anwendung"><i class="fa fa-check"></i><b>3.2</b> Fixed effects Modelle in der praktischen Anwendung</a></li>
+<li class="chapter" data-level="3.2" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#übungsaufgaben-1"><i class="fa fa-check"></i><b>3.2</b> Übungsaufgaben 1</a></li>
+<li class="chapter" data-level="3.3" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#fixed-effects-modelle-in-der-praktischen-anwendung"><i class="fa fa-check"></i><b>3.3</b> <em>Fixed effects</em> Modelle in der praktischen Anwendung</a></li>
+<li class="chapter" data-level="3.4" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#conclusio-vor--und-nachteile-des-fixed-effects-modells"><i class="fa fa-check"></i><b>3.4</b> Conclusio: Vor- und Nachteile des <em>fixed effects</em> Modells</a></li>
+<li class="chapter" data-level="3.5" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#übungsaufgaben-2"><i class="fa fa-check"></i><b>3.5</b> Übungsaufgaben 2</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="random-effects-models.html"><a href="random-effects-models.html"><i class="fa fa-check"></i><b>4</b> Random effects models</a></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
@@ -229,7 +232,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Die Modelle in diesem Workshop nutzen das <em>long format</em></p></li>
 <li>Datensätze können von einem ins andere Format transformiert werden, z.B. im <code>tidyverse</code>:
 <ul>
-<li><code>tidyr::gather()</code> und <code>tidyr::spread()</code> oder</li>
+<li><code>tidyr::gather()</code> und <code>tidyr::spread()</code> (verwende ich in <code>R/data.R</code>) oder</li>
 <li><code>tidyr::pivot_longer()</code> und <code>tidyr::pivot_wider()</code></li>
 </ul></li>
 </ul>
@@ -433,8 +436,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb2-2" data-line-number="2"></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(IDsosci <span class="op">%in%</span><span class="st"> </span>id_smple) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(IDsosci, wave, verh1, verhint1) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>IDsosci, <span class="op">-</span>wave) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(wave, value, <span class="dt">group =</span> IDsosci, </a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">    <span class="dt">color =</span> IDsosci)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">position =</span> <span class="kw">position_jitter</span>(<span class="dt">height =</span> <span class="fl">0.2</span>), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="st">&quot;variable&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb2-5" data-line-number="5">    <span class="dt">color =</span> IDsosci)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">position =</span> <span class="kw">position_jitter</span>(<span class="dt">height =</span> <span class="fl">0.1</span>, <span class="dt">width =</span> <span class="dv">0</span>), </a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">    <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="st">&quot;variable&quot;</span>)</a></code></pre></div>
 <p><img src="workshop_panel_files/figure-html/vis-ex1-1.png" width="672" /></p>
 <ul>
 <li>Das einfachste Modell, diesen Effekt zu schätzen, ist eine einfache OLS Regression der Verhaltensintention auf das Verhalten.</li>
@@ -443,10 +446,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <pre><code>## # A tibble: 2 x 5
 ##   term        estimate std.error statistic p.value
 ##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
-## 1 (Intercept)     0.47      0.02      19.6       0
+## 1 (Intercept)     0.46      0.02      19.2       0
 ## 2 verhint1        0.59      0.01      53.8       0</code></pre>
 <ul>
-<li>Das Modell besagt, dass die Häufigkeit, nach raus zu gehen, mit jedem Punkt auf der Intentionsskala um ca. <span class="math inline">\(b_{verhint1} = 0.6\)</span> Punkte steigt.</li>
+<li>Das Modell besagt, dass die Häufigkeit, ohne triftigen Grund raus zu gehen, mit jedem Punkt auf der Intentionsskala um ca. <span class="math inline">\(b_{verhint1} = 0.6\)</span> Punkte steigt.</li>
 </ul>
 <div id="warum-ist-pooled-ols-immer-falsch-statistische-theorie" class="section level3 unnumbered">
 <h3>Warum ist Pooled OLS immer falsch? Statistische Theorie</h3>

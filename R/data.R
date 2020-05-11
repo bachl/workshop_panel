@@ -35,7 +35,8 @@ d = d_wide %>%
   spread(variable, value) %>% 
   mutate(wave = as.integer(str_sub(wave, start = 2))) %>% 
   # Und Konstanten wieder anhängen
-  left_join(d_constants)
+  left_join(d_constants) %>% 
+  filter(!is.na(C_sex)) # Ausschluss der Personen mit fehlender Angabe in C_sex
 
 # Speichern der aufbereiteten Daten im long format
 saveRDS(d, "R/data/data.rds")

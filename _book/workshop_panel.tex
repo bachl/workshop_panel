@@ -202,7 +202,7 @@ Wir verwenden die folgenden Pakete
 \begin{Shaded}
 \begin{Highlighting}[]
 \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)) }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)}
-\NormalTok{pacman}\OperatorTok{::}\KeywordTok{p_load}\NormalTok{(tidyverse, broom, haven)}
+\NormalTok{pacman}\OperatorTok{::}\KeywordTok{p_load}\NormalTok{(tidyverse, broom, haven, plm, lmtest)}
 \KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_bw}\NormalTok{())  }\CommentTok{# ggplot theme}
 
 \KeywordTok{tibble}\NormalTok{(}\DataTypeTok{package =} \KeywordTok{c}\NormalTok{(}\StringTok{"R"}\NormalTok{, }\KeywordTok{sort}\NormalTok{(pacman}\OperatorTok{::}\KeywordTok{p_loaded}\NormalTok{()))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{version =} \KeywordTok{map_chr}\NormalTok{(package, }
@@ -226,7 +226,11 @@ ggplot2 & 3.2.1\\
 \hline
 haven & 2.2.0\\
 \hline
+lmtest & 0.9.37\\
+\hline
 pacman & 0.5.1\\
+\hline
+plm & 2.2.3\\
 \hline
 purrr & 0.3.3\\
 \hline
@@ -239,6 +243,8 @@ tibble & 2.1.3\\
 tidyr & 1.0.2\\
 \hline
 tidyverse & 1.3.0\\
+\hline
+zoo & 1.8.7\\
 \hline
 \end{tabular}
 
@@ -360,7 +366,7 @@ tidyverse & 1.3.0\\
   \begin{itemize}
   \tightlist
   \item
-    \texttt{tidyr::gather()} und \texttt{tidyr::spread()} oder
+    \texttt{tidyr::gather()} und \texttt{tidyr::spread()} (verwende ich in \texttt{R/data.R}) oder
   \item
     \texttt{tidyr::pivot\_longer()} und \texttt{tidyr::pivot\_wider()}
   \end{itemize}
@@ -501,8 +507,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(IDsosci }\OperatorTok{%in%}\StringTok{ }\NormalTok{id_smple) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(IDsosci, wave, verh1, verhint1) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{gather}\NormalTok{(variable, value, }\OperatorTok{-}\NormalTok{IDsosci, }\OperatorTok{-}\NormalTok{wave) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(wave, value, }\DataTypeTok{group =}\NormalTok{ IDsosci, }
-    \DataTypeTok{color =}\NormalTok{ IDsosci)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{position =} \KeywordTok{position_jitter}\NormalTok{(}\DataTypeTok{height =} \FloatTok{0.2}\NormalTok{), }\DataTypeTok{show.legend =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}\StringTok{ }
-\StringTok{    }\KeywordTok{facet_wrap}\NormalTok{(}\StringTok{"variable"}\NormalTok{)}
+    \DataTypeTok{color =}\NormalTok{ IDsosci)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{position =} \KeywordTok{position_jitter}\NormalTok{(}\DataTypeTok{height =} \FloatTok{0.1}\NormalTok{, }\DataTypeTok{width =} \DecValTok{0}\NormalTok{), }
+    \DataTypeTok{show.legend =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\StringTok{"variable"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -524,14 +530,14 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ## # A tibble: 2 x 5
 ##   term        estimate std.error statistic p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
-## 1 (Intercept)     0.47      0.02      19.6       0
+## 1 (Intercept)     0.46      0.02      19.2       0
 ## 2 verhint1        0.59      0.01      53.8       0
 \end{verbatim}
 
 \begin{itemize}
 \tightlist
 \item
-  Das Modell besagt, dass die Häufigkeit, nach raus zu gehen, mit jedem Punkt auf der Intentionsskala um ca. \(b_{verhint1} = 0.6\) Punkte steigt.
+  Das Modell besagt, dass die Häufigkeit, ohne triftigen Grund raus zu gehen, mit jedem Punkt auf der Intentionsskala um ca. \(b_{verhint1} = 0.6\) Punkte steigt.
 \end{itemize}
 
 \hypertarget{warum-ist-pooled-ols-immer-falsch-statistische-theorie}{%
@@ -710,7 +716,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 236 x 6
+## # A tibble: 232 x 6
 ##    IDsosci term     estimate std.error statistic p.value
 ##    <chr>   <chr>       <dbl>     <dbl>     <dbl>   <dbl>
 ##  1 050IPY  verhint1     1.25      0.56  2.24e+ 0    0.15
@@ -720,17 +726,17 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ##  5 0F5L9Z  verhint1     0         0.71  0.          1   
 ##  6 0KYYAJ  verhint1     0.45      0.18  2.50e+ 0    0.13
 ##  7 0ONV4O  verhint1     1         0     9.01e+15    0   
-##  8 0Q5XIM  verhint1    -0.27      0.31 -8.70e- 1    0.48
-##  9 0ZCKB5  verhint1    -0.35      0.5  -6.90e- 1    0.56
-## 10 114OWA  verhint1     0.33      0.33  1.00e+ 0    0.42
-## # ... with 226 more rows
+##  8 0ZCKB5  verhint1    -0.35      0.5  -6.90e- 1    0.56
+##  9 114OWA  verhint1     0.33      0.33  1.00e+ 0    0.42
+## 10 16YGN0  verhint1     0.5       0.25  2.00e+ 0    0.18
+## # ... with 222 more rows
 \end{verbatim}
 
 \begin{verbatim}
 ## # A tibble: 1 x 2
 ##   estimate std.error
 ##      <dbl>     <dbl>
-## 1    0.493     0.520
+## 1    0.502     0.521
 \end{verbatim}
 
 \begin{itemize}
@@ -738,7 +744,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Wir erhalten für jede Person einen Schätzer mit Standardfehler. Wir können diese mitteln, um einen Schätzer des durchschnittlichen kausalen Effekts zu erhalten.
 \item
-  Wir müssen die Schätzer entfernen, bei denen das Modell wegen eines perfekten Zusammenhangs oder wegen fehlender \emph{within-person} Varianz keine OLS Lösung hat.
+  Wir müssen die Schätzer entfernen, bei denen es wegen eines perfekten Zusammenhangs oder wegen fehlender intraindividueller Varianz keine OLS Lösung gibt.
 \end{itemize}
 
 \hypertarget{within-transformation}{%
@@ -755,13 +761,13 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \end{Shaded}
 
 \begin{verbatim}
-##      verh1          verhint1      verh1_wi      verhint1_wi   
-##  Min.   :1.000   Min.   :1.0   Min.   :-3.00   Min.   :-3.00  
-##  1st Qu.:1.000   1st Qu.:1.0   1st Qu.:-0.25   1st Qu.:-0.25  
-##  Median :1.000   Median :1.0   Median : 0.00   Median : 0.00  
-##  Mean   :1.526   Mean   :1.8   Mean   : 0.00   Mean   : 0.00  
-##  3rd Qu.:2.000   3rd Qu.:2.0   3rd Qu.: 0.00   3rd Qu.: 0.00  
-##  Max.   :5.000   Max.   :5.0   Max.   : 3.00   Max.   : 3.00
+##      verh1          verhint1        verh1_wi      verhint1_wi   
+##  Min.   :1.000   Min.   :1.000   Min.   :-3.00   Min.   :-3.00  
+##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:-0.25   1st Qu.:-0.25  
+##  Median :1.000   Median :1.000   Median : 0.00   Median : 0.00  
+##  Mean   :1.529   Mean   :1.804   Mean   : 0.00   Mean   : 0.00  
+##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.: 0.00   3rd Qu.: 0.00  
+##  Max.   :5.000   Max.   :5.000   Max.   : 3.00   Max.   : 3.00
 \end{verbatim}
 
 \begin{Shaded}
@@ -776,7 +782,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ##   term        estimate std.error statistic p.value
 ##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
 ## 1 (Intercept)     0         0.01       0         1
-## 2 verhint1_wi     0.34      0.01      24.7       0
+## 2 verhint1_wi     0.35      0.01      24.9       0
 \end{verbatim}
 
 \begin{itemize}
@@ -801,27 +807,27 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 586 x 5
+## # A tibble: 577 x 5
 ##    term                  estimate std.error statistic p.value
 ##    <chr>                    <dbl>     <dbl>     <dbl>   <dbl>
-##  1 (Intercept)              0.66       0.28      2.32    0.02
-##  2 verhint1                 0.34       0.02     21.4     0   
-##  3 factor(IDsosci)02E6C8   -0.34       0.4      -0.85    0.39
-##  4 factor(IDsosci)050IPY    1.23       0.4       3.04    0   
-##  5 factor(IDsosci)05J4R8    0.32       0.4       0.81    0.42
-##  6 factor(IDsosci)08BDZJ    0.98       0.4       2.42    0.02
-##  7 factor(IDsosci)0BHGLF    0.570      0.4       1.43    0.15
+##  1 (Intercept)              0.65       0.28      2.31    0.02
+##  2 verhint1                 0.35       0.02     21.5     0   
+##  3 factor(IDsosci)02E6C8   -0.35       0.4      -0.86    0.39
+##  4 factor(IDsosci)050IPY    1.21       0.4       3.01    0   
+##  5 factor(IDsosci)05J4R8    0.32       0.4       0.79    0.43
+##  6 factor(IDsosci)08BDZJ    0.96       0.4       2.39    0.02
+##  7 factor(IDsosci)0BHGLF    0.570      0.4       1.42    0.16
 ##  8 factor(IDsosci)0EB6C1    0          0.4       0       1   
-##  9 factor(IDsosci)0EO9L2    1.97       0.4       4.87    0   
-## 10 factor(IDsosci)0F5L9Z    1.65       0.4       4.09    0   
-## 11 factor(IDsosci)0KAKHF    2.22       0.4       5.49    0   
-## 12 factor(IDsosci)0KYYAJ   -0.01       0.4      -0.01    0.99
+##  9 factor(IDsosci)0EO9L2    1.95       0.4       4.82    0   
+## 10 factor(IDsosci)0F5L9Z    1.64       0.4       4.06    0   
+## 11 factor(IDsosci)0KAKHF    2.2        0.4       5.44    0   
+## 12 factor(IDsosci)0KYYAJ   -0.01       0.4      -0.02    0.98
 ## 13 factor(IDsosci)0ONV4O    0.33       0.4       0.82    0.41
-## 14 factor(IDsosci)0PKFWT   -0.09       0.4      -0.21    0.83
-## 15 factor(IDsosci)0Q5XIM    0.32       0.4       0.81    0.42
-## 16 factor(IDsosci)0ZCKB5    0.32       0.4       0.81    0.42
-## 17 factor(IDsosci)114OWA    0.33       0.4       0.82    0.41
-## # ... with 569 more rows
+## 14 factor(IDsosci)0PKFWT   -0.09       0.4      -0.22    0.83
+## 15 factor(IDsosci)0ZCKB5    0.32       0.4       0.79    0.43
+## 16 factor(IDsosci)114OWA    0.33       0.4       0.82    0.41
+## 17 factor(IDsosci)11KVRK   -0.17       0.4      -0.43    0.67
+## # ... with 560 more rows
 \end{verbatim}
 
 \begin{itemize}
@@ -855,8 +861,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   Insgesamt sind viele quantitative Sozialforscher (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass \emph{fixed effects} Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
 \end{itemize}
 
-\hypertarget{mehre-fixed-effects-in-einem-modell---perioden-effekte}{%
-\subsection{Mehre fixed effects in einem Modell - Perioden-Effekte}\label{mehre-fixed-effects-in-einem-modell---perioden-effekte}}
+\hypertarget{mehre-fixed-effects-in-einem-modell-perioden-effekte}{%
+\subsection{Mehre fixed effects in einem Modell -- Perioden-Effekte}\label{mehre-fixed-effects-in-einem-modell-perioden-effekte}}
 
 \begin{itemize}
 \tightlist
@@ -884,27 +890,27 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 589 x 5
+## # A tibble: 580 x 5
 ##    term                  estimate std.error statistic p.value
 ##    <chr>                    <dbl>     <dbl>     <dbl>   <dbl>
-##  1 (Intercept)               0.61      0.28      2.15    0.03
-##  2 verhint1                  0.32      0.02     19.6     0   
-##  3 factor(wave)2             0.02      0.03      0.66    0.51
-##  4 factor(wave)3             0.14      0.03      4.25    0   
-##  5 factor(wave)4             0.12      0.03      3.53    0   
-##  6 factor(IDsosci)02E6C8    -0.32      0.4      -0.81    0.42
-##  7 factor(IDsosci)050IPY     1.28      0.4       3.19    0   
-##  8 factor(IDsosci)05J4R8     0.35      0.4       0.87    0.39
-##  9 factor(IDsosci)08BDZJ     1.03      0.4       2.57    0.01
-## 10 factor(IDsosci)0BHGLF     0.6       0.4       1.5     0.13
+##  1 (Intercept)               0.6       0.28      2.13    0.03
+##  2 verhint1                  0.33      0.02     19.8     0   
+##  3 factor(wave)2             0.02      0.03      0.6     0.55
+##  4 factor(wave)3             0.14      0.03      4.15    0   
+##  5 factor(wave)4             0.12      0.03      3.41    0   
+##  6 factor(IDsosci)02E6C8    -0.33      0.4      -0.83    0.41
+##  7 factor(IDsosci)050IPY     1.26      0.4       3.15    0   
+##  8 factor(IDsosci)05J4R8     0.34      0.4       0.85    0.39
+##  9 factor(IDsosci)08BDZJ     1.01      0.4       2.53    0.01
+## 10 factor(IDsosci)0BHGLF     0.59      0.4       1.48    0.14
 ## 11 factor(IDsosci)0EB6C1     0         0.4       0       1   
-## 12 factor(IDsosci)0EO9L2     2.04      0.4       5.06    0   
-## 13 factor(IDsosci)0F5L9Z     1.69      0.4       4.23    0   
-## 14 factor(IDsosci)0KAKHF     2.29      0.4       5.68    0   
-## 15 factor(IDsosci)0KYYAJ     0.01      0.4       0.02    0.99
-## 16 factor(IDsosci)0ONV4O     0.34      0.4       0.85    0.4 
-## 17 factor(IDsosci)0PKFWT    -0.08      0.4      -0.2     0.84
-## # ... with 572 more rows
+## 12 factor(IDsosci)0EO9L2     2.02      0.4       5.01    0   
+## 13 factor(IDsosci)0F5L9Z     1.68      0.4       4.2     0   
+## 14 factor(IDsosci)0KAKHF     2.27      0.4       5.63    0   
+## 15 factor(IDsosci)0KYYAJ     0         0.4       0.01    0.99
+## 16 factor(IDsosci)0ONV4O     0.34      0.4       0.84    0.4 
+## 17 factor(IDsosci)0PKFWT    -0.08      0.4      -0.21    0.84
+## # ... with 563 more rows
 \end{verbatim}
 
 \begin{itemize}
@@ -917,35 +923,470 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   Die \(b_{id_i}\) zeigen weiterhin den Kontrast zu Person 1 (substantiell nicht sonderlich interessant).
 \end{itemize}
 
-\hypertarget{uxfcbungsaufgaben-zur-grundsuxe4tzlichen-spezifikation-von-fixed-effects-modellen}{%
-\subsection*{\texorpdfstring{Übungsaufgaben zur grundsätzlichen Spezifikation von \emph{fixed effects} Modellen}{Übungsaufgaben zur grundsätzlichen Spezifikation von fixed effects Modellen}}\label{uxfcbungsaufgaben-zur-grundsuxe4tzlichen-spezifikation-von-fixed-effects-modellen}}
-\addcontentsline{toc}{subsection}{Übungsaufgaben zur grundsätzlichen Spezifikation von \emph{fixed effects} Modellen}
+\hypertarget{uxfcbungsaufgaben-1}{%
+\section{Übungsaufgaben 1}\label{uxfcbungsaufgaben-1}}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den kausalen Effekt von X auf Y mit einem \emph{fixed effects} Modell (andere Beispiele aus dem Datensatz).
+  Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (\texttt{med2}) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}).
 
   \begin{itemize}
   \tightlist
   \item
-    INHALTLICH FORMULIERTE FRAGE
+    Schätze zuerst das \emph{falsche} pooled OLS Modell.
   \item
-    Vergleiche die Modelle mit und ohne Periodeneffekte.
+    Schätze dann das einfache \emph{fixed effects} Modell mit einer Spezifikation freier Wahl.
+  \item
+    Vergleiche schließlich die Modelle mit und ohne Periodeneffekt.
   \end{itemize}
 \item
-  Spezifiziere, schätze und interpretiere ein eigenes \emph{fixed effects} Modell mit dem Beipsieldatensatz.
+  Spezifiziere, schätze und interpretiere ein eigenes bivariates \emph{fixed effects} Modell mit Daten aus dem Beipsieldatensatz.
 \end{enumerate}
 
 \hypertarget{fixed-effects-modelle-in-der-praktischen-anwendung}{%
-\section{Fixed effects Modelle in der praktischen Anwendung}\label{fixed-effects-modelle-in-der-praktischen-anwendung}}
+\section{\texorpdfstring{\emph{Fixed effects} Modelle in der praktischen Anwendung}{Fixed effects Modelle in der praktischen Anwendung}}\label{fixed-effects-modelle-in-der-praktischen-anwendung}}
 
 \begin{itemize}
 \tightlist
 \item
-  mit \texttt{plm}
+  Auch wenn wir das \emph{fixed effects} Modell nur mit \texttt{stats::lm()} und der LSDV-Spezifikation schätzen können, ist die weitere Arbeit mit diesen Modellen nicht ideal - besonders, wenn wir tiefer in Detail-Anpassungen einsteigen.
+\item
+  Zudem wird das Schätzen mit \texttt{stats::lm()} und LSDV bei großen Datensätzen und mit vielen \emph{fixed effects} langsam.
+\item
+  \texttt{plm} \citep{R-plm} ist das etablierte Paket für das Schätzen von ökonometrischen Panel-Modellen in \texttt{R}. Es bietet ein einfaches Interface zu allen Standardmodellen (und zu den übrigen Klassikern der Ökonometrie, instrumental variables, differences in differences).
+\item
+  Das Schätzen der Modelle basiert auf OLS mit Datentransformationen im Hintergrund. Dadurch ist das Schätzen wesentlich schneller als mit einer LSDV-Spezifikation. Die notwendigen Anpassungen der Standardfehler werden ebenfalls vorgenommen.
 \end{itemize}
+
+\hypertarget{spezifikation-eines-einfachen-fixed-effects-modells-mit-plm}{%
+\subsection*{\texorpdfstring{Spezifikation eines einfachen \emph{fixed effects} Modells mit \texttt{plm}}{Spezifikation eines einfachen fixed effects Modells mit plm}}\label{spezifikation-eines-einfachen-fixed-effects-modells-mit-plm}}
+\addcontentsline{toc}{subsection}{Spezifikation eines einfachen \emph{fixed effects} Modells mit \texttt{plm}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Oneway (individual) effect Within Model
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1, data = ., model = "within", index = "IDsosci")
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -3.000000 -0.163516  0.000000  0.095937  3.000000 
+## 
+## Coefficients:
+##          Estimate Std. Error t-value  Pr(>|t|)    
+## verhint1 0.345937   0.016061  21.539 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    702.5
+## Residual Sum of Squares: 553.75
+## R-Squared:      0.21175
+## Adj. R-Squared: -0.051155
+## F-statistic: 463.924 on 1 and 1727 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Das \emph{fixed effects} Modell wird über \texttt{model\ =\ "within"} angefordert. Mit \texttt{index\ =\ "IDsosci"} wird der Indikator für die Einheiten angegeben.
+\item
+  Der Output von \texttt{summary()} liefert eine korrekte Beschreibung der Fallzahlen im Datensatz.
+\item
+  Beachte: Das angepasste \(R^2\) ist hier (wie in vielen \emph{fixed effects} Modellen) negativ. Das ist kein Grund zur Beunruhigung. Die Logik dahinter kann gut nachvollzogen werden, wenn wir uns die LSDV-Spezifikation in Erinnerung rufen. Zusätzlich zu den inhaltlich relevanten Prädiktoren enthält das Modell \(n - 1\) Prädiktoren für die Einheiten.
+\end{itemize}
+
+\hypertarget{mehre-fixed-effects-in-einem-modell-perioden-effekte-mit-plm}{%
+\subsection{\texorpdfstring{Mehre \emph{fixed effects} in einem Modell -- Perioden-Effekte mit \texttt{plm}}{Mehre fixed effects in einem Modell -- Perioden-Effekte mit plm}}\label{mehre-fixed-effects-in-einem-modell-perioden-effekte-mit-plm}}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{plm} bietet zwei Möglichkeiten, die Perioden-Effekte zu spezifizieren (identische Ergebnisse, anderer Output):
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Zwei Indices \texttt{index=c("IDsosci",\ "wave")} und \texttt{effect\ =\ "twoways"} für die within-Transformation.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Es wird ``still'' für Personen und Perioden kontrolliert, beide werden nicht im Output angezeigt.
+  \item
+    Das \(R^2\) bezieht sich nur auf die Varianzaufklärung durch die Prädiktoren.
+  \end{itemize}
+\item
+  Perioden-Effekt als Dummies hinzufügen.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Praktisch, wenn es nur wenige Perioden gibt und wir die Ergebnisse dazu direkt im Output sehen wollen.
+  \item
+    Das \(R^2\) bezieht sich auf die Varianzaufklärung durch die Prädiktoren und den Perioden-Effekt.
+  \end{itemize}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{, }
+    \DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Twoways effects Within Model
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1, data = ., effect = "twoways", 
+##     model = "within", index = c("IDsosci", "wave"))
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -3.070526 -0.180571  0.011669  0.131626  3.049432 
+## 
+## Coefficients:
+##          Estimate Std. Error t-value  Pr(>|t|)    
+## verhint1 0.328779   0.016614  19.789 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    669.68
+## Residual Sum of Squares: 545.72
+## R-Squared:      0.1851
+## Adj. R-Squared: -0.088576
+## F-statistic: 391.609 on 1 and 1724 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mdl_pfe_pdv =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }
+    \DataTypeTok{model =} \StringTok{"within"}\NormalTok{)}
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Oneway (individual) effect Within Model
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1 + factor(wave), data = ., model = "within", 
+##     index = "IDsosci")
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -3.070526 -0.180571  0.011669  0.131626  3.049432 
+## 
+## Coefficients:
+##               Estimate Std. Error t-value  Pr(>|t|)    
+## verhint1      0.328779   0.016614 19.7891 < 2.2e-16 ***
+## factor(wave)2 0.019997   0.033589  0.5954 0.5516856    
+## factor(wave)3 0.139955   0.033691  4.1540 3.426e-05 ***
+## factor(wave)4 0.117763   0.034484  3.4150 0.0006526 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    702.5
+## Residual Sum of Squares: 545.72
+## R-Squared:      0.22318
+## Adj. R-Squared: -0.037717
+## F-statistic: 123.824 on 4 and 1724 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\hypertarget{robuste-standardfehler}{%
+\subsection*{Robuste Standardfehler}\label{robuste-standardfehler}}
+\addcontentsline{toc}{subsection}{Robuste Standardfehler}
+
+\begin{itemize}
+\item
+  In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Autokorrelation oder Heteroskedastizität.
+\item
+  Das \texttt{lmtest} Paket \citep{R-lmtest} ist kompatibel mit Modellen aus \texttt{plm}. Es stellt zahlreiche robuste Standardfehler zur Verfügung.
+\item
+  Hier die ``normalen'' Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.
+\item
+  Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle unter anderem \citet{kingHowRobustStandard2015} zur kritischen Lektüre.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Normale SE und CI}
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coeftest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## t test of coefficients:
+## 
+##               Estimate Std. Error t value Pr(>|t|)    
+## verhint1         0.329      0.017  19.789   <2e-16 ***
+## factor(wave)2    0.020      0.034   0.595    0.552    
+## factor(wave)3    0.140      0.034   4.154   <2e-16 ***
+## factor(wave)4    0.118      0.034   3.415    0.001 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coefci}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                2.5 % 97.5 %
+## verhint1       0.296  0.361
+## factor(wave)2 -0.046  0.086
+## factor(wave)3  0.074  0.206
+## factor(wave)4  0.050  0.185
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Heteroskedasticity-robust SE and CI}
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coeftest}\NormalTok{(}\DataTypeTok{vcov. =}\NormalTok{ vcovHC) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## t test of coefficients:
+## 
+##               Estimate Std. Error t value Pr(>|t|)    
+## verhint1         0.329      0.028  11.868   <2e-16 ***
+## factor(wave)2    0.020      0.029   0.688    0.491    
+## factor(wave)3    0.140      0.036   3.849   <2e-16 ***
+## factor(wave)4    0.118      0.032   3.701   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coefci}\NormalTok{(}\DataTypeTok{vcov. =}\NormalTok{ vcovHC) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                2.5 % 97.5 %
+## verhint1       0.274  0.383
+## factor(wave)2 -0.037  0.077
+## factor(wave)3  0.069  0.211
+## factor(wave)4  0.055  0.180
+\end{verbatim}
+
+\hypertarget{aufnahme-weiterer-uxfcber-die-zeit-variierender-pruxe4diktoren}{%
+\subsection*{Aufnahme weiterer über die Zeit variierender Prädiktoren}\label{aufnahme-weiterer-uxfcber-die-zeit-variierender-pruxe4diktoren}}
+\addcontentsline{toc}{subsection}{Aufnahme weiterer über die Zeit variierender Prädiktoren}
+
+\begin{itemize}
+\item
+  Die Aufnahme weiterer Prädiktoren, die über die Zeit variieren, erfolgt prinzipiell wie im bekannten OLS Modell.
+\item
+  Wichtig ist, dass es bei \emph{fixed effects} Modellen explizit um das Schätzen von kausalen Effekten geht. Entsprechend bedacht sollte die Auswahl von weiteren Prädiktoren sein. Ein ``kitchen sink'' Ansatz, den man vor allem in OLS mit Querschnittsdaten sieht, ist hier nicht angebracht. Es muss (wie eigentlich immer) darauf geachtet werden, welche Koeffizienten eines Regressionsmodells kausal interpretiert werden dürfen \citep{keeleCausalInterpretationEstimated2019}. Im \emph{fixed effects} Modell müssen wir uns das ganz explizit vergegenwärtigen und in der Ergebnisdarstellung berücksichtigen, da die Modellklasse kausale Effekte impliziert.
+\item
+  Nach der TPB dürfen wir dieses Modell annehmen, da die drei Prädiktoren auf derselben kausalen Stufe stehen: Verhaltensintention \textasciitilde{} Einstellung + Deskriptive Norm + Injunktive Norm. Hier schätzen wir das Modell für die Verhaltensintention \emph{Rausgehen ohne triftigen Grund}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\NormalTok{ein1 }\OperatorTok{+}\StringTok{ }\NormalTok{desnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{injnormp1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }
+    \DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 5
+##   term          estimate std.error statistic p.value
+##   <chr>            <dbl>     <dbl>     <dbl>   <dbl>
+## 1 ein1              0.31      0.02     12.4     0   
+## 2 desnormp1         0.05      0.03      1.56    0.12
+## 3 injnormp1         0.1       0.03      3.31    0   
+## 4 factor(wave)2     0.21      0.05      4.69    0   
+## 5 factor(wave)3     0.24      0.05      5.3     0   
+## 6 factor(wave)4     0.39      0.05      8.32    0
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Vor allem die Einstellung zum Verhalten und die wahrgenommenen normativen Erwartungen haben stärkere kausale Effekte auf die Verhaltensintention.
+\end{itemize}
+
+\hypertarget{aufnahme-eines-personenmerkmals-funktioniert-nicht-ohne-warnung}{%
+\subsection*{Aufnahme eines Personenmerkmals (funktioniert nicht, ohne Warnung!)}\label{aufnahme-eines-personenmerkmals-funktioniert-nicht-ohne-warnung}}
+\addcontentsline{toc}{subsection}{Aufnahme eines Personenmerkmals (funktioniert nicht, ohne Warnung!)}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\NormalTok{summary}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Oneway (individual) effect Within Model
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1 + C_sex + factor(wave), data = ., 
+##     model = "within", index = "IDsosci")
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -3.070526 -0.180571  0.011669  0.131626  3.049432 
+## 
+## Coefficients:
+##               Estimate Std. Error t-value  Pr(>|t|)    
+## verhint1      0.328779   0.016614 19.7891 < 2.2e-16 ***
+## factor(wave)2 0.019997   0.033589  0.5954 0.5516856    
+## factor(wave)3 0.139955   0.033691  4.1540 3.426e-05 ***
+## factor(wave)4 0.117763   0.034484  3.4150 0.0006526 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    702.5
+## Residual Sum of Squares: 545.72
+## R-Squared:      0.22318
+## Adj. R-Squared: -0.037717
+## F-statistic: 123.824 on 4 and 1724 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Geschlecht wird nicht in das Modell aufgenommen. Vorsicht: Es taucht einfach nicht im Ergebnis auf, obwohl es in der Formel steht (siehe \texttt{Call} in der Summary)
+\end{itemize}
+
+\hypertarget{warum-wird-das-personenmerkmal-nicht-ins-modell-aufgenomen}{%
+\subsection*{Warum wird das Personenmerkmal nicht ins Modell aufgenomen?}\label{warum-wird-das-personenmerkmal-nicht-ins-modell-aufgenomen}}
+\addcontentsline{toc}{subsection}{Warum wird das Personenmerkmal nicht ins Modell aufgenomen?}
+
+\begin{itemize}
+\tightlist
+\item
+  Within-person Transformation entfernt die gesamte between-person Varianz aus den Daten: \(\bar{y_{i}} = 0\).
+\item
+  Daher können innerhalb der Personen invariante Mermmale keine Unterschiede erklären.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{id_smple =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{unique}\NormalTok{(d}\OperatorTok{$}\NormalTok{IDsosci), }\DecValTok{100}\NormalTok{)}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(IDsosci }\OperatorTok{%in%}\StringTok{ }\NormalTok{id_smple) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(IDsosci, wave, verh1) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(IDsosci) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{verh1_within =}\NormalTok{ verh1 }\OperatorTok{-}\StringTok{ }\KeywordTok{mean}\NormalTok{(verh1)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{gather}\NormalTok{(transformation, }
+\NormalTok{    value, }\OperatorTok{-}\NormalTok{IDsosci, }\OperatorTok{-}\NormalTok{wave) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(wave, value, }\DataTypeTok{group =}\NormalTok{ IDsosci)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{position =} \KeywordTok{position_jitter}\NormalTok{(}\DataTypeTok{width =} \DecValTok{0}\NormalTok{, }
+    \DataTypeTok{height =} \FloatTok{0.3}\NormalTok{), }\DataTypeTok{show.legend =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{facet_wrap}\NormalTok{(}\StringTok{"transformation"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{workshop_panel_files/figure-latex/vis-ex2-1.pdf}
+
+\begin{itemize}
+\item
+  Die Abbildung verdeutlicht dies ahand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level der Verhaltensintention zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
+\item
+  Das gleiche gilt für Prädiktoren, die als Merkmale anderer Einheiten, die wir als \emph{fixed effects} spezifiziert haben, konstant sind. In diesem Beispiel wären dies Eigenschaften der Perioden, also z.B. neue Schutzmaßnahmen bzw. deren Lockerung, soweit sie alle Personen gleichermaßen im gleichen Zeitraum betreffen.
+\end{itemize}
+
+\hypertarget{interaktionen-mit-personenmerkmalen}{%
+\subsection{Interaktionen mit Personenmerkmalen}\label{interaktionen-mit-personenmerkmalen}}
+
+\begin{itemize}
+\tightlist
+\item
+  Wir können jedoch Interaktionen zwischen über die Zeit variierenden Prädiktoren und Personenmerkmalen (oder Merkmalen anderer \emph{fixed effects} Einheiten) ins Modell aufnehmen.
+\item
+  Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der gruppenspezifischen Effekte, z.B. den den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.
+\item
+  Bei kontinierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{*}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 5
+##   term           estimate std.error statistic p.value
+##   <chr>             <dbl>     <dbl>     <dbl>   <dbl>
+## 1 verhint1           0.34      0.03     13.2     0   
+## 2 factor(wave)2      0.02      0.03      0.59    0.55
+## 3 factor(wave)3      0.14      0.03      4.14    0   
+## 4 factor(wave)4      0.12      0.03      3.42    0   
+## 5 verhint1:C_sex    -0.01      0.03     -0.39    0.7
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Der Effekt ist in der Stichprobe für Frauen minimal schwächer als für Männer. Der Unterschied ist jedoch weder substantiell noch statistisch bedeutsam.
+\end{itemize}
+
+\hypertarget{conclusio-vor--und-nachteile-des-fixed-effects-modells}{%
+\section{\texorpdfstring{Conclusio: Vor- und Nachteile des \emph{fixed effects} Modells}{Conclusio: Vor- und Nachteile des fixed effects Modells}}\label{conclusio-vor--und-nachteile-des-fixed-effects-modells}}
+
+\begin{quote}
+In many applications the whole point of using panel data is to allow for \(a_i\) to be arbitrarily correlated with the \(x_{it}\). A fixed effects analysis achieves this purpose explicitly. --- \citet{wooldridge10}, p.~300
+\end{quote}
+
+\begin{quote}
+By controlling out context, FE models effectively cut out much of what is going on --- goings-on that are usually of interest to the researcher, the reader and the policy maker. We contend that models that control out, rather than explicitly model, context and heterogeneity offer overly simplistic and impoverished results that can lead to misleading interpretations. --- \citet{bellExplainingFixedEffects2015}, p.~134
+\end{quote}
+
+\begin{itemize}
+\item
+  Das \emph{fixed effects} Modell ist nützlich, wenn wir einen kausalen Effekt, der sich innerhalb von Einheiten (Personen) abspielt, schätzen wollen.
+\item
+  Das \emph{fixed effects} Modell kann keine Mermale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die \emph{fixed effects} erklärt wird.
+\item
+  Wir interessieren uns aber häufig (auch) für die Unterschiede zwischen Einheiten (Personen). Das \emph{fixed effects} Modell macht Antworten auf solche Fragen unmöglich.
+\item
+  Ein weiterer, damit unverbundener Nachteil des \emph{fixed effects} Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie sind nicht personenspezifisch).
+\end{itemize}
+
+\hypertarget{uxfcbungsaufgaben-2}{%
+\section{Übungsaufgaben 2}\label{uxfcbungsaufgaben-2}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (\texttt{med2}) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}). Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Verwende jetzt \texttt{plm} für die Schätzung.
+  \item
+    Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (\texttt{med1}) in das Modell auf.
+  \item
+    Prüfe, ob sich der Effekt der Information aus Zeitungen und Zeitschriften nach Geschlecht (\texttt{C\_sex}) unterscheidet.
+  \end{itemize}
+\item
+  Spezifiziere, schätze und interpretiere ein eigenes \emph{fixed effects} Modell mit Daten aus dem Beipsieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.
+\end{enumerate}
 
 \hypertarget{random-effects-models}{%
 \chapter{Random effects models}\label{random-effects-models}}
