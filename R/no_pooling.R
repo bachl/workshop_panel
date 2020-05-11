@@ -1,21 +1,18 @@
 ## ---- no-pooling
 
-n = 8; t = 6; tce = 1
-example_data = tibble(id = 1:n,
-                      z = seq(-3, 3, length.out = n),
-                      m_beer = z * 1 + rnorm(n)) %>% 
-  replicate(t, ., simplify = FALSE) %>% 
-  bind_rows() %>% 
-  mutate(beer = m_beer + rnorm(n*t),
-         beer = beer + abs(min(beer)),
-         hangover = beer * tce + z * -2 + rnorm(n*t))
-
-example_data %>%
-  group_by(id) %>%
+d %>%
+  group_by(IDsosci) %>%
+  # mutate(chk = sd(verh1) != 0 & sd(verhint1) != 0) %>% 
+  # filter(chk) %>% 
   nest() %>%
-  mutate(mdls = map(data, ~tidy(lm(hangover ~ beer, data = .x)))) %>% 
+  mutate(mdls = map(data, ~tidy(lm(verh1 ~ verhint1, data = .x)))) %>% 
   unnest(mdls) %>%
   ungroup() %>% 
   select(-data) %>% 
-  filter(term == "beer") %>% 
-  mutate_if(is.numeric, round, 2)
+  na.omit() %>%
+  filter(statistic != Inf) %>%
+  filter(term == "verhint1") %>% 
+  mutate_if(is.numeric, round, 2) %>% 
+  print %>% 
+  summarise(estimate = mean(estimate),
+            std.error = sqrt(mean(std.error^2))) # simple approximation

@@ -142,6 +142,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html"><i class="fa fa-check"></i><b>3</b> Fixed effects Modelle</a><ul>
 <li class="chapter" data-level="3.1" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#konzeptionelle-einführung"><i class="fa fa-check"></i><b>3.1</b> Konzeptionelle Einführung</a></li>
+<li class="chapter" data-level="3.2" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#fixed-effects-modelle-in-der-praktischen-anwendung"><i class="fa fa-check"></i><b>3.2</b> Fixed effects Modelle in der praktischen Anwendung</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="random-effects-models.html"><a href="random-effects-models.html"><i class="fa fa-check"></i><b>4</b> Random effects models</a></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
@@ -237,44 +238,221 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="beispiel-daten" class="section level2">
 <h2><span class="header-section-number">2.2</span> Beispiel-Daten</h2>
 <ul>
+<li>Titel: Soziale Normen im alltäglichen Umgang mit den Konsequenzen der Corona-Krise</li>
 <li><p>sponsored by Jule Scheper und Sophie Bruns</p></li>
-<li>KURZE INHALTLICHE BESCHREIBUNG
+<li><p>Thema der Erhebung: Die Corona-Pandemie hat Regierungen auf der ganzen Welt dazu veranlasst, Reglungen zur Reduzierung der raschen Ausbreitung des Virus einzuführen. Die deutsche Bundesregierung hat am 22. März 2020 mehrere Maßnahmen zur Einschränkung sozialer Kontakte beschlossen. Diese Einschränkungen im sozialen Leben sind vollkommen neu und jede*r Einzelne muss sich auf diese Regelungen und die neue Lebenssituation einstellen. Diese Studie beschäftigt sich mit der Frage, wie Menschen sich im Alltag mit der Corona-Pandemie beschäftigen und wie sie mit den Regelungen zur Beschränkung sozialer Kontakte umgehen. Im Mittelpunkt der Untersuchung steht die Entstehung und Veränderung von sozialen Normen und persönlichen Einstellungen zur Beschränkung sozialer Kontakte über die Zeit.</p></li>
+<li><p>Im Rahmen des Workshops steht der Einfluss der sozialen Normen und der eigenen Einstellung zum Verhalten auf das tatsächliche Social Distancing-Verhalten im Mittelpunkt.</p></li>
+<li><p>Zeitraum der Erhebung: 1.4.-28.4.2020</p></li>
+<li>Datum der Messzeitpunkte: Die Befragung besteht aus vier Wellen. Jede Welle war für eine Woche im Feld und bezog sich immer auf die vorherige Kalenderwoche.
 <ul>
-<li>Ergebungszeitraum, Messzeitpunkte</li>
-<li>Repeated Measures</li>
-<li>Constant Measures</li>
+<li>Welle 1: Erhebungszeitraum vom 1.4.-7.4., Bezugszeitraum vom 23.3. bis 29.4.</li>
+<li>Welle 2: Erhebungszeitraum vom 8.4.-14.4., Bezugszeitraum vom 30.3. bis 5.4.</li>
+<li>Welle 3: Erhebungszeitraum vom 15.4.-21.4., Bezugszeitraum vom 6.4. bis 12.4.</li>
+<li>Welle 4: Erhebungszeitraum vom 22.4.-28.4., Bezugszeitraum vom 13.4. bis 19.4.</li>
 </ul></li>
-<li><p>Kurzer Auszug mit <code>summary</code> und <code>print</code></p></li>
+<li>Nachvollziehen der Aufbereitung in <code>R/data.R</code></li>
+<li><p>Direkt laden (z.B. für Übungen) aus <code>R/data/data.rds</code></p></li>
 </ul>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">d =<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>), <span class="dt">y =</span> <span class="kw">rnorm</span>(<span class="dv">10</span>))</a></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variablenname</th>
+<th align="left">Label</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">alter</td>
+<td align="left">Alter</td>
+</tr>
+<tr class="even">
+<td align="left">besorg1</td>
+<td align="left">Ich bin besorgt, wenn ich an Corona denke.</td>
+</tr>
+<tr class="odd">
+<td align="left">bildung</td>
+<td align="left">Bildungsabschluss</td>
+</tr>
+<tr class="even">
+<td align="left">desnormp1</td>
+<td align="left">…sind in der letzten Woche rausgegangen, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Spaziergang/Sport, Einkauf oder Hilfestellungen handelte.</td>
+</tr>
+<tr class="odd">
+<td align="left">desnormp2</td>
+<td align="left">…haben sich in der letzten Woche in ihrer Freizeit mit mehr als einer anderen Person getroffen, die nicht im gleichen Haushalt lebt.</td>
+</tr>
+<tr class="even">
+<td align="left">desnormp3</td>
+<td align="left">…haben in der letzten Woche weniger als 1,5 Meter Abstand zu Personen gehalten, die nicht im gleichen Haushalt leben.</td>
+</tr>
+<tr class="odd">
+<td align="left">desnormp4</td>
+<td align="left">…haben sich in der letzten Woche strikt an die Maßnahmen zur Beschränkung sozialer Kontakte gehalten.</td>
+</tr>
+<tr class="even">
+<td align="left">ein1</td>
+<td align="left">Ich finde es in Ordnung, wenn man rausgeht, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Spaziergang/Sport, Einkauf oder Hilfe handelt.</td>
+</tr>
+<tr class="odd">
+<td align="left">ein2</td>
+<td align="left">Ich finde es in Ordnung, wenn man sich in seiner Freizeit mit mehr als einer anderen Person trifft, die nicht im gleichen Haushalt lebt.</td>
+</tr>
+<tr class="even">
+<td align="left">ein3</td>
+<td align="left">Ich finde es in Ordnung, wenn man weniger als 1,5 Meter Abstand zu Personen hält, die nicht im gleichen Haushalt leben.</td>
+</tr>
+<tr class="odd">
+<td align="left">ein4</td>
+<td align="left">Ich finde es wichtig, dass die Empfehlung zur Beschränkung sozialer Kontakte strikt eingehalten werden.</td>
+</tr>
+<tr class="even">
+<td align="left">ein5</td>
+<td align="left">Ich finde es richtig, dass generell Abstand gehalten werden soll.</td>
+</tr>
+<tr class="odd">
+<td align="left">injnormp1</td>
+<td align="left">…finden es in Ordnung, wenn man rausgeht, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Spaziergang/Sport, Einkauf oder Hilfestellungen handelt.</td>
+</tr>
+<tr class="even">
+<td align="left">injnormp2</td>
+<td align="left">… finden es in Ordnung, wenn man sich in seiner Freizeit mit mehr als einer anderen Person trifft, die nicht im gleichen Haushalt lebt.</td>
+</tr>
+<tr class="odd">
+<td align="left">injnormp3</td>
+<td align="left">…finden es in Ordnung, wenn man weniger als 1,5 Meter Abstand zu Personen hält, die nicht im gleichen Haushalt leben.</td>
+</tr>
+<tr class="even">
+<td align="left">injnormp4</td>
+<td align="left">…finden es in Ordnung, wenn man sich strikt an die Maßnahmen zur Beschränkung sozialer Kontakte hält.</td>
+</tr>
+<tr class="odd">
+<td align="left">kompeer_s1</td>
+<td align="left">Freunde</td>
+</tr>
+<tr class="even">
+<td align="left">kompeer_s2</td>
+<td align="left">Familie und Partner oder Partnerin</td>
+</tr>
+<tr class="odd">
+<td align="left">kompeer_s3</td>
+<td align="left">Bekannte (z.B. Arbeitskollegen und -kolleginnen, Vereinsmitglieder)</td>
+</tr>
+<tr class="even">
+<td align="left">kompeer_s4</td>
+<td align="left">Prominente und/oder Influencer</td>
+</tr>
+<tr class="odd">
+<td align="left">med1</td>
+<td align="left">Zeitungen &amp; Zeitschriften (z.B. Die ZEIT, Bild, Focus, der Spiegel)</td>
+</tr>
+<tr class="even">
+<td align="left">med2</td>
+<td align="left">Öffentlich-rechtliche Fernsehsender (z.B. ARD, ZDF, h1)</td>
+</tr>
+<tr class="odd">
+<td align="left">med3</td>
+<td align="left">Private Fernsehsender (z.B. RTL, ProSieben)</td>
+</tr>
+<tr class="even">
+<td align="left">med4</td>
+<td align="left">Öffentlich-Rechtliche Radiosender (z.B. DLF, n-joy, NDR)</td>
+</tr>
+<tr class="odd">
+<td align="left">med5</td>
+<td align="left">Private Radiosender (z.B. 89.0 RTL, ffn)</td>
+</tr>
+<tr class="even">
+<td align="left">sex</td>
+<td align="left">Geschlecht W4 dummy</td>
+</tr>
+<tr class="odd">
+<td align="left">stress</td>
+<td align="left">Ich fühle mich durch die Corona-Pandemie gestresst.</td>
+</tr>
+<tr class="even">
+<td align="left">verh1</td>
+<td align="left">Ich bin rausgegangen, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Einkauf, Spaziergang/Sport oder Hilfestellung gehandelt hat.</td>
+</tr>
+<tr class="odd">
+<td align="left">verh2</td>
+<td align="left">Ich habe mich mit mehr als einer Person getroffen, die nicht in meinem Haushalt lebt.</td>
+</tr>
+<tr class="even">
+<td align="left">verh3</td>
+<td align="left">Ich habe weniger 1,5 Meter Abstand zu Personen gehalten, die nicht in meinem Haushalt leben.</td>
+</tr>
+<tr class="odd">
+<td align="left">verh4</td>
+<td align="left">Ich habe mich strikt an die Maßnahmen zur Beschränkung sozialer Kontakte gehalten.</td>
+</tr>
+<tr class="even">
+<td align="left">verh5</td>
+<td align="left">Ich habe mich im Privaten mit Freunden oder Familienmitgliedern getroffen, die nicht in meinem Haushalt leben.</td>
+</tr>
+<tr class="odd">
+<td align="left">verh6</td>
+<td align="left">Ich war länger draußen als für einen üblichen Spaziergang (z.B. saß auf der Wiese oder am See).</td>
+</tr>
+<tr class="even">
+<td align="left">verhint1</td>
+<td align="left">Rausgehen, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Einkauf, Spaziergang/Sport oder Hilfestellung handelt.</td>
+</tr>
+<tr class="odd">
+<td align="left">verhint2</td>
+<td align="left">Mich mit mehr als einer Person treffen, die nicht in meinem Haushalt lebt.</td>
+</tr>
+<tr class="even">
+<td align="left">verhint3</td>
+<td align="left">Weniger als 1,5 Meter Abstand zu Personen halten, die nicht in meinem Haushalt leben.</td>
+</tr>
+<tr class="odd">
+<td align="left">verhint4</td>
+<td align="left">Mich strikt an die Maßnahmen zur Beschränkung sozialer Kontakte halten.</td>
+</tr>
+<tr class="even">
+<td align="left">verhint5</td>
+<td align="left">Mich im Privaten mit Freunden oder Familienmitgliedern treffen, die nicht in meinem Haushalt leben.</td>
+</tr>
+<tr class="odd">
+<td align="left">verhint6</td>
+<td align="left">Mich länger draußen aufhalten als für einen üblichen Spaziergang (z.B. auf der Wiese oder am See sitzen).</td>
+</tr>
+<tr class="even">
+<td align="left">veruns</td>
+<td align="left">Ich bin verunsichert durch die Corona-Krise.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="pooled-ols-wrong" class="section level2">
 <h2><span class="header-section-number">2.3</span> Pooled OLS (WRONG!)</h2>
 <ul>
-<li><p>Untersuchung des Effekts X -&gt; Y</p></li>
-<li><p>Einfachstes Modell: Regression X -&gt; Y</p></li>
+<li>Als erstes Beispiel wollen wir uns einer klassischen Frage aus der Theory of Planned Behavior zuwenden. Wir interessieren uns für den Effekt der Verhaltensintention auf das (berichtete) Verhalten (schließlich würden wir zum Start des Workshops ja gerne etwas finden ;)). Konkret betrachten wir den Effekt des Vorhabens, entgegen der Empfehlungen ohne relevanten Grund die Wohnung zu verlassen, auf den Selbstbericht, dies auch zu tun. Die beiden relevanten Variablen sind <code>verh1</code> und <code>verhint1</code>. Die Abbildung zeigt ihre Entwicklung über die vier Wellen für 10 zufällig ausgewählte Personen.</li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> d) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">show.resid =</span> F)</a></code></pre></div>
-<pre><code>## 
-## Call:
-## lm(formula = y ~ x, data = d)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.84149 -0.43816 -0.08292  0.36029  0.88638 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)  -0.2462     0.1990  -1.237   0.2511  
-## x             0.6952     0.2148   3.237   0.0119 *
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Residual standard error: 0.6169 on 8 degrees of freedom
-## Multiple R-squared:  0.567,  Adjusted R-squared:  0.5129 
-## F-statistic: 10.48 on 1 and 8 DF,  p-value: 0.01194</code></pre>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">id_smple =<span class="st"> </span><span class="kw">sample</span>(<span class="kw">unique</span>(d<span class="op">$</span>IDsosci), <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(IDsosci <span class="op">%in%</span><span class="st"> </span>id_smple) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(IDsosci, wave, verh1, verhint1) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="st">    </span><span class="kw">gather</span>(variable, value, <span class="op">-</span>IDsosci, <span class="op">-</span>wave) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(wave, value, <span class="dt">group =</span> IDsosci, </a>
+<a class="sourceLine" id="cb2-5" data-line-number="5">    <span class="dt">color =</span> IDsosci)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>(<span class="dt">position =</span> <span class="kw">position_jitter</span>(<span class="dt">height =</span> <span class="fl">0.2</span>), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="st">    </span><span class="kw">facet_wrap</span>(<span class="st">&quot;variable&quot;</span>)</a></code></pre></div>
+<p><img src="workshop_panel_files/figure-html/vis-ex1-1.png" width="672" /></p>
+<ul>
+<li>Das einfachste Modell, diesen Effekt zu schätzen, ist eine einfache OLS Regression der Verhaltensintention auf das Verhalten.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">lm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> d) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_if</span>(is.numeric, round, <span class="dv">2</span>)</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 5
+##   term        estimate std.error statistic p.value
+##   &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+## 1 (Intercept)     0.47      0.02      19.6       0
+## 2 verhint1        0.59      0.01      53.8       0</code></pre>
+<ul>
+<li>Das Modell besagt, dass die Häufigkeit, nach raus zu gehen, mit jedem Punkt auf der Intentionsskala um ca. <span class="math inline">\(b_{verhint1} = 0.6\)</span> Punkte steigt.</li>
+</ul>
 <div id="warum-ist-pooled-ols-immer-falsch-statistische-theorie" class="section level3 unnumbered">
 <h3>Warum ist Pooled OLS immer falsch? Statistische Theorie</h3>
+<ul>
+<li>Wir nennen dieses Modell <em>pooled</em> OLS, da alle Beobachtungen einfach zusammengeworfen werden, ohne zu beachten, dass einige von ihnen zusammen gehören, da sie von denselben Personen stammen.</li>
+</ul>
 <ol style="list-style-type: decimal">
 <li>Exogenitätsannahme ist verletzt, <span class="math inline">\(E(u_i|x_i) \neq 0\)</span>, da
 <ul>
@@ -304,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Pooled OLS vermischt aber zwei Quellen von Unterschieden in den Daten: Den (kausalen) Effekt innerhalb der Personen (within) und die Unterschiede zwischen Personen (between).</li>
 <li>Within und between Effekte können sich in Größe und sogar in der Richtung unterscheiden!</li>
 <li>Die Schätzung aus einem poold OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.</li>
-<li>In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment <span class="math inline">\(x\)</span> schon höhere Werte in <span class="math inline">\(y\)</span> haben? <em>X Evtl. anpassen an Datenbeispiel X</em></li>
+<li>In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment <span class="math inline">\(x\)</span> schon höhere Werte in <span class="math inline">\(y\)</span> haben?</li>
 <li>Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.</li>
 </ul>
 </div>
@@ -314,11 +492,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Zum Abschluss noch ein imagninäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.</p></li>
 <li><p>In der pooled OLS Analyse wird einfach die Rergressionsgerade durch alle Beobachung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.</p></li>
 </ul>
-<p><img src="workshop_panel_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="workshop_panel_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <ul>
 <li>Wenn wir aber für alle acht Personen separat den Zusammenhang zwischen Bierkonsum und Kater berechnen (so genanntes no pooling Modell), ergibt sich ein anderes Bild. Für alle Personen gilt mehr oder weniger deutlich: Je mehr Bier konsumiert wurde, desto stärker fällt der Hangover aus (within).</li>
 </ul>
-<p><img src="workshop_panel_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="workshop_panel_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <ul>
 <li>Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte auf eine nicht beobachte Drittvariable auf Ebene der Personen zurück gehen:
 <ul>

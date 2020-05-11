@@ -2,12 +2,12 @@
 
 ```{r, include=FALSE}
 source("R/packages.R")
-source("R/data.R")
+d = read_rds("R/data/data.rds")
 ```
 
 ## Konzeptionelle Einführung
 
-* Im ersten Teil des Abschnitts zu *fixed effects* Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir die bekannte Funktion `stats::lm()` (übliche OLS-Schätzung linearer Modelle in R).
+* Im ersten Teil des Abschnitts zu *fixed effects* Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir `stats::lm()` (übliche OLS-Schätzung linearer Modelle in `R`).
 
 ### Wie können wir den kauselen (within-person) Effekt mit Paneldaten schätzen? {-}
 
@@ -23,78 +23,129 @@ source("R/data.R")
   * Der Schätzer ist aber weniger effizient, da zufällige Unterschiede in den Effekten zwischen den Personen aufgegriffen werden.
   * Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
 
-
 ### No pooling {-}
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/no_pooling.R")
 ```
 
-```{r no-pooling, eval=TRUE, tidy=TRUE, message=FALSE}
+```{r no-pooling, eval=TRUE, tidy=TRUE, message=FALSE, warning=FALSE}
 
 ```
 
-<!-- ## Regression using within transformation -->
+* Wir erhalten für jede Person einen Schätzer mit Standardfehler. Wir können diese mitteln, um einen Schätzer des durchschnittlichen kausalen Effekts zu erhalten.
+* Wir müssen die Schätzer entfernen, bei denen es wegen eines perfekten Zusammenhangs oder wegen fehlender intraindividueller Varianz keine OLS Lösung gibt.
 
-<!-- ```{r, echo = T} -->
-<!-- wage10 = wage10 %>% group_by(nr) %>% mutate(union_within = union - mean(union), lwage_within = lwage - mean(lwage)) %>% ungroup -->
-<!-- wage10 %>% select(contains("lwage"), contains("union")) %>% summary -->
-<!-- ``` -->
-<!-- ```{r, echo = T} -->
-<!-- within = lm(lwage_within ~ union_within, data = wage10 )  -->
-<!-- summary(within)$coef %>% round(2) %>% head -->
-<!-- ``` -->
+### Within Transformation {-}
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/wi_trans.R")
+```
+
+```{r wi-trans, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Intuitive Interpretation: Eine Abweichung vom Personen-Durchschnitt in $X$ um einen Punkt führt zu einer Abweichung vom Personen-Durchschnitt in $Y$ um $b_{X}$ Punkte.
+* Hier: Wenn eine Person um einen Punkt wahrscheinlicher rausgehen möchte als üblich, dann wird sie 0.34 Punkte häufiger rausgehen (beides auf 5er Skalen).
+* Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß.
+  
+### Least Squares mit Dummy Variablen (LSDV) {-}
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/lsdv.R")
+```
+
+```{r lsdv, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Der Punktschätzer $b_{X}$ entspricht genau dem Punktschätzer nach der within-person Transformation.
+* Zusätzlich gibt die Regressionskonstante den Mittelwert für Person 1 an und die $n - 1$ Koeffizienten der Dummy-Variablen die Abweichung der übrigen Personen von diesem Mittelwert. Es gelten die üblichen Regeln für die Interpretation solcher Koeffizienten.
+
+### Welche Modellspezifikation soll ich nutzen? {-}
+
+1) Der Schätzer des durchschnittlichen kausalen Effekts in der no pooling Spezifikation ist im Vergleich zu den beiden anderen Varianten weniger effizient. Außerdem ist er praktisch schwieriger zu ermitteln, da er erst aus den Schätzern der Einzel-Modelle berechnet werden muss. Wenn wir die Annahme eines homogenen kausalen Effekts treffen (und das tun wir üblicherweise), dann gibt es keinen Grund, das no pooling Modell in der Praxis zu verwenden.
+
+1) Die Spezifikationen mit within-person Transformation und LSDV ergeben dieselben Punktschätzer für den kausalen Effekt und sind insofern austauschbar.
+
+1) Die Standardfehler des Modells mit einer naiven within-person Transformation (wie oben dargestellt) sind zu klein, da wir die Stichprobenmittelwerte und nicht die (mit Unsicherheit behafteten) Schätzer der Populationsmittelwerte zur Zentrierung verwenden. Die Standardfehler müssen daher angepasst werden (passiert in spezialisierten Software-Paketen automatisch).
+
+1) Die LSDV Spezifikation ist in fast jedem Softwarepaket einfach umzusetzen. Mit großen Datensätzen wird aber die Schätzung langsam und der Output unübersichtlich.
+
+* Unabhängig von der Spezifikation gelten weiterhin alle Annahmen der (OLS) Regression. Besonders gern vergessen wird der *omitted variable bias* durch nicht gemessene, über die Zeit variierdene $Z$. *Fixed effects* Modelle kontrollieren nur die $Z$, die auf konstante Merkmale der als *fixed effects* spezifizierten Einheiten zurückgehen.
+
+* Insgesamt sind viele quantitative Sozialforscher (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass *fixed effects* Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
+
+### Mehre fixed effects in einem Modell -- Perioden-Effekte
+
+* Grundsätzlich können in einem Modell beliebig viele *fixed effects* spezifiziert werden.
+* In Paneldaten ist der Erhebungszeitpunkt bzw. die Ergebungsperiode (Panelwelle) eine typische Variable, über die verschiedene, für alle Personen konstante Effekte kontrolliert werden können.
+* Einige Lehrbücher empfehlen, dies *immer* zu tun, da kausale Effekte von Ereignissen, die für alle Einheiten konstant sind, statistisch nicht identifiziert sind.
+* Eine typische Spezifikation ist die Aufnahme eines *fixed effects* für den Indikator der Panelwelle.
+* In der LSDV-Spezifikation kann einfach ein weiterer Dummy-Faktor hinzugefügt werden. Die within-person Transformation ist mathematisch komplizierter, wird aber in spezialisierten Software-Pakten im Hintergrund erledigt. Es können auch beide Spezifikationen kombiniert werden, wenn z.B. die Periodeneffekte von inhaltlichem Interesse sind und im Output angezeigt werden sollen (siehe nächsten Teilabschnitt).
+
+### Ein Beispiel mit *fixed effects* für Personen und Perioden {-}
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/period_fe.R")
+```
+
+```{r period-fe, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* $b_{verhint1}$ quantifiziert weiterhin den kausalen Effekt von Interesse. Er ist robust gegen die Kontrolle des Periodeneffekts.
+* Die $b_{wave_t}$ zeigen den Kontrast zur ersten Welle. In diesem Fall sind liegen in der dritten und vierten Welle die Häufigkeiten des Rausgehens höher als noch in den ersten beiden Wellen.
+* Die $b_{id_i}$ zeigen weiterhin den Kontrast zu Person 1 (substantiell nicht sonderlich interessant).
+
+### Übungsaufgaben zur grundsätzlichen Spezifikation von *fixed effects* Modellen {-}
+
+1) Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (`med2`) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`).
+    * Schätze zuerst das *falsche* pooled OLS Modell.
+    * Schätze dann das einfache *fixed effects* Modell mit einer Spezifikation freier Wahl.
+    * Vergleiche schließlich die Modelle mit und ohne Periodeneffekt.
+
+2) Spezifiziere, schätze und interpretiere ein eigenes bivariates *fixed effects* Modell mit Daten aus dem Beipsieldatensatz.
+
+## Fixed effects Modelle in der praktischen Anwendung
+
+* Auch wenn wir das *fixed effects* Modell nur mit `stats::lm()` und der LSDV-Spezifikation schätzen können, ist die weitere Arbeit mit diesen Modellen nicht ideal - besonders, wenn wir tiefer in Detail-Anpassungen einsteigen.
+* Zudem wird das Schätzen bei großen Datensätzen mit vielen *fixed effects* langsam.
+* `plm` [@R-plm] ist das etablierte Paket für das Schätzen von ökonometrischen Panel-Modellen in `R`. Es bietet ein einfaches Interface zu allen Standardmodellen.
+* Das Schätzen der Modelle basiert auf OLS mit Datentransformationen im Hintergrund. Dadurch ist das Schätzen wesentlich schneller als mit einer LSDV-Spezifikation. Die notwendigen Anpassungen der Standardfehler werden ebenfalls vorgenommen.
+
+### Spezifikation eines einfachen *fixed effects* Modells mit `plm` {-}
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/plm_intro.R")
+```
+
+```{r plm-intro, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
 
 
-<!-- This has an intuitive interpretation: deviations from the person-average in $X$ predict deviations from the person-average in $Y$. -->
+* Das *fixed effects* Modell wird über `model = "within"` angefordert. Mit `index = "IDsosci"` wird der Indikator für die Einheiten angegeben.
+* Der Output von `summary()` liefert eine korrekte Beschreibung der Fallzahlen im Datensatz.
+* Beachte: Das angepasste $R^2$ ist hier (wie in vielen *fixed effects* Modellen) negativ. Das ist kein Grund zur Beunruhigung. Die Logik dahinter kann gut nachvollzogen werden, wenn wir uns die LSDV-Spezifikation in Erinnerung rufen. Zusätzlich zu den inhaltlich relevanten Prädiktoren enthält das Modell $n - 1$ Prädiktoren für die Einheiten. 
 
-<!-- ## Least Squares with Dummy Variables (LSDV) -->
+### Mehre *fixed effects* in einem Modell -- Perioden-Effekte mit `plm`
 
+* `plm` bietet zwei Möglichkeiten, die Perioden-Effekte zu spezifizieren (identische Ergebnisse, anderer Output):
 
-<!-- ```{r, echo = T} -->
-<!-- lsdv = lm(lwage ~ union + factor(nr), data = wage10) -->
-<!-- summary(lsdv)$coef %>% round(2) %>% head(5) -->
-<!-- ``` -->
+1) Zwei Indices `index=c("IDsosci", "wave")` und `effect = "twoways"` für die within-Transformation.
+    * Es wird "still" für Personen und Perioden kontrolliert, beide werden nicht im Output angezeigt.
+    * Das $R^2$ bezieht sich nur auf die Varianzaufklärung durch die Prädiktoren.
 
+1) Perioden-Effekt als Dummies hinzufügen.
+    * Praktisch, wenn es nur wenige Perioden gibt und wir die Ergebnisse dazu direkt im Output sehen wollen.
+    * Das $R^2$ bezieht sich auf die Varianzaufklärung durch die Prädiktoren und den Perioden-Effekt.
 
-<!-- ## What approach to use? -->
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/plm_twoway.R")
+```
 
-<!-- 1. Both the LSDV and within-transformed regression yield the same estimates. -->
-<!-- 2. The standard errors for the within-transformed model need to be adjusted for the fact that we are substracting estimates (means). They are too small. -->
-<!-- 3. Practically, the LSDV approach is simpler to implement, but can be slow (and produce a lot of output) in large samples. -->
-<!-- 4. Overall, a large group of scholars (but not all) agree that the FE model is the best way to estimate causal effects from non-experimental data. -->
+```{r plm-twoway, eval=TRUE, tidy=TRUE, message=FALSE}
 
-<!-- Regardless of approach, all the assumptions of OLS still apply, e.g. you can still have omitted variable bias (only time-varying confounders), heteroskedasticity, etc.  -->
-
-<!-- ## Multiple fixed effects - time -->
-
-<!-- * In panel data, heterogeneity can also stem from time-varying variables that are constant across individuals, e.g. specific time points (months, years, specific events, etc.). -->
-<!-- * In order to account for these effects, it is reasonable to include fixed effects for periods or trends. -->
-<!-- * A simple approach is to use time or period dummy variables into the model. -->
-<!-- * @br recommends to **always** include period fixed effects in a FE panel model. -->
-
-<!-- ## Person and period fixed effects -->
-
-<!-- ```{r, echo = T} -->
-<!-- lsdv2 = lm(lwage ~ union + factor(nr) + factor(year), data = wage10) -->
-<!-- summary(lsdv2)$coef %>% tidy %>% .[c(1:4, 22:24),] %>% mutate_each(funs(round(., 2)), -`.rownames`) -->
-<!-- ``` -->
-
-
-<!-- ## Checking assumptions  -->
-
-<!-- Visually check regression assumptions using the `sjPlot` package [@R-sjPlot]. -->
-
-<!-- ```{r, results = "hide", fig.keep='none'} -->
-<!-- p <- sjp.lm(lsdv2, type = "ma") -->
-<!-- ``` -->
-<!-- ```{r, fig.height=5, fig.width=10, echo = F} -->
-<!-- x = plot_grid(p$plot.list) -->
-<!-- ``` -->
-
-<!-- ## Exercise: FE models using OLS -->
-
-<!-- 1. Estimate the effect of union membership on an individual's hourly wage. -->
-<!-- 2. Is there a marriage premium on hourly wages? -->
-<!-- 3. How does the within-person effect of marriage compare to the pooled OLS effect? -->
-<!-- 4. Bonus: For either of the two $X$ predictors mentioned above, estimate separate within and between models. -->
+```

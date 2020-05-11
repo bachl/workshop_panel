@@ -142,6 +142,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html"><i class="fa fa-check"></i><b>3</b> Fixed effects Modelle</a><ul>
 <li class="chapter" data-level="3.1" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#konzeptionelle-einführung"><i class="fa fa-check"></i><b>3.1</b> Konzeptionelle Einführung</a></li>
+<li class="chapter" data-level="3.2" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#fixed-effects-modelle-in-der-praktischen-anwendung"><i class="fa fa-check"></i><b>3.2</b> Fixed effects Modelle in der praktischen Anwendung</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="random-effects-models.html"><a href="random-effects-models.html"><i class="fa fa-check"></i><b>4</b> Random effects models</a></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
@@ -175,7 +176,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li><p>Der Mini-Workshop bietet eine <em>pragmatische</em> Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf sogenannten <em>micro panels</em>, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).</p></li>
 <li><p>In der Analyse beschränken uns hier auf Varianten der <em>linearen</em> Regressionsmodelle. Wir beginnen mit den grundlegenden <em>fixed effects</em> und <em>random effects</em> Modellen. Dann betrachten wir das <em>within-between</em> Modell, das als eine Integration des <em>fixed effects</em> Modell in das <em>random effects</em> Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.</p></li>
-<li><p>Wir schätzen die Modelle mit etablierten <em>least-squares</em> und <em>maximum likelihood</em> Methoden. Gerade bei den <em>within-between</em> Modellen sind bayesianische Schätzmethoden, z.B. <em>MCMC sampling</em> (implementiert in <a href="https://mc-stan.org/">Stan</a>), unabhängig von den statistisch-philosophischen, sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.</p></li>
+<li><p>Wir schätzen die Modelle mit etablierten <em>least-squares</em> und <em>maximum likelihood</em> Methoden. Gerade bei den <em>within-between</em> Modellen sind bayesianische Schätzmethoden, z.B. <em>MCMC sampling</em> (implementiert in <a href="https://mc-stan.org/">Stan</a>), unabhängig von statistisch-philosophischen Überlegungen sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.</p></li>
 <li><p>Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir <code>R</code> mit dem <code>tidyverse</code> und eine kleine Zahl speziallisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in <code>R</code>.</p></li>
 </ul>
 </div>
@@ -186,7 +187,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Grundkentnisse in <code>R</code> setze ich voraus, insbesondere Datentransformationen innerhalb des <code>tidyverse</code>. Wir werden aber keine komplizierten Dinge in <code>R</code> tun. Auch ohne weiterführende <code>R</code>-Kenntnisse sollten die Inhalte des Workshops in Bezug auf die datenanalystischen Verfahren klar werden.</p></li>
 <li><p>Wir werden nicht viel Zeit auf die verschiedenen Schätzer, deren Effizienz und Bias, die verschiedenen Algorithmen und Datentransformationen verwenden.</p></li>
 <li><p>Wir werden keine Beweise oder Ableitungen besprechen. Wir setzen keine Kenntnisse in Matrixalgebra voraus — weder meiner- noch eurerseits.</p></li>
-<li><p>Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc.</p></li>
+<li><p>Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.</p></li>
 <li><p>Fehlende Daten (Panelmortalität, Ausfall von Einheiten in einzelnen Wellen) sind ein großes Thema in der Längsschnittanalyse. Wir werden es hier ignorieren, bis auf den Hinweis, dass alle Fälle, die in mindestens zwei bzw. drei Wellen Daten haben, grundsätzlich Informationen zur Schätzung beitragen.</p></li>
 </ul>
 </div>
@@ -215,7 +216,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Pakete</h3>
 <p>Wir verwenden die folgenden Pakete</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse, broom)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse, broom, haven, plm)</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())  <span class="co"># ggplot theme</span></a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"></a>
 <a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">tibble</span>(<span class="dt">package =</span> <span class="kw">c</span>(<span class="st">&quot;R&quot;</span>, <span class="kw">sort</span>(pacman<span class="op">::</span><span class="kw">p_loaded</span>()))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">version =</span> <span class="kw">map_chr</span>(package, </a>
@@ -249,8 +250,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">3.2.1</td>
 </tr>
 <tr class="even">
+<td align="left">haven</td>
+<td align="left">2.2.0</td>
+</tr>
+<tr class="odd">
 <td align="left">pacman</td>
 <td align="left">0.5.1</td>
+</tr>
+<tr class="even">
+<td align="left">plm</td>
+<td align="left">2.2.3</td>
 </tr>
 <tr class="odd">
 <td align="left">purrr</td>

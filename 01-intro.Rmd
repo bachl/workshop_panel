@@ -2,7 +2,6 @@
 
 ```{r, include=FALSE}
 source("R/packages.R")
-source("R/data.R")
 ```
 
 ## Längsschnittdaten
@@ -49,34 +48,54 @@ source("R/data.R")
 * Die Modelle in diesem Workshop nutzen das *long format*
 
 * Datensätze können von einem ins andere Format transformiert werden, z.B. im `tidyverse`:
-  * `tidyr::gather()` und `tidyr::spread()` oder
+  * `tidyr::gather()` und `tidyr::spread()` (verwende ich in `R/data.R`) oder
   * `tidyr::pivot_longer()` und `tidyr::pivot_wider()`
 
 ## Beispiel-Daten
 
+
+* Titel: Soziale Normen im alltäglichen Umgang mit den Konsequenzen der Corona-Krise 
 * sponsored by Jule Scheper und Sophie Bruns
 
-* KURZE INHALTLICHE BESCHREIBUNG
-  * Ergebungszeitraum, Messzeitpunkte
-  * Repeated Measures
-  * Constant Measures
-  
-* Kurzer Auszug mit `summary` und `print`
+* Thema der Erhebung: Die Corona-Pandemie hat Regierungen auf der ganzen Welt dazu veranlasst, Reglungen zur Reduzierung der raschen Ausbreitung des Virus einzuführen. Die deutsche Bundesregierung hat am 22. März 2020 mehrere Maßnahmen zur Einschränkung sozialer Kontakte beschlossen. Diese Einschränkungen im sozialen Leben sind vollkommen neu und jede*r Einzelne muss sich auf diese Regelungen und die neue Lebenssituation einstellen. Diese Studie beschäftigt sich mit der Frage, wie Menschen sich im Alltag mit der Corona-Pandemie beschäftigen und wie sie mit den Regelungen zur Beschränkung sozialer Kontakte umgehen. Im Mittelpunkt der Untersuchung steht die Entstehung und Veränderung von sozialen Normen und persönlichen Einstellungen zur Beschränkung sozialer Kontakte über die Zeit.
+
+* Im Rahmen des Workshops steht der Einfluss der sozialen Normen und der eigenen Einstellung zum Verhalten auf das tatsächliche Social Distancing-Verhalten im Mittelpunkt.
+
+* Zeitraum der Erhebung: 1.4.-28.4.2020
+
+* Datum der Messzeitpunkte: Die Befragung besteht aus vier Wellen. Jede Welle war für eine Woche im Feld und bezog sich immer auf die vorherige Kalenderwoche. 
+  * Welle 1: Erhebungszeitraum vom 1.4.-7.4., Bezugszeitraum vom 23.3. bis 29.4.
+  * Welle 2: Erhebungszeitraum vom 8.4.-14.4., Bezugszeitraum vom 30.3. bis 5.4.
+  * Welle 3: Erhebungszeitraum vom 15.4.-21.4., Bezugszeitraum vom 6.4. bis 12.4.
+  * Welle 4: Erhebungszeitraum vom 22.4.-28.4., Bezugszeitraum vom 13.4. bis 19.4.
+
+
+* Nachvollziehen der Aufbereitung in `R/data.R`
+* Direkt laden (z.B. für Übungen) aus `R/data/data.rds`
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/data.R")
 ```
 
-```{r data, eval=TRUE, tidy=TRUE, message=FALSE}
+```{r data, eval=TRUE, tidy=TRUE, message=FALSE, warning=FALSE, echo=FALSE}
 
 ```
 
 
 ## Pooled OLS (WRONG!)
 
-* Untersuchung des Effekts X -> Y
+* Als erstes Beispiel wollen wir uns einer klassischen Frage aus der Theory of Planned Behavior zuwenden. Wir interessieren uns für den Effekt der Verhaltensintention auf das (berichtete) Verhalten (schließlich würden wir zum Start des Workshops ja gerne etwas finden ;)). Konkret betrachten wir den Effekt des Vorhabens, entgegen der Empfehlungen ohne relevanten Grund die Wohnung zu verlassen, auf den Selbstbericht, dies auch zu tun. Die beiden relevanten Variablen sind `verh1` und `verhint1`. Die Abbildung zeigt ihre Entwicklung über die vier Wellen für 10 zufällig ausgewählte Personen.
 
-* Einfachstes Modell: Regression X -> Y
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/vis_ex1.R")
+```
+
+```{r vis-ex1, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+
+* Das einfachste Modell, diesen Effekt zu schätzen, ist eine einfache OLS Regression der Verhaltensintention auf das Verhalten.
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/wrong_ols.R")
@@ -86,8 +105,11 @@ knitr::read_chunk("R/wrong_ols.R")
 
 ```
 
+* Das Modell besagt, dass die Häufigkeit, ohne triftigen Grund raus zu gehen, mit jedem Punkt auf der Intentionsskala um ca. $b_{verhint1} = 0.6$ Punkte steigt.
 
 ### Warum ist Pooled OLS immer falsch? Statistische Theorie {-}
+
+* Wir nennen dieses Modell *pooled* OLS, da alle Beobachtungen einfach zusammengeworfen werden, ohne zu beachten, dass einige von ihnen zusammen gehören, da sie von denselben Personen stammen.
 
 1) Exogenitätsannahme ist verletzt, $E(u_i|x_i) \neq 0$, da
     * Korrelationen zwischen den Variablen $x$ gehen auf nicht gemessene Eigenschaften der Einheiten zurück, z.B. Eigenschaften der Person $z_i$, die sowohl $x_i$ als auch $y_i$ beeinflussen.
@@ -109,7 +131,7 @@ knitr::read_chunk("R/wrong_ols.R")
 * Pooled OLS vermischt aber zwei Quellen von Unterschieden in den Daten: Den (kausalen) Effekt innerhalb der Personen (within) und die Unterschiede zwischen Personen (between).
 * Within und between Effekte können sich in Größe und sogar in der Richtung unterscheiden!
 * Die Schätzung aus einem poold OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.
-* In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment $x$ schon höhere Werte in $y$ haben? _X Evtl. anpassen an Datenbeispiel X_
+* In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment $x$ schon höhere Werte in $y$ haben?
 * Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.
 
 ### Pooled OLS, within und between - eine Illustration {-}

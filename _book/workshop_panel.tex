@@ -130,9 +130,9 @@
 \item
   Der Mini-Workshop bietet eine \emph{pragmatische} Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf sogenannten \emph{micro panels}, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).
 \item
-  In der Analyse beschränken uns hier auf Varianten der \emph{linearen} Regressionsmodelle. Wir beginnen mit den grundlgenden \emph{fixed effects} und \emph{random effects} Modellen. Dann betrachten wir das \emph{within-between} Modell, das als eine Integration des \emph{fixed effects} Modell in das \emph{random effects} Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.
+  In der Analyse beschränken uns hier auf Varianten der \emph{linearen} Regressionsmodelle. Wir beginnen mit den grundlegenden \emph{fixed effects} und \emph{random effects} Modellen. Dann betrachten wir das \emph{within-between} Modell, das als eine Integration des \emph{fixed effects} Modell in das \emph{random effects} Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.
 \item
-  Wir schätzen die Modelle mit etablierten \emph{least-squares} und \emph{maximum likelihood} Methoden. Gerade bei den \emph{within-between} Modellen sind bayesianische Schätzmethoden, z.B. \emph{MCMC sampling} (implementiert in \href{https://mc-stan.org/}{Stan}), unabhängig von den statistisch-philosophischen, sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.
+  Wir schätzen die Modelle mit etablierten \emph{least-squares} und \emph{maximum likelihood} Methoden. Gerade bei den \emph{within-between} Modellen sind bayesianische Schätzmethoden, z.B. \emph{MCMC sampling} (implementiert in \href{https://mc-stan.org/}{Stan}), unabhängig von statistisch-philosophischen Überlegungen sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.
 \item
   Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir \texttt{R} mit dem \texttt{tidyverse} und eine kleine Zahl speziallisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in \texttt{R}.
 \end{itemize}
@@ -150,7 +150,7 @@
 \item
   Wir werden keine Beweise oder Ableitungen besprechen. Wir setzen keine Kenntnisse in Matrixalgebra voraus --- weder meiner- noch eurerseits.
 \item
-  Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc.
+  Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.
 \item
   Fehlende Daten (Panelmortalität, Ausfall von Einheiten in einzelnen Wellen) sind ein großes Thema in der Längsschnittanalyse. Wir werden es hier ignorieren, bis auf den Hinweis, dass alle Fälle, die in mindestens zwei bzw. drei Wellen Daten haben, grundsätzlich Informationen zur Schätzung beitragen.
 \end{itemize}
@@ -202,7 +202,7 @@ Wir verwenden die folgenden Pakete
 \begin{Shaded}
 \begin{Highlighting}[]
 \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)) }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)}
-\NormalTok{pacman}\OperatorTok{::}\KeywordTok{p_load}\NormalTok{(tidyverse)}
+\NormalTok{pacman}\OperatorTok{::}\KeywordTok{p_load}\NormalTok{(tidyverse, broom, haven)}
 \KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_bw}\NormalTok{())  }\CommentTok{# ggplot theme}
 
 \KeywordTok{tibble}\NormalTok{(}\DataTypeTok{package =} \KeywordTok{c}\NormalTok{(}\StringTok{"R"}\NormalTok{, }\KeywordTok{sort}\NormalTok{(pacman}\OperatorTok{::}\KeywordTok{p_loaded}\NormalTok{()))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{version =} \KeywordTok{map_chr}\NormalTok{(package, }
@@ -216,11 +216,15 @@ package & version\\
 \hline
 R & 3.6.2\\
 \hline
+broom & 0.5.4\\
+\hline
 dplyr & 0.8.4\\
 \hline
 forcats & 0.4.0\\
 \hline
 ggplot2 & 3.2.1\\
+\hline
+haven & 2.2.0\\
 \hline
 pacman & 0.5.1\\
 \hline
@@ -367,69 +371,178 @@ tidyverse & 1.3.0\\
 
 \begin{itemize}
 \item
+  Titel: Soziale Normen im alltäglichen Umgang mit den Konsequenzen der Corona-Krise
+\item
   sponsored by Jule Scheper und Sophie Bruns
 \item
-  KURZE INHALTLICHE BESCHREIBUNG
+  Thema der Erhebung: Die Corona-Pandemie hat Regierungen auf der ganzen Welt dazu veranlasst, Reglungen zur Reduzierung der raschen Ausbreitung des Virus einzuführen. Die deutsche Bundesregierung hat am 22. März 2020 mehrere Maßnahmen zur Einschränkung sozialer Kontakte beschlossen. Diese Einschränkungen im sozialen Leben sind vollkommen neu und jede*r Einzelne muss sich auf diese Regelungen und die neue Lebenssituation einstellen. Diese Studie beschäftigt sich mit der Frage, wie Menschen sich im Alltag mit der Corona-Pandemie beschäftigen und wie sie mit den Regelungen zur Beschränkung sozialer Kontakte umgehen. Im Mittelpunkt der Untersuchung steht die Entstehung und Veränderung von sozialen Normen und persönlichen Einstellungen zur Beschränkung sozialer Kontakte über die Zeit.
+\item
+  Im Rahmen des Workshops steht der Einfluss der sozialen Normen und der eigenen Einstellung zum Verhalten auf das tatsächliche Social Distancing-Verhalten im Mittelpunkt.
+\item
+  Zeitraum der Erhebung: 1.4.-28.4.2020
+\item
+  Datum der Messzeitpunkte: Die Befragung besteht aus vier Wellen. Jede Welle war für eine Woche im Feld und bezog sich immer auf die vorherige Kalenderwoche.
 
   \begin{itemize}
   \tightlist
   \item
-    Ergebungszeitraum, Messzeitpunkte
+    Welle 1: Erhebungszeitraum vom 1.4.-7.4., Bezugszeitraum vom 23.3. bis 29.4.
   \item
-    Repeated Measures
+    Welle 2: Erhebungszeitraum vom 8.4.-14.4., Bezugszeitraum vom 30.3. bis 5.4.
   \item
-    Constant Measures
+    Welle 3: Erhebungszeitraum vom 15.4.-21.4., Bezugszeitraum vom 6.4. bis 12.4.
+  \item
+    Welle 4: Erhebungszeitraum vom 22.4.-28.4., Bezugszeitraum vom 13.4. bis 19.4.
   \end{itemize}
 \item
-  Kurzer Auszug mit \texttt{summary} und \texttt{print}
+  Nachvollziehen der Aufbereitung in \texttt{R/data.R}
+\item
+  Direkt laden (z.B. für Übungen) aus \texttt{R/data/data.rds}
 \end{itemize}
 
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{d =}\StringTok{ }\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{), }\DataTypeTok{y =} \KeywordTok{rnorm}\NormalTok{(}\DecValTok{10}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
+\begin{tabular}{l|l}
+\hline
+Variablenname & Label\\
+\hline
+alter & Alter\\
+\hline
+besorg1 & Ich bin besorgt, wenn ich an Corona denke.\\
+\hline
+bildung & Bildungsabschluss\\
+\hline
+desnormp1 & …sind in der letzten Woche rausgegangen, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Spaziergang/Sport, Einkauf oder Hilfestellungen handelte.\\
+\hline
+desnormp2 & …haben sich in der letzten Woche in ihrer Freizeit mit mehr als einer anderen Person getroffen, die nicht im gleichen Haushalt lebt.\\
+\hline
+desnormp3 & …haben in der letzten Woche weniger als 1,5 Meter Abstand zu Personen gehalten, die nicht im gleichen Haushalt leben.\\
+\hline
+desnormp4 & ...haben sich in der letzten Woche strikt an die Maßnahmen zur Beschränkung sozialer Kontakte gehalten.\\
+\hline
+ein1 & Ich finde es in Ordnung, wenn man rausgeht, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Spaziergang/Sport, Einkauf oder Hilfe handelt.\\
+\hline
+ein2 & Ich finde es in Ordnung, wenn man sich in seiner Freizeit mit mehr als einer anderen Person trifft, die nicht im gleichen Haushalt lebt.\\
+\hline
+ein3 & Ich finde es in Ordnung, wenn man weniger als 1,5 Meter Abstand zu Personen hält, die nicht im gleichen Haushalt leben.\\
+\hline
+ein4 & Ich finde es wichtig, dass die Empfehlung zur Beschränkung sozialer Kontakte strikt eingehalten werden.\\
+\hline
+ein5 & Ich finde es richtig, dass generell Abstand gehalten werden soll.\\
+\hline
+injnormp1 & …finden es in Ordnung, wenn man rausgeht, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Spaziergang/Sport, Einkauf oder Hilfestellungen handelt.\\
+\hline
+injnormp2 & … finden es in Ordnung, wenn man sich in seiner Freizeit mit mehr als einer anderen Person trifft, die nicht im gleichen Haushalt lebt.\\
+\hline
+injnormp3 & …finden es in Ordnung, wenn man weniger als 1,5 Meter Abstand zu Personen hält, die nicht im gleichen Haushalt leben.\\
+\hline
+injnormp4 & ...finden es in Ordnung, wenn man sich strikt an die Maßnahmen zur Beschränkung sozialer Kontakte hält.\\
+\hline
+kompeer\_s1 & Freunde\\
+\hline
+kompeer\_s2 & Familie und Partner oder Partnerin\\
+\hline
+kompeer\_s3 & Bekannte (z.B. Arbeitskollegen und -kolleginnen, Vereinsmitglieder)\\
+\hline
+kompeer\_s4 & Prominente und/oder Influencer\\
+\hline
+med1 & Zeitungen \& Zeitschriften (z.B. Die ZEIT, Bild, Focus, der Spiegel)\\
+\hline
+med2 & Öffentlich-rechtliche Fernsehsender (z.B. ARD, ZDF, h1)\\
+\hline
+med3 & Private Fernsehsender (z.B. RTL, ProSieben)\\
+\hline
+med4 & Öffentlich-Rechtliche Radiosender (z.B. DLF, n-joy, NDR)\\
+\hline
+med5 & Private Radiosender (z.B. 89.0 RTL, ffn)\\
+\hline
+sex & Geschlecht W4 dummy\\
+\hline
+stress & Ich fühle mich durch die Corona-Pandemie gestresst.\\
+\hline
+verh1 & Ich bin rausgegangen, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Einkauf, Spaziergang/Sport oder Hilfestellung gehandelt hat.\\
+\hline
+verh2 & Ich habe mich mit mehr als einer Person getroffen, die nicht in meinem Haushalt lebt.\\
+\hline
+verh3 & Ich habe weniger 1,5 Meter Abstand zu Personen gehalten, die nicht in meinem Haushalt leben.\\
+\hline
+verh4 & Ich habe mich strikt an die Maßnahmen zur Beschränkung sozialer Kontakte gehalten.\\
+\hline
+verh5 & Ich habe mich im Privaten mit Freunden oder Familienmitgliedern getroffen, die nicht in meinem Haushalt leben.\\
+\hline
+verh6 & Ich war länger draußen als für einen üblichen Spaziergang (z.B. saß auf der Wiese oder am See).\\
+\hline
+verhint1 & Rausgehen, auch wenn es sich nicht um einen Arztbesuch, Arbeitsweg, Einkauf, Spaziergang/Sport oder Hilfestellung handelt.\\
+\hline
+verhint2 & Mich mit mehr als einer Person treffen, die nicht in meinem Haushalt lebt.\\
+\hline
+verhint3 & Weniger als 1,5 Meter Abstand zu Personen halten, die nicht in meinem Haushalt leben.\\
+\hline
+verhint4 & Mich strikt an die Maßnahmen zur Beschränkung sozialer Kontakte halten.\\
+\hline
+verhint5 & Mich im Privaten mit Freunden oder Familienmitgliedern treffen, die nicht in meinem Haushalt leben.\\
+\hline
+verhint6 & Mich länger draußen aufhalten als für einen üblichen Spaziergang (z.B. auf der Wiese oder am See sitzen).\\
+\hline
+veruns & Ich bin verunsichert durch die Corona-Krise.\\
+\hline
+\end{tabular}
 
 \hypertarget{pooled-ols-wrong}{%
 \section{Pooled OLS (WRONG!)}\label{pooled-ols-wrong}}
 
 \begin{itemize}
+\tightlist
 \item
-  Untersuchung des Effekts X -\textgreater{} Y
-\item
-  Einfachstes Modell: Regression X -\textgreater{} Y
+  Als erstes Beispiel wollen wir uns einer klassischen Frage aus der Theory of Planned Behavior zuwenden. Wir interessieren uns für den Effekt der Verhaltensintention auf das (berichtete) Verhalten (schließlich würden wir zum Start des Workshops ja gerne etwas finden ;)). Konkret betrachten wir den Effekt des Vorhabens, entgegen der Empfehlungen ohne relevanten Grund die Wohnung zu verlassen, auf den Selbstbericht, dies auch zu tun. Die beiden relevanten Variablen sind \texttt{verh1} und \texttt{verhint1}. Die Abbildung zeigt ihre Entwicklung über die vier Wellen für 10 zufällig ausgewählte Personen.
 \end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{lm}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{x, }\DataTypeTok{data =}\NormalTok{ d) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{show.resid =}\NormalTok{ F)}
+\NormalTok{id_smple =}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{unique}\NormalTok{(d}\OperatorTok{$}\NormalTok{IDsosci), }\DecValTok{10}\NormalTok{)}
+
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(IDsosci }\OperatorTok{%in%}\StringTok{ }\NormalTok{id_smple) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(IDsosci, wave, verh1, verhint1) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{gather}\NormalTok{(variable, value, }\OperatorTok{-}\NormalTok{IDsosci, }\OperatorTok{-}\NormalTok{wave) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(wave, value, }\DataTypeTok{group =}\NormalTok{ IDsosci, }
+    \DataTypeTok{color =}\NormalTok{ IDsosci)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{position =} \KeywordTok{position_jitter}\NormalTok{(}\DataTypeTok{height =} \FloatTok{0.2}\NormalTok{), }\DataTypeTok{show.legend =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{facet_wrap}\NormalTok{(}\StringTok{"variable"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{workshop_panel_files/figure-latex/vis-ex1-1.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  Das einfachste Modell, diesen Effekt zu schätzen, ist eine einfache OLS Regression der Verhaltensintention auf das Verhalten.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ d) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## 
-## Call:
-## lm(formula = y ~ x, data = d)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -1.1811 -0.2609  0.1079  0.4811  0.7554 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)  
-## (Intercept)   0.4686     0.2344   1.999   0.0806 .
-## x             0.1677     0.4765   0.352   0.7340  
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.6859 on 8 degrees of freedom
-## Multiple R-squared:  0.01524,    Adjusted R-squared:  -0.1079 
-## F-statistic: 0.1238 on 1 and 8 DF,  p-value: 0.734
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic p.value
+##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+## 1 (Intercept)     0.47      0.02      19.6       0
+## 2 verhint1        0.59      0.01      53.8       0
 \end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Das Modell besagt, dass die Häufigkeit, nach raus zu gehen, mit jedem Punkt auf der Intentionsskala um ca. \(b_{verhint1} = 0.6\) Punkte steigt.
+\end{itemize}
 
 \hypertarget{warum-ist-pooled-ols-immer-falsch-statistische-theorie}{%
 \subsection*{Warum ist Pooled OLS immer falsch? Statistische Theorie}\label{warum-ist-pooled-ols-immer-falsch-statistische-theorie}}
 \addcontentsline{toc}{subsection}{Warum ist Pooled OLS immer falsch? Statistische Theorie}
+
+\begin{itemize}
+\tightlist
+\item
+  Wir nennen dieses Modell \emph{pooled} OLS, da alle Beobachtungen einfach zusammengeworfen werden, ohne zu beachten, dass einige von ihnen zusammen gehören, da sie von denselben Personen stammen.
+\end{itemize}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi})}
@@ -489,7 +602,7 @@ tidyverse & 1.3.0\\
 \item
   Die Schätzung aus einem poold OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.
 \item
-  In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment \(x\) schon höhere Werte in \(y\) haben? \emph{X Evtl. anpassen an Datenbeispiel X}
+  In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment \(x\) schon höhere Werte in \(y\) haben?
 \item
   Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.
 \end{itemize}
@@ -505,7 +618,7 @@ tidyverse & 1.3.0\\
   In der pooled OLS Analyse wird einfach die Rergressionsgerade durch alle Beobachung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
 \end{itemize}
 
-\includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-7-1.pdf}
+\includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-8-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -513,7 +626,7 @@ tidyverse & 1.3.0\\
   Wenn wir aber für alle acht Personen separat den Zusammenhang zwischen Bierkonsum und Kater berechnen (so genanntes no pooling Modell), ergibt sich ein anderes Bild. Für alle Personen gilt mehr oder weniger deutlich: Je mehr Bier konsumiert wurde, desto stärker fällt der Hangover aus (within).
 \end{itemize}
 
-\includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 \begin{itemize}
 \tightlist
@@ -540,7 +653,7 @@ tidyverse & 1.3.0\\
 \begin{itemize}
 \tightlist
 \item
-  Im ersten Teil des Abschnitts zu \emph{fixed effects} Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir die bekannte Funktion \texttt{stats::lm()} (übliche OLS-Schätzung linearer Modelle in R).
+  Im ersten Teil des Abschnitts zu \emph{fixed effects} Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir \texttt{stats::lm()} (übliche OLS-Schätzung linearer Modelle in \texttt{R}).
 \end{itemize}
 
 \hypertarget{wie-kuxf6nnen-wir-den-kauselen-within-person-effekt-mit-paneldaten-schuxe4tzen}{%
@@ -568,7 +681,7 @@ tidyverse & 1.3.0\\
   \begin{itemize}
   \tightlist
   \item
-    \(y_{it} = \beta' x_{it}' + \alpha_i + u_{it}\) or \(y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})'\beta + (u_{it} - \bar{u_{i}})\)
+    \(y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})'\beta + (u_{it} - \bar{u_{i}})\) oder \(y_{it} = \beta' x_{it}' + \alpha_i + u_{it}\)
   \end{itemize}
 \item
   In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme homogener Treatment-Effekte (entspricht der typischen Annahme im randomisierten Between-Subject-Experiment) entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
@@ -580,6 +693,258 @@ tidyverse & 1.3.0\\
   \item
     Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
   \end{itemize}
+\end{itemize}
+
+\hypertarget{no-pooling}{%
+\subsection*{No pooling}\label{no-pooling}}
+\addcontentsline{toc}{subsection}{No pooling}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(IDsosci) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# mutate(chk = sd(verh1) != 0 & sd(verhint1) != 0) %>% filter(chk) %>%}
+\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mdls =} \KeywordTok{map}\NormalTok{(data, }\OperatorTok{~}\KeywordTok{tidy}\NormalTok{(}\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ .x)))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unnest}\NormalTok{(mdls) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{data) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{na.omit}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(statistic }\OperatorTok{!=}\StringTok{ }\OtherTok{Inf}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(term }\OperatorTok{==}\StringTok{ }
+\StringTok{    "verhint1"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\NormalTok{print }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{estimate =} \KeywordTok{mean}\NormalTok{(estimate), }
+    \DataTypeTok{std.error =} \KeywordTok{sqrt}\NormalTok{(}\KeywordTok{mean}\NormalTok{(std.error}\OperatorTok{^}\DecValTok{2}\NormalTok{)))  }\CommentTok{# simple approximation}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 236 x 6
+##    IDsosci term     estimate std.error statistic p.value
+##    <chr>   <chr>       <dbl>     <dbl>     <dbl>   <dbl>
+##  1 050IPY  verhint1     1.25      0.56  2.24e+ 0    0.15
+##  2 05J4R8  verhint1     0.45      0.18  2.50e+ 0    0.13
+##  3 08BDZJ  verhint1     0.33      0.53  6.30e- 1    0.59
+##  4 0EO9L2  verhint1     1.67      0.67  2.50e+ 0    0.13
+##  5 0F5L9Z  verhint1     0         0.71  0.          1   
+##  6 0KYYAJ  verhint1     0.45      0.18  2.50e+ 0    0.13
+##  7 0ONV4O  verhint1     1         0     9.01e+15    0   
+##  8 0Q5XIM  verhint1    -0.27      0.31 -8.70e- 1    0.48
+##  9 0ZCKB5  verhint1    -0.35      0.5  -6.90e- 1    0.56
+## 10 114OWA  verhint1     0.33      0.33  1.00e+ 0    0.42
+## # ... with 226 more rows
+\end{verbatim}
+
+\begin{verbatim}
+## # A tibble: 1 x 2
+##   estimate std.error
+##      <dbl>     <dbl>
+## 1    0.493     0.520
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Wir erhalten für jede Person einen Schätzer mit Standardfehler. Wir können diese mitteln, um einen Schätzer des durchschnittlichen kausalen Effekts zu erhalten.
+\item
+  Wir müssen die Schätzer entfernen, bei denen das Modell wegen eines perfekten Zusammenhangs oder wegen fehlender \emph{within-person} Varianz keine OLS Lösung hat.
+\end{itemize}
+
+\hypertarget{within-transformation}{%
+\subsection*{Within Transformation}\label{within-transformation}}
+\addcontentsline{toc}{subsection}{Within Transformation}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d_wi =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(IDsosci, verh1, verhint1) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(IDsosci) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{verh1_wi =}\NormalTok{ verh1 }\OperatorTok{-}\StringTok{ }
+\StringTok{    }\KeywordTok{mean}\NormalTok{(verh1), }\DataTypeTok{verhint1_wi =}\NormalTok{ verhint1 }\OperatorTok{-}\StringTok{ }\KeywordTok{mean}\NormalTok{(verhint1)) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ungroup}\NormalTok{()}
+
+\NormalTok{d_wi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{IDsosci) }\OperatorTok{%>%}\StringTok{ }\NormalTok{summary}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      verh1          verhint1      verh1_wi      verhint1_wi   
+##  Min.   :1.000   Min.   :1.0   Min.   :-3.00   Min.   :-3.00  
+##  1st Qu.:1.000   1st Qu.:1.0   1st Qu.:-0.25   1st Qu.:-0.25  
+##  Median :1.000   Median :1.0   Median : 0.00   Median : 0.00  
+##  Mean   :1.526   Mean   :1.8   Mean   : 0.00   Mean   : 0.00  
+##  3rd Qu.:2.000   3rd Qu.:2.0   3rd Qu.: 0.00   3rd Qu.: 0.00  
+##  Max.   :5.000   Max.   :5.0   Max.   : 3.00   Max.   : 3.00
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d_wi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lm}\NormalTok{(verh1_wi }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_wi, }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }
+\NormalTok{    round, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 5
+##   term        estimate std.error statistic p.value
+##   <chr>          <dbl>     <dbl>     <dbl>   <dbl>
+## 1 (Intercept)     0         0.01       0         1
+## 2 verhint1_wi     0.34      0.01      24.7       0
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Intuitive Interpretation: Eine Abweichung vom Personen-Durchschnitt in \(X\) um einen Punkt führt zu einer Abweichung vom Personen-Durchschnitt in \(Y\) um \(b_{X}\) Punkte.
+\item
+  Hier: Wenn eine Person um einen Punkt wahrscheinlicher rausgehen möchte als üblich, dann wird sie 0.34 Punkte häufiger rausgehen (beides auf 5er Skalen).
+\item
+  Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß.
+\end{itemize}
+
+\hypertarget{least-squares-mit-dummy-variablen-lsdv}{%
+\subsection*{Least Squares mit Dummy Variablen (LSDV)}\label{least-squares-mit-dummy-variablen-lsdv}}
+\addcontentsline{toc}{subsection}{Least Squares mit Dummy Variablen (LSDV)}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(IDsosci), }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }
+\NormalTok{    round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{n =} \DecValTok{17}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 586 x 5
+##    term                  estimate std.error statistic p.value
+##    <chr>                    <dbl>     <dbl>     <dbl>   <dbl>
+##  1 (Intercept)              0.66       0.28      2.32    0.02
+##  2 verhint1                 0.34       0.02     21.4     0   
+##  3 factor(IDsosci)02E6C8   -0.34       0.4      -0.85    0.39
+##  4 factor(IDsosci)050IPY    1.23       0.4       3.04    0   
+##  5 factor(IDsosci)05J4R8    0.32       0.4       0.81    0.42
+##  6 factor(IDsosci)08BDZJ    0.98       0.4       2.42    0.02
+##  7 factor(IDsosci)0BHGLF    0.570      0.4       1.43    0.15
+##  8 factor(IDsosci)0EB6C1    0          0.4       0       1   
+##  9 factor(IDsosci)0EO9L2    1.97       0.4       4.87    0   
+## 10 factor(IDsosci)0F5L9Z    1.65       0.4       4.09    0   
+## 11 factor(IDsosci)0KAKHF    2.22       0.4       5.49    0   
+## 12 factor(IDsosci)0KYYAJ   -0.01       0.4      -0.01    0.99
+## 13 factor(IDsosci)0ONV4O    0.33       0.4       0.82    0.41
+## 14 factor(IDsosci)0PKFWT   -0.09       0.4      -0.21    0.83
+## 15 factor(IDsosci)0Q5XIM    0.32       0.4       0.81    0.42
+## 16 factor(IDsosci)0ZCKB5    0.32       0.4       0.81    0.42
+## 17 factor(IDsosci)114OWA    0.33       0.4       0.82    0.41
+## # ... with 569 more rows
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Der Punktschätzer \(b_{X}\) entspricht genau dem Punktschätzer nach der within-person Transformation.
+\item
+  Zusätzlich gibt die Regressionskonstante den Mittelwert für Person 1 an und die \(n - 1\) Koeffizienten der Dummy-Variablen die Abweichung der übrigen Personen von diesem Mittelwert. Es gelten die üblichen Regeln für die Interpretation solcher Koeffizienten.
+\end{itemize}
+
+\hypertarget{welche-modellspezifikation-soll-ich-nutzen}{%
+\subsection*{Welche Modellspezifikation soll ich nutzen?}\label{welche-modellspezifikation-soll-ich-nutzen}}
+\addcontentsline{toc}{subsection}{Welche Modellspezifikation soll ich nutzen?}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\item
+  Der Schätzer des durchschnittlichen kausalen Effekts in der no pooling Spezifikation ist im Vergleich zu den beiden anderen Varianten weniger effizient. Außerdem ist er praktisch schwieriger zu ermitteln, da er erst aus den Schätzern der Einzel-Modelle berechnet werden muss. Wenn wir die Annahme eines homogenen kausalen Effekts treffen (und das tun wir üblicherweise), dann gibt es keinen Grund, das no pooling Modell in der Praxis zu verwenden.
+\item
+  Die Spezifikationen mit within-person Transformation und LSDV ergeben dieselben Punktschätzer für den kausalen Effekt und sind insofern austauschbar.
+\item
+  Die Standardfehler des Modells mit einer naiven within-person Transformation (wie oben dargestellt) sind zu klein, da wir die Stichprobenmittelwerte und nicht die (mit Unsicherheit behafteten) Schätzer der Populationsmittelwerte zur Zentrierung verwenden. Die Standardfehler müssen daher angepasst werden (passiert in spezialisierten Software-Paketen automatisch).
+\item
+  Die LSDV Spezifikation ist in fast jedem Softwarepaket einfach umzusetzen. Mit großen Datensätzen wird aber die Schätzung langsam und der Output unübersichtlich.
+\end{enumerate}
+
+\begin{itemize}
+\item
+  Unabhängig von der Spezifikation gelten weiterhin alle Annahmen der (OLS) Regression. Besonders gern vergessen wird der \emph{omitted variable bias} durch nicht gemessene, über die Zeit variierdene \(Z\). \emph{Fixed effects} Modelle kontrollieren nur die \(Z\), die auf konstante Merkmale der als \emph{fixed effects} spezifizierten Einheiten zurückgehen.
+\item
+  Insgesamt sind viele quantitative Sozialforscher (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass \emph{fixed effects} Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
+\end{itemize}
+
+\hypertarget{mehre-fixed-effects-in-einem-modell---perioden-effekte}{%
+\subsection{Mehre fixed effects in einem Modell - Perioden-Effekte}\label{mehre-fixed-effects-in-einem-modell---perioden-effekte}}
+
+\begin{itemize}
+\tightlist
+\item
+  Grundsätzlich können in einem Modell beliebig viele \emph{fixed effects} spezifiziert werden.
+\item
+  In Paneldaten ist der Erhebungszeitpunkt bzw. die Ergebungsperiode (Panelwelle) eine typische Variable, über die verschiedene, für alle Personen konstante Effekte kontrolliert werden können.
+\item
+  Einige Lehrbücher empfehlen, dies \emph{immer} zu tun, da kausale Effekte von Ereignissen, die für alle Einheiten konstant sind, statistisch nicht identifiziert sind.
+\item
+  Eine typische Spezifikation ist die Aufnahme eines \emph{fixed effects} für den Indikator der Panelwelle.
+\item
+  In der LSDV-Spezifikation kann einfach ein weiterer Dummy-Faktor hinzugefügt werden. Die within-person Transformation ist mathematisch komplizierter, wird aber in spezialisierten Software-Pakten im Hintergrund erledigt. Es können auch beide Spezifikationen kombiniert werden, wenn z.B. die Periodeneffekte von inhaltlichem Interesse sind und im Output angezeigt werden sollen (siehe nächsten Teilabschnitt).
+\end{itemize}
+
+\hypertarget{ein-beispiel-mit-fixed-effects-fuxfcr-personen-und-perioden}{%
+\subsection*{\texorpdfstring{Ein Beispiel mit \emph{fixed effects} für Personen und Perioden}{Ein Beispiel mit fixed effects für Personen und Perioden}}\label{ein-beispiel-mit-fixed-effects-fuxfcr-personen-und-perioden}}
+\addcontentsline{toc}{subsection}{Ein Beispiel mit \emph{fixed effects} für Personen und Perioden}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(IDsosci), }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{n =} \DecValTok{17}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 589 x 5
+##    term                  estimate std.error statistic p.value
+##    <chr>                    <dbl>     <dbl>     <dbl>   <dbl>
+##  1 (Intercept)               0.61      0.28      2.15    0.03
+##  2 verhint1                  0.32      0.02     19.6     0   
+##  3 factor(wave)2             0.02      0.03      0.66    0.51
+##  4 factor(wave)3             0.14      0.03      4.25    0   
+##  5 factor(wave)4             0.12      0.03      3.53    0   
+##  6 factor(IDsosci)02E6C8    -0.32      0.4      -0.81    0.42
+##  7 factor(IDsosci)050IPY     1.28      0.4       3.19    0   
+##  8 factor(IDsosci)05J4R8     0.35      0.4       0.87    0.39
+##  9 factor(IDsosci)08BDZJ     1.03      0.4       2.57    0.01
+## 10 factor(IDsosci)0BHGLF     0.6       0.4       1.5     0.13
+## 11 factor(IDsosci)0EB6C1     0         0.4       0       1   
+## 12 factor(IDsosci)0EO9L2     2.04      0.4       5.06    0   
+## 13 factor(IDsosci)0F5L9Z     1.69      0.4       4.23    0   
+## 14 factor(IDsosci)0KAKHF     2.29      0.4       5.68    0   
+## 15 factor(IDsosci)0KYYAJ     0.01      0.4       0.02    0.99
+## 16 factor(IDsosci)0ONV4O     0.34      0.4       0.85    0.4 
+## 17 factor(IDsosci)0PKFWT    -0.08      0.4      -0.2     0.84
+## # ... with 572 more rows
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  \(b_{verhint1}\) quantifiziert weiterhin den kausalen Effekt von Interesse. Er ist robust gegen die Kontrolle des Periodeneffekts.
+\item
+  Die \(b_{wave_t}\) zeigen den Kontrast zur ersten Welle. In diesem Fall sind liegen in der dritten und vierten Welle die Häufigkeiten des Rausgehens höher als noch in den ersten beiden Wellen.
+\item
+  Die \(b_{id_i}\) zeigen weiterhin den Kontrast zu Person 1 (substantiell nicht sonderlich interessant).
+\end{itemize}
+
+\hypertarget{uxfcbungsaufgaben-zur-grundsuxe4tzlichen-spezifikation-von-fixed-effects-modellen}{%
+\subsection*{\texorpdfstring{Übungsaufgaben zur grundsätzlichen Spezifikation von \emph{fixed effects} Modellen}{Übungsaufgaben zur grundsätzlichen Spezifikation von fixed effects Modellen}}\label{uxfcbungsaufgaben-zur-grundsuxe4tzlichen-spezifikation-von-fixed-effects-modellen}}
+\addcontentsline{toc}{subsection}{Übungsaufgaben zur grundsätzlichen Spezifikation von \emph{fixed effects} Modellen}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Schätze den kausalen Effekt von X auf Y mit einem \emph{fixed effects} Modell (andere Beispiele aus dem Datensatz).
+
+  \begin{itemize}
+  \tightlist
+  \item
+    INHALTLICH FORMULIERTE FRAGE
+  \item
+    Vergleiche die Modelle mit und ohne Periodeneffekte.
+  \end{itemize}
+\item
+  Spezifiziere, schätze und interpretiere ein eigenes \emph{fixed effects} Modell mit dem Beipsieldatensatz.
+\end{enumerate}
+
+\hypertarget{fixed-effects-modelle-in-der-praktischen-anwendung}{%
+\section{Fixed effects Modelle in der praktischen Anwendung}\label{fixed-effects-modelle-in-der-praktischen-anwendung}}
+
+\begin{itemize}
+\tightlist
+\item
+  mit \texttt{plm}
 \end{itemize}
 
 \hypertarget{random-effects-models}{%
