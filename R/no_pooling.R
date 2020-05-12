@@ -2,8 +2,6 @@
 
 d %>%
   group_by(IDsosci) %>%
-  # mutate(chk = sd(verh1) != 0 & sd(verhint1) != 0) %>% 
-  # filter(chk) %>% 
   nest() %>%
   mutate(mdls = map(data, ~tidy(lm(verh1 ~ verhint1, data = .x)))) %>% 
   unnest(mdls) %>%

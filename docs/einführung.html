@@ -430,7 +430,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="pooled-ols-wrong" class="section level2">
 <h2><span class="header-section-number">2.3</span> Pooled OLS (WRONG!)</h2>
 <ul>
-<li>Als erstes Beispiel wollen wir uns einer klassischen Frage aus der Theory of Planned Behavior zuwenden. Wir interessieren uns für den Effekt der Verhaltensintention auf das (berichtete) Verhalten (schließlich würden wir zum Start des Workshops ja gerne etwas finden ;)). Konkret betrachten wir den Effekt des Vorhabens, entgegen der Empfehlungen ohne relevanten Grund die Wohnung zu verlassen, auf den Selbstbericht, dies auch zu tun. Die beiden relevanten Variablen sind <code>verh1</code> und <code>verhint1</code>. Die Abbildung zeigt ihre Entwicklung über die vier Wellen für 10 zufällig ausgewählte Personen.</li>
+<li>Als erstes Beispiel wollen wir uns einer klassischen Frage aus der Theory of Planned Behavior zuwenden. Wir interessieren uns für den Effekt der Verhaltensintention auf das (berichtete) Verhalten (schließlich würden wir zum Start des Workshops ja gerne etwas finden ;)). Konkret betrachten wir den Effekt des Vorhabens, entgegen der Empfehlungen ohne relevanten Grund die Wohnung zu verlassen, auf den Selbstbericht, dies auch zu tun. Die beiden relevanten Variablen sind <code>verh1</code> und <code>verhint1</code>. Höhere Werte bedeuten eine häufigere Ausübung des Verhaltens bzw. eine höhere Wahrscheinlichkeit, das Verhalten auszuüben (gemessen auf Skala von 1 bis 5).</li>
+<li>Die Abbildung zeigt die Entwicklung der beiden Variablen über die vier Wellen für 10 zufällig ausgewählte Personen.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">id_smple =<span class="st"> </span><span class="kw">sample</span>(<span class="kw">unique</span>(d<span class="op">$</span>IDsosci), <span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"></a>
@@ -457,7 +458,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Wir nennen dieses Modell <em>pooled</em> OLS, da alle Beobachtungen einfach zusammengeworfen werden, ohne zu beachten, dass einige von ihnen zusammen gehören, da sie von denselben Personen stammen.</li>
 </ul>
 <ol style="list-style-type: decimal">
-<li>Exogenitätsannahme ist verletzt, <span class="math inline">\(E(u_i|x_i) \neq 0\)</span>, da
+<li>Exogenitätsannahme ist verletzt, <span class="math inline">\(E(u_i|x_i) \neq 0\)</span>
 <ul>
 <li>Korrelationen zwischen den Variablen <span class="math inline">\(x\)</span> gehen auf nicht gemessene Eigenschaften der Einheiten zurück, z.B. Eigenschaften der Person <span class="math inline">\(z_i\)</span>, die sowohl <span class="math inline">\(x_i\)</span> als auch <span class="math inline">\(y_i\)</span> beeinflussen.</li>
 <li>Auch bekannt als <em>omitted variable bias</em></li>
@@ -485,14 +486,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Pooled OLS vermischt aber zwei Quellen von Unterschieden in den Daten: Den (kausalen) Effekt innerhalb der Personen (within) und die Unterschiede zwischen Personen (between).</li>
 <li>Within und between Effekte können sich in Größe und sogar in der Richtung unterscheiden!</li>
 <li>Die Schätzung aus einem poold OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.</li>
-<li>In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment <span class="math inline">\(x\)</span> schon höhere Werte in <span class="math inline">\(y\)</span> haben?</li>
+<li>In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment <span class="math inline">\(x\)</span> schon höhere Werte in <span class="math inline">\(y\)</span> haben, das Treatment häufiger auswählen als Personen, die niedrig in $x§ sind?</li>
 <li>Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.</li>
 </ul>
 </div>
 <div id="pooled-ols-within-und-between---eine-illustration" class="section level3 unnumbered">
 <h3>Pooled OLS, within und between - eine Illustration</h3>
 <ul>
-<li><p>Zum Abschluss noch ein imagninäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.</p></li>
+<li><p>Zum Abschluss noch ein imaginäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.</p></li>
 <li><p>In der pooled OLS Analyse wird einfach die Rergressionsgerade durch alle Beobachung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.</p></li>
 </ul>
 <p><img src="workshop_panel_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
@@ -504,7 +505,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte auf eine nicht beobachte Drittvariable auf Ebene der Personen zurück gehen:
 <ul>
 <li>Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken.</li>
-<li>Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: “A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking.”</li>
+<li>Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: “A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking.”&quot;</li>
 </ul></li>
 <li>Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber <em>alle</em> Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im <em>fixed effects</em> Modell, das wir im nächsten Abschnitt besprechen.</li>
 </ul>

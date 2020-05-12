@@ -9,9 +9,9 @@ d = read_rds("R/data/data.rds")
 
 * Im ersten Teil des Abschnitts zu *fixed effects* Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir `stats::lm()` (übliche OLS-Schätzung linearer Modelle in `R`).
 
-### Wie können wir den kauselen (within-person) Effekt mit Paneldaten schätzen? {-}
+### Wie können wir den kausalen (within-person) Effekt mit Paneldaten schätzen? {-}
 
-1) Separate OLS Modelle für jede Person schätzen und Koeffizeinten mitteln (no pooling).
+1) Separate OLS Modelle für jede Person schätzen und Koeffizienten mitteln (no pooling).
 1) Alle $X$ und $Y$ Variablen um die Mittelwerte der Person zentrieren (within transformation).
 1) Dummy-Variablen für jede Person in das Regressionsmodell aufnehmen (least squares dummy variables [LSDV] estimation).
 
@@ -38,6 +38,8 @@ knitr::read_chunk("R/no_pooling.R")
 
 ### Within Transformation {-}
 
+* Wir ziehen von jedem Messwert den Personenmittelwert ab. In das Modell gehen dann die um den Personenmittelwert bereinigten Variablen ein.
+
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/wi_trans.R")
 ```
@@ -48,9 +50,11 @@ knitr::read_chunk("R/wi_trans.R")
 
 * Intuitive Interpretation: Eine Abweichung vom Personen-Durchschnitt in $X$ um einen Punkt führt zu einer Abweichung vom Personen-Durchschnitt in $Y$ um $b_{X}$ Punkte.
 * Hier: Wenn eine Person um einen Punkt wahrscheinlicher rausgehen möchte als üblich, dann wird sie 0.34 Punkte häufiger rausgehen (beides auf 5er Skalen).
-* Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß.
+* Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß. Es scheint also auch einen Unterschied zwischen Personen zugeben. Personen, die im Durchschnitt wahrscheinlicher raus gehen wollen, gehen im Durchschnitt auf häufiger raus.
   
 ### Least Squares mit Dummy Variablen (LSDV) {-}
+
+* Es wird ein Dummy-Indiktator für jede $n-1$te Person in das Modell aufgenommen.
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/lsdv.R")
@@ -106,7 +110,7 @@ knitr::read_chunk("R/period_fe.R")
     * Schätze dann das einfache *fixed effects* Modell mit einer Spezifikation freier Wahl.
     * Vergleiche schließlich die Modelle mit und ohne Periodeneffekt.
 
-2) Spezifiziere, schätze und interpretiere ein eigenes bivariates *fixed effects* Modell mit Daten aus dem Beipsieldatensatz.
+2) Spezifiziere, schätze und interpretiere ein eigenes bivariates *fixed effects* Modell mit Daten aus dem Beispieldatensatz.
 
 ## *Fixed effects* Modelle in der praktischen Anwendung
 
@@ -117,6 +121,8 @@ knitr::read_chunk("R/period_fe.R")
 
 ### Spezifikation eines einfachen *fixed effects* Modells mit `plm` {-}
 
+* Das *fixed effects* Modell wird über `model = "within"` angefordert. Mit `index = "IDsosci"` wird der Indikator für die Einheiten angegeben.
+
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/plm_intro.R")
 ```
@@ -126,7 +132,6 @@ knitr::read_chunk("R/plm_intro.R")
 ```
 
 
-* Das *fixed effects* Modell wird über `model = "within"` angefordert. Mit `index = "IDsosci"` wird der Indikator für die Einheiten angegeben.
 * Der Output von `summary()` liefert eine korrekte Beschreibung der Fallzahlen im Datensatz.
 * Beachte: Das angepasste $R^2$ ist hier (wie in vielen *fixed effects* Modellen) negativ. Das ist kein Grund zur Beunruhigung. Die Logik dahinter kann gut nachvollzogen werden, wenn wir uns die LSDV-Spezifikation in Erinnerung rufen. Zusätzlich zu den inhaltlich relevanten Prädiktoren enthält das Modell $n - 1$ Prädiktoren für die Einheiten. 
 
@@ -152,8 +157,8 @@ knitr::read_chunk("R/plm_twoway.R")
 
 ### Robuste Standardfehler {-}
 
-* In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Autokorrelation oder Heteroskedastizität.
-* Das `lmtest` Paket [@R-lmtest] ist kompatibel mit Modellen aus `plm`. Es stellt zahlreiche robuste Standardfehler zur Verfügung.
+* In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Korrelationen der Residuen oder Heteroskedastizität.
+* Das `lmtest` Paket [@R-lmtest] ist kompatibel mit Modellen aus `plm`. Es implementiert zahlreiche robuste Schätzer bzw. Korrekturen.
 
 * Hier die "normalen" Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.
 
@@ -196,7 +201,7 @@ d %>% plm(verh1 ~ verhint1 + C_sex + factor(wave), data = ., index = "IDsosci", 
 ### Warum wird das Personenmerkmal nicht ins Modell aufgenomen? {-}
 
 * Within-person Transformation entfernt die gesamte between-person Varianz aus den Daten: $\bar{y_{i}} = 0$.
-* Daher können innerhalb der Personen invariante Mermmale keine Unterschiede erklären.
+* Daher können innerhalb der Personen invariante Merkmale keine Unterschiede erklären.
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/vis_ex2.R")
@@ -206,15 +211,15 @@ knitr::read_chunk("R/vis_ex2.R")
 
 ```
 
-* Die Abbildung verdeutlicht dies ahand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level der Verhaltensintention zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
+* Die Abbildung verdeutlicht dies anhand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level des berichteten Verhaltens zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
 
 * Das gleiche gilt für Prädiktoren, die als Merkmale anderer Einheiten, die wir als *fixed effects* spezifiziert haben, konstant sind. In diesem Beispiel wären dies Eigenschaften der Perioden, also z.B. neue Schutzmaßnahmen bzw. deren Lockerung, soweit sie alle Personen gleichermaßen im gleichen Zeitraum betreffen.
 
-### Interaktionen mit Personenmerkmalen
+### Interaktionen mit Personenmerkmalen {-}
 
 * Wir können jedoch Interaktionen zwischen über die Zeit variierenden Prädiktoren und Personenmerkmalen (oder Merkmalen anderer *fixed effects* Einheiten) ins Modell aufnehmen.
-* Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der gruppenspezifischen Effekte, z.B. den den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.
-* Bei kontinierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist.
+* Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der Unterschiede zwischen gruppenspezifischen Effekten, z.B. den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.
+* Bei kontinuierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist. Der Koeffizient des Interaktionsterms quantifiziert den Unterschied des Effekts zwischen zwei Personen, die sich auf dem Moderator um eine Einheit unterscheiden.
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/plm_mod.R")
@@ -234,7 +239,7 @@ knitr::read_chunk("R/plm_mod.R")
 
 
 * Das *fixed effects* Modell ist nützlich, wenn wir einen kausalen Effekt, der sich innerhalb von Einheiten (Personen) abspielt, schätzen wollen.
-* Das *fixed effects* Modell kann keine Mermale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die *fixed effects* erklärt werden.
+* Das *fixed effects* Modell kann keine Merkmale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die *fixed effects* erklärt werden.
 * Wir interessieren uns aber häufig (auch) für die Unterschiede zwischen Einheiten (Personen). Das *fixed effects* Modell macht Antworten auf solche Fragen unmöglich.
 
 * Ein weiterer, damit unverbundener Nachteil des *fixed effects* Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie sind nicht personenspezifisch).
@@ -246,4 +251,4 @@ knitr::read_chunk("R/plm_mod.R")
     * Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (`med1`) in das Modell auf.
     * Prüfe, ob sich der Effekt der Information aus Zeitungen und Zeitschriften nach Geschlecht (`C_sex`) unterscheidet.
 
-2) Spezifiziere, schätze und interpretiere ein eigenes *fixed effects* Modell mit Daten aus dem Beipsieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.
+2) Spezifiziere, schätze und interpretiere ein eigenes *fixed effects* Modell mit Daten aus dem Beispieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.

@@ -150,7 +150,7 @@
 \item
   Wir werden keine Beweise oder Ableitungen besprechen. Wir setzen keine Kenntnisse in Matrixalgebra voraus --- weder meiner- noch eurerseits.
 \item
-  Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Der konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.
+  Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Wir konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.
 \item
   Fehlende Daten (Panelmortalität, Ausfall von Einheiten in einzelnen Wellen) sind ein großes Thema in der Längsschnittanalyse. Wir werden es hier ignorieren, bis auf den Hinweis, dass alle Fälle, die in mindestens zwei bzw. drei Wellen Daten haben, grundsätzlich Informationen zur Schätzung beitragen.
 \end{itemize}
@@ -498,7 +498,9 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \begin{itemize}
 \tightlist
 \item
-  Als erstes Beispiel wollen wir uns einer klassischen Frage aus der Theory of Planned Behavior zuwenden. Wir interessieren uns für den Effekt der Verhaltensintention auf das (berichtete) Verhalten (schließlich würden wir zum Start des Workshops ja gerne etwas finden ;)). Konkret betrachten wir den Effekt des Vorhabens, entgegen der Empfehlungen ohne relevanten Grund die Wohnung zu verlassen, auf den Selbstbericht, dies auch zu tun. Die beiden relevanten Variablen sind \texttt{verh1} und \texttt{verhint1}. Die Abbildung zeigt ihre Entwicklung über die vier Wellen für 10 zufällig ausgewählte Personen.
+  Als erstes Beispiel wollen wir uns einer klassischen Frage aus der Theory of Planned Behavior zuwenden. Wir interessieren uns für den Effekt der Verhaltensintention auf das (berichtete) Verhalten (schließlich würden wir zum Start des Workshops ja gerne etwas finden ;)). Konkret betrachten wir den Effekt des Vorhabens, entgegen der Empfehlungen ohne relevanten Grund die Wohnung zu verlassen, auf den Selbstbericht, dies auch zu tun. Die beiden relevanten Variablen sind \texttt{verh1} und \texttt{verhint1}. Höhere Werte bedeuten eine häufigere Ausübung des Verhaltens bzw. eine höhere Wahrscheinlichkeit, das Verhalten auszuüben (gemessen auf Skala von 1 bis 5).
+\item
+  Die Abbildung zeigt die Entwicklung der beiden Variablen über die vier Wellen für 10 zufällig ausgewählte Personen.
 \end{itemize}
 
 \begin{Shaded}
@@ -554,7 +556,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Exogenitätsannahme ist verletzt, \(E(u_i|x_i) \neq 0\), da
+  Exogenitätsannahme ist verletzt, \(E(u_i|x_i) \neq 0\)
 
   \begin{itemize}
   \tightlist
@@ -608,7 +610,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Die Schätzung aus einem poold OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.
 \item
-  In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment \(x\) schon höhere Werte in \(y\) haben?
+  In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment \(x\) schon höhere Werte in \(y\) haben, das Treatment häufiger auswählen als Personen, die niedrig in \$x§ sind?
 \item
   Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.
 \end{itemize}
@@ -619,7 +621,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{itemize}
 \item
-  Zum Abschluss noch ein imagninäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.
+  Zum Abschluss noch ein imaginäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.
 \item
   In der pooled OLS Analyse wird einfach die Rergressionsgerade durch alle Beobachung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
 \end{itemize}
@@ -644,7 +646,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   \item
     Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken.
   \item
-    Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: ``A kid once said to me ``Do you get hangovers?'' I said, ``To get hangovers you have to stop drinking.''
+    Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: ``A kid once said to me ``Do you get hangovers?'' I said, ``To get hangovers you have to stop drinking.''"
   \end{itemize}
 \item
   Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber \emph{alle} Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im \emph{fixed effects} Modell, das wir im nächsten Abschnitt besprechen.
@@ -662,15 +664,15 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   Im ersten Teil des Abschnitts zu \emph{fixed effects} Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir \texttt{stats::lm()} (übliche OLS-Schätzung linearer Modelle in \texttt{R}).
 \end{itemize}
 
-\hypertarget{wie-kuxf6nnen-wir-den-kauselen-within-person-effekt-mit-paneldaten-schuxe4tzen}{%
-\subsection*{Wie können wir den kauselen (within-person) Effekt mit Paneldaten schätzen?}\label{wie-kuxf6nnen-wir-den-kauselen-within-person-effekt-mit-paneldaten-schuxe4tzen}}
-\addcontentsline{toc}{subsection}{Wie können wir den kauselen (within-person) Effekt mit Paneldaten schätzen?}
+\hypertarget{wie-kuxf6nnen-wir-den-kausalen-within-person-effekt-mit-paneldaten-schuxe4tzen}{%
+\subsection*{Wie können wir den kausalen (within-person) Effekt mit Paneldaten schätzen?}\label{wie-kuxf6nnen-wir-den-kausalen-within-person-effekt-mit-paneldaten-schuxe4tzen}}
+\addcontentsline{toc}{subsection}{Wie können wir den kausalen (within-person) Effekt mit Paneldaten schätzen?}
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Separate OLS Modelle für jede Person schätzen und Koeffizeinten mitteln (no pooling).
+  Separate OLS Modelle für jede Person schätzen und Koeffizienten mitteln (no pooling).
 \item
   Alle \(X\) und \(Y\) Variablen um die Mittelwerte der Person zentrieren (within transformation).
 \item
@@ -707,11 +709,10 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(IDsosci) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# mutate(chk = sd(verh1) != 0 & sd(verhint1) != 0) %>% filter(chk) %>%}
-\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mdls =} \KeywordTok{map}\NormalTok{(data, }\OperatorTok{~}\KeywordTok{tidy}\NormalTok{(}\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ .x)))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unnest}\NormalTok{(mdls) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{data) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{na.omit}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(statistic }\OperatorTok{!=}\StringTok{ }\OtherTok{Inf}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(term }\OperatorTok{==}\StringTok{ }
-\StringTok{    "verhint1"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\NormalTok{print }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{estimate =} \KeywordTok{mean}\NormalTok{(estimate), }
-    \DataTypeTok{std.error =} \KeywordTok{sqrt}\NormalTok{(}\KeywordTok{mean}\NormalTok{(std.error}\OperatorTok{^}\DecValTok{2}\NormalTok{)))  }\CommentTok{# simple approximation}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{group_by}\NormalTok{(IDsosci) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{nest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mdls =} \KeywordTok{map}\NormalTok{(data, }\OperatorTok{~}\KeywordTok{tidy}\NormalTok{(}\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }
+    \DataTypeTok{data =}\NormalTok{ .x)))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{unnest}\NormalTok{(mdls) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ungroup}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{select}\NormalTok{(}\OperatorTok{-}\NormalTok{data) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{na.omit}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{filter}\NormalTok{(statistic }\OperatorTok{!=}\StringTok{ }\OtherTok{Inf}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{filter}\NormalTok{(term }\OperatorTok{==}\StringTok{ "verhint1"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }
+\NormalTok{    round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\NormalTok{print }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{estimate =} \KeywordTok{mean}\NormalTok{(estimate), }\DataTypeTok{std.error =} \KeywordTok{sqrt}\NormalTok{(}\KeywordTok{mean}\NormalTok{(std.error}\OperatorTok{^}\DecValTok{2}\NormalTok{)))  }\CommentTok{# simple approximation}
 \end{Highlighting}
 \end{Shaded}
 
@@ -750,6 +751,12 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \hypertarget{within-transformation}{%
 \subsection*{Within Transformation}\label{within-transformation}}
 \addcontentsline{toc}{subsection}{Within Transformation}
+
+\begin{itemize}
+\tightlist
+\item
+  Wir ziehen von jedem Messwert den Personenmittelwert ab. In das Modell gehen dann die um den Personenmittelwert bereinigten Variablen ein.
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -792,12 +799,18 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Hier: Wenn eine Person um einen Punkt wahrscheinlicher rausgehen möchte als üblich, dann wird sie 0.34 Punkte häufiger rausgehen (beides auf 5er Skalen).
 \item
-  Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß.
+  Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß. Es scheint also auch einen Unterschied zwischen Personen zugeben. Personen, die im Durchschnitt wahrscheinlicher raus gehen wollen, gehen im Durchschnitt auf häufiger raus.
 \end{itemize}
 
 \hypertarget{least-squares-mit-dummy-variablen-lsdv}{%
 \subsection*{Least Squares mit Dummy Variablen (LSDV)}\label{least-squares-mit-dummy-variablen-lsdv}}
 \addcontentsline{toc}{subsection}{Least Squares mit Dummy Variablen (LSDV)}
+
+\begin{itemize}
+\tightlist
+\item
+  Es wird ein Dummy-Indiktator für jede \(n-1\)te Person in das Modell aufgenommen.
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -942,7 +955,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
     Vergleiche schließlich die Modelle mit und ohne Periodeneffekt.
   \end{itemize}
 \item
-  Spezifiziere, schätze und interpretiere ein eigenes bivariates \emph{fixed effects} Modell mit Daten aus dem Beipsieldatensatz.
+  Spezifiziere, schätze und interpretiere ein eigenes bivariates \emph{fixed effects} Modell mit Daten aus dem Beispieldatensatz.
 \end{enumerate}
 
 \hypertarget{fixed-effects-modelle-in-der-praktischen-anwendung}{%
@@ -963,6 +976,12 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \hypertarget{spezifikation-eines-einfachen-fixed-effects-modells-mit-plm}{%
 \subsection*{\texorpdfstring{Spezifikation eines einfachen \emph{fixed effects} Modells mit \texttt{plm}}{Spezifikation eines einfachen fixed effects Modells mit plm}}\label{spezifikation-eines-einfachen-fixed-effects-modells-mit-plm}}
 \addcontentsline{toc}{subsection}{Spezifikation eines einfachen \emph{fixed effects} Modells mit \texttt{plm}}
+
+\begin{itemize}
+\tightlist
+\item
+  Das \emph{fixed effects} Modell wird über \texttt{model\ =\ "within"} angefordert. Mit \texttt{index\ =\ "IDsosci"} wird der Indikator für die Einheiten angegeben.
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -997,8 +1016,6 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{itemize}
 \tightlist
-\item
-  Das \emph{fixed effects} Modell wird über \texttt{model\ =\ "within"} angefordert. Mit \texttt{index\ =\ "IDsosci"} wird der Indikator für die Einheiten angegeben.
 \item
   Der Output von \texttt{summary()} liefert eine korrekte Beschreibung der Fallzahlen im Datensatz.
 \item
@@ -1115,9 +1132,9 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{itemize}
 \item
-  In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Autokorrelation oder Heteroskedastizität.
+  In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Korrelationen der Residuen oder Heteroskedastizität.
 \item
-  Das \texttt{lmtest} Paket \citep{R-lmtest} ist kompatibel mit Modellen aus \texttt{plm}. Es stellt zahlreiche robuste Standardfehler zur Verfügung.
+  Das \texttt{lmtest} Paket \citep{R-lmtest} ist kompatibel mit Modellen aus \texttt{plm}. Es implementiert zahlreiche robuste Schätzer bzw. Korrekturen.
 \item
   Hier die ``normalen'' Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.
 \item
@@ -1285,7 +1302,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Within-person Transformation entfernt die gesamte between-person Varianz aus den Daten: \(\bar{y_{i}} = 0\).
 \item
-  Daher können innerhalb der Personen invariante Mermmale keine Unterschiede erklären.
+  Daher können innerhalb der Personen invariante Merkmale keine Unterschiede erklären.
 \end{itemize}
 
 \begin{Shaded}
@@ -1302,22 +1319,23 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{itemize}
 \item
-  Die Abbildung verdeutlicht dies ahand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level der Verhaltensintention zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
+  Die Abbildung verdeutlicht dies anhand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level des berichteten Verhaltens zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
 \item
   Das gleiche gilt für Prädiktoren, die als Merkmale anderer Einheiten, die wir als \emph{fixed effects} spezifiziert haben, konstant sind. In diesem Beispiel wären dies Eigenschaften der Perioden, also z.B. neue Schutzmaßnahmen bzw. deren Lockerung, soweit sie alle Personen gleichermaßen im gleichen Zeitraum betreffen.
 \end{itemize}
 
 \hypertarget{interaktionen-mit-personenmerkmalen}{%
-\subsection{Interaktionen mit Personenmerkmalen}\label{interaktionen-mit-personenmerkmalen}}
+\subsection*{Interaktionen mit Personenmerkmalen}\label{interaktionen-mit-personenmerkmalen}}
+\addcontentsline{toc}{subsection}{Interaktionen mit Personenmerkmalen}
 
 \begin{itemize}
 \tightlist
 \item
   Wir können jedoch Interaktionen zwischen über die Zeit variierenden Prädiktoren und Personenmerkmalen (oder Merkmalen anderer \emph{fixed effects} Einheiten) ins Modell aufnehmen.
 \item
-  Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der gruppenspezifischen Effekte, z.B. den den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.
+  Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der Unterschiede zwischen gruppenspezifischen Effekten, z.B. den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.
 \item
-  Bei kontinierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist.
+  Bei kontinuierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist. Der Koeffizient des Interaktionsterms quantifiziert den Unterschied des Effekts zwischen zwei Personen, die sich auf dem Moderator um eine Einheit unterscheiden.
 \end{itemize}
 
 \begin{Shaded}
@@ -1359,7 +1377,7 @@ By controlling out context, FE models effectively cut out much of what is going 
 \item
   Das \emph{fixed effects} Modell ist nützlich, wenn wir einen kausalen Effekt, der sich innerhalb von Einheiten (Personen) abspielt, schätzen wollen.
 \item
-  Das \emph{fixed effects} Modell kann keine Mermale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die \emph{fixed effects} erklärt werden.
+  Das \emph{fixed effects} Modell kann keine Merkmale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die \emph{fixed effects} erklärt werden.
 \item
   Wir interessieren uns aber häufig (auch) für die Unterschiede zwischen Einheiten (Personen). Das \emph{fixed effects} Modell macht Antworten auf solche Fragen unmöglich.
 \item
@@ -1385,7 +1403,7 @@ By controlling out context, FE models effectively cut out much of what is going 
     Prüfe, ob sich der Effekt der Information aus Zeitungen und Zeitschriften nach Geschlecht (\texttt{C\_sex}) unterscheidet.
   \end{itemize}
 \item
-  Spezifiziere, schätze und interpretiere ein eigenes \emph{fixed effects} Modell mit Daten aus dem Beipsieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.
+  Spezifiziere, schätze und interpretiere ein eigenes \emph{fixed effects} Modell mit Daten aus dem Beispieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.
 \end{enumerate}
 
 \hypertarget{random-effects-models}{%

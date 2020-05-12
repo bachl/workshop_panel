@@ -174,10 +174,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Im ersten Teil des Abschnitts zu <em>fixed effects</em> Modellen beschäftigen wir uns mit den Grundlagen der Modellierung. Dazu nutzen wir <code>stats::lm()</code> (übliche OLS-Schätzung linearer Modelle in <code>R</code>).</li>
 </ul>
-<div id="wie-können-wir-den-kauselen-within-person-effekt-mit-paneldaten-schätzen" class="section level3 unnumbered">
-<h3>Wie können wir den kauselen (within-person) Effekt mit Paneldaten schätzen?</h3>
+<div id="wie-können-wir-den-kausalen-within-person-effekt-mit-paneldaten-schätzen" class="section level3 unnumbered">
+<h3>Wie können wir den kausalen (within-person) Effekt mit Paneldaten schätzen?</h3>
 <ol style="list-style-type: decimal">
-<li>Separate OLS Modelle für jede Person schätzen und Koeffizeinten mitteln (no pooling).</li>
+<li>Separate OLS Modelle für jede Person schätzen und Koeffizienten mitteln (no pooling).</li>
 <li>Alle <span class="math inline">\(X\)</span> und <span class="math inline">\(Y\)</span> Variablen um die Mittelwerte der Person zentrieren (within transformation).</li>
 <li>Dummy-Variablen für jede Person in das Regressionsmodell aufnehmen (least squares dummy variables [LSDV] estimation).</li>
 </ol>
@@ -196,11 +196,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="no-pooling" class="section level3 unnumbered">
 <h3>No pooling</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(IDsosci) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># mutate(chk = sd(verh1) != 0 &amp; sd(verhint1) != 0) %&gt;% filter(chk) %&gt;%</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">nest</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mdls =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">tidy</span>(<span class="kw">lm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> .x)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(mdls) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na.omit</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(statistic <span class="op">!=</span><span class="st"> </span><span class="ot">Inf</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="st">    &quot;verhint1&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_if</span>(is.numeric, round, <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>print <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">estimate =</span> <span class="kw">mean</span>(estimate), </a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">    <span class="dt">std.error =</span> <span class="kw">sqrt</span>(<span class="kw">mean</span>(std.error<span class="op">^</span><span class="dv">2</span>)))  <span class="co"># simple approximation</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(IDsosci) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">nest</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">mdls =</span> <span class="kw">map</span>(data, <span class="op">~</span><span class="kw">tidy</span>(<span class="kw">lm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, </a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">    <span class="dt">data =</span> .x)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">unnest</span>(mdls) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>data) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">na.omit</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="st">    </span><span class="kw">filter</span>(statistic <span class="op">!=</span><span class="st"> </span><span class="ot">Inf</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(term <span class="op">==</span><span class="st"> &quot;verhint1&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_if</span>(is.numeric, </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">    round, <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>print <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">estimate =</span> <span class="kw">mean</span>(estimate), <span class="dt">std.error =</span> <span class="kw">sqrt</span>(<span class="kw">mean</span>(std.error<span class="op">^</span><span class="dv">2</span>)))  <span class="co"># simple approximation</span></a></code></pre></div>
 <pre><code>## # A tibble: 232 x 6
 ##    IDsosci term     estimate std.error statistic p.value
 ##    &lt;chr&gt;   &lt;chr&gt;       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
@@ -226,6 +225,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="within-transformation" class="section level3 unnumbered">
 <h3>Within Transformation</h3>
+<ul>
+<li>Wir ziehen von jedem Messwert den Personenmittelwert ab. In das Modell gehen dann die um den Personenmittelwert bereinigten Variablen ein.</li>
+</ul>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">d_wi =<span class="st"> </span>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(IDsosci, verh1, verhint1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(IDsosci) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">verh1_wi =</span> verh1 <span class="op">-</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb8-2" data-line-number="2"><span class="st">    </span><span class="kw">mean</span>(verh1), <span class="dt">verhint1_wi =</span> verhint1 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(verhint1)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ungroup</span>()</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3"></a>
@@ -247,11 +249,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Intuitive Interpretation: Eine Abweichung vom Personen-Durchschnitt in <span class="math inline">\(X\)</span> um einen Punkt führt zu einer Abweichung vom Personen-Durchschnitt in <span class="math inline">\(Y\)</span> um <span class="math inline">\(b_{X}\)</span> Punkte.</li>
 <li>Hier: Wenn eine Person um einen Punkt wahrscheinlicher rausgehen möchte als üblich, dann wird sie 0.34 Punkte häufiger rausgehen (beides auf 5er Skalen).</li>
-<li>Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß.</li>
+<li>Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß. Es scheint also auch einen Unterschied zwischen Personen zugeben. Personen, die im Durchschnitt wahrscheinlicher raus gehen wollen, gehen im Durchschnitt auf häufiger raus.</li>
 </ul>
 </div>
 <div id="least-squares-mit-dummy-variablen-lsdv" class="section level3 unnumbered">
 <h3>Least Squares mit Dummy Variablen (LSDV)</h3>
+<ul>
+<li>Es wird ein Dummy-Indiktator für jede <span class="math inline">\(n-1\)</span>te Person in das Modell aufgenommen.</li>
+</ul>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">lm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(IDsosci), <span class="dt">data =</span> .) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_if</span>(is.numeric, </a>
 <a class="sourceLine" id="cb12-2" data-line-number="2">    round, <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">17</span>)</a></code></pre></div>
 <pre><code>## # A tibble: 577 x 5
@@ -344,7 +349,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Schätze dann das einfache <em>fixed effects</em> Modell mit einer Spezifikation freier Wahl.</li>
 <li>Vergleiche schließlich die Modelle mit und ohne Periodeneffekt.</li>
 </ul></li>
-<li>Spezifiziere, schätze und interpretiere ein eigenes bivariates <em>fixed effects</em> Modell mit Daten aus dem Beipsieldatensatz.</li>
+<li>Spezifiziere, schätze und interpretiere ein eigenes bivariates <em>fixed effects</em> Modell mit Daten aus dem Beispieldatensatz.</li>
 </ol>
 </div>
 <div id="fixed-effects-modelle-in-der-praktischen-anwendung" class="section level2">
@@ -357,6 +362,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <div id="spezifikation-eines-einfachen-fixed-effects-modells-mit-plm" class="section level3 unnumbered">
 <h3>Spezifikation eines einfachen <em>fixed effects</em> Modells mit <code>plm</code></h3>
+<ul>
+<li>Das <em>fixed effects</em> Modell wird über <code>model = &quot;within&quot;</code> angefordert. Mit <code>index = &quot;IDsosci&quot;</code> wird der Indikator für die Einheiten angegeben.</li>
+</ul>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;within&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
 <pre><code>## Oneway (individual) effect Within Model
 ## 
@@ -381,7 +389,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Adj. R-Squared: -0.051155
 ## F-statistic: 463.924 on 1 and 1727 DF, p-value: &lt; 2.22e-16</code></pre>
 <ul>
-<li>Das <em>fixed effects</em> Modell wird über <code>model = &quot;within&quot;</code> angefordert. Mit <code>index = &quot;IDsosci&quot;</code> wird der Indikator für die Einheiten angegeben.</li>
 <li>Der Output von <code>summary()</code> liefert eine korrekte Beschreibung der Fallzahlen im Datensatz.</li>
 <li>Beachte: Das angepasste <span class="math inline">\(R^2\)</span> ist hier (wie in vielen <em>fixed effects</em> Modellen) negativ. Das ist kein Grund zur Beunruhigung. Die Logik dahinter kann gut nachvollzogen werden, wenn wir uns die LSDV-Spezifikation in Erinnerung rufen. Zusätzlich zu den inhaltlich relevanten Prädiktoren enthält das Modell <span class="math inline">\(n - 1\)</span> Prädiktoren für die Einheiten.</li>
 </ul>
@@ -461,8 +468,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="robuste-standardfehler" class="section level3 unnumbered">
 <h3>Robuste Standardfehler</h3>
 <ul>
-<li>In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Autokorrelation oder Heteroskedastizität.</li>
-<li><p>Das <code>lmtest</code> Paket <span class="citation">(Hothorn et al. <a href="#ref-R-lmtest">2019</a>)</span> ist kompatibel mit Modellen aus <code>plm</code>. Es stellt zahlreiche robuste Standardfehler zur Verfügung.</p></li>
+<li>In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Korrelationen der Residuen oder Heteroskedastizität.</li>
+<li><p>Das <code>lmtest</code> Paket <span class="citation">(Hothorn et al. <a href="#ref-R-lmtest">2019</a>)</span> ist kompatibel mit Modellen aus <code>plm</code>. Es implementiert zahlreiche robuste Schätzer bzw. Korrekturen.</p></li>
 <li><p>Hier die “normalen” Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.</p></li>
 <li><p>Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle unter anderem <span class="citation">King and Roberts (<a href="#ref-kingHowRobustStandard2015">2015</a>)</span> zur kritischen Lektüre.</p></li>
 </ul>
@@ -563,7 +570,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Warum wird das Personenmerkmal nicht ins Modell aufgenomen?</h3>
 <ul>
 <li>Within-person Transformation entfernt die gesamte between-person Varianz aus den Daten: <span class="math inline">\(\bar{y_{i}} = 0\)</span>.</li>
-<li>Daher können innerhalb der Personen invariante Mermmale keine Unterschiede erklären.</li>
+<li>Daher können innerhalb der Personen invariante Merkmale keine Unterschiede erklären.</li>
 </ul>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">id_smple =<span class="st"> </span><span class="kw">sample</span>(<span class="kw">unique</span>(d<span class="op">$</span>IDsosci), <span class="dv">100</span>)</a>
 <a class="sourceLine" id="cb34-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(IDsosci <span class="op">%in%</span><span class="st"> </span>id_smple) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(IDsosci, wave, verh1) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(IDsosci) <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -572,16 +579,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a class="sourceLine" id="cb34-5" data-line-number="5">    <span class="dt">height =</span> <span class="fl">0.3</span>), <span class="dt">show.legend =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="st">&quot;transformation&quot;</span>)</a></code></pre></div>
 <p><img src="workshop_panel_files/figure-html/vis-ex2-1.png" width="672" /></p>
 <ul>
-<li><p>Die Abbildung verdeutlicht dies ahand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level der Verhaltensintention zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.</p></li>
+<li><p>Die Abbildung verdeutlicht dies anhand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level des berichteten Verhaltens zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.</p></li>
 <li><p>Das gleiche gilt für Prädiktoren, die als Merkmale anderer Einheiten, die wir als <em>fixed effects</em> spezifiziert haben, konstant sind. In diesem Beispiel wären dies Eigenschaften der Perioden, also z.B. neue Schutzmaßnahmen bzw. deren Lockerung, soweit sie alle Personen gleichermaßen im gleichen Zeitraum betreffen.</p></li>
 </ul>
 </div>
-<div id="interaktionen-mit-personenmerkmalen" class="section level3">
-<h3><span class="header-section-number">3.3.2</span> Interaktionen mit Personenmerkmalen</h3>
+<div id="interaktionen-mit-personenmerkmalen" class="section level3 unnumbered">
+<h3>Interaktionen mit Personenmerkmalen</h3>
 <ul>
 <li>Wir können jedoch Interaktionen zwischen über die Zeit variierenden Prädiktoren und Personenmerkmalen (oder Merkmalen anderer <em>fixed effects</em> Einheiten) ins Modell aufnehmen.</li>
-<li>Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der gruppenspezifischen Effekte, z.B. den den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.</li>
-<li>Bei kontinierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist.</li>
+<li>Bei kategoriellen Moderator-Variablen erhalten wir Schätzer der Unterschiede zwischen gruppenspezifischen Effekten, z.B. den Unterschied zwischen den Effekten der Verhaltensintention auf das Verhalten für Frauen und Männer.</li>
+<li>Bei kontinuierlichen Moderator-Variablen gelten die üblichen Fallstricke: Der Koeffizient des Prädiktors ist nun der einfache Effekt für den Fall, dass der Moderator gleich 0 ist. Der Koeffizient des Interaktionsterms quantifiziert den Unterschied des Effekts zwischen zwei Personen, die sich auf dem Moderator um eine Einheit unterscheiden.</li>
 </ul>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">*</span><span class="st"> </span>C_sex <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;within&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb35-2" data-line-number="2"><span class="st">    </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_if</span>(is.numeric, round, <span class="dv">2</span>)</a></code></pre></div>
@@ -608,7 +615,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <ul>
 <li>Das <em>fixed effects</em> Modell ist nützlich, wenn wir einen kausalen Effekt, der sich innerhalb von Einheiten (Personen) abspielt, schätzen wollen.</li>
-<li>Das <em>fixed effects</em> Modell kann keine Mermale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die <em>fixed effects</em> erklärt werden.</li>
+<li>Das <em>fixed effects</em> Modell kann keine Merkmale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die <em>fixed effects</em> erklärt werden.</li>
 <li><p>Wir interessieren uns aber häufig (auch) für die Unterschiede zwischen Einheiten (Personen). Das <em>fixed effects</em> Modell macht Antworten auf solche Fragen unmöglich.</p></li>
 <li><p>Ein weiterer, damit unverbundener Nachteil des <em>fixed effects</em> Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie sind nicht personenspezifisch).</p></li>
 </ul>
@@ -622,7 +629,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (<code>med1</code>) in das Modell auf.</li>
 <li>Prüfe, ob sich der Effekt der Information aus Zeitungen und Zeitschriften nach Geschlecht (<code>C_sex</code>) unterscheidet.</li>
 </ul></li>
-<li>Spezifiziere, schätze und interpretiere ein eigenes <em>fixed effects</em> Modell mit Daten aus dem Beipsieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.</li>
+<li>Spezifiziere, schätze und interpretiere ein eigenes <em>fixed effects</em> Modell mit Daten aus dem Beispieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.</li>
 </ol>
 
 </div>
