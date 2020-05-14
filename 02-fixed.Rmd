@@ -233,9 +233,9 @@ knitr::read_chunk("R/plm_mod.R")
 
 ## Conclusio: Vor- und Nachteile des *fixed effects* Modells
 
-> In many applications the whole point of using panel data is to allow for $a_i$ to be arbitrarily correlated with the $x_{it}$. A fixed effects analysis achieves this purpose explicitly. --- @wooldridge10, p. 300
+> In many applications the whole point of using panel data is to allow for $a_i$ to be arbitrarily correlated with the $x_{it}$. A fixed effects analysis achieves this purpose explicitly. --- @wooldridge10, S. 300
 
-> By controlling out context, FE models effectively cut out much of what is going on — goings-on that are usually of interest to the researcher, the reader and the policy maker. We contend that models that control out, rather than explicitly model, context and heterogeneity offer overly simplistic and impoverished results that can lead to misleading interpretations. --- @bellExplainingFixedEffects2015, p. 134
+> By controlling out context, FE models effectively cut out much of what is going on — goings-on that are usually of interest to the researcher, the reader and the policy maker. We contend that models that control out, rather than explicitly model, context and heterogeneity offer overly simplistic and impoverished results that can lead to misleading interpretations. --- @bellExplainingFixedEffects2015, S. 134
 
 
 * Das *fixed effects* Modell ist nützlich, wenn wir einen kausalen Effekt, der sich innerhalb von Einheiten (Personen) abspielt, schätzen wollen.

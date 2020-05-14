@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Abschnitt 4 Random effects Modelle | Mini-Workshop Panel Data Analysis</title>
+  <meta name="description" content="Material für den Mini-Workshop Panel Data Analysis" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Abschnitt 4 Random effects Modelle | Mini-Workshop Panel Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Material für den Mini-Workshop Panel Data Analysis" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Abschnitt 4 Random effects Modelle | Mini-Workshop Panel Data Analysis" />
+  
+  <meta name="twitter:description" content="Material für den Mini-Workshop Panel Data Analysis" />
+  
+
+<meta name="author" content="Marko Bachl (mit Material von Michael Scharkow)" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="fixed-effects-modelle.html"/>
+<link rel="next" href="within-between-models.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Panel Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Überblick</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#inhalt-des-virtuellen-mini-workshops"><i class="fa fa-check"></i><b>1.1</b> Inhalt des virtuellen Mini-Workshops</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#welche-inhalte-wir-nicht-behandeln"><i class="fa fa-check"></i><b>1.2</b> Welche Inhalte wir nicht behandeln</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#aufbau-des-workshops"><i class="fa fa-check"></i><b>1.3</b> Aufbau des Workshops</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="einführung.html"><a href="einführung.html"><i class="fa fa-check"></i><b>2</b> Einführung</a><ul>
+<li class="chapter" data-level="2.1" data-path="einführung.html"><a href="einführung.html#längsschnittdaten"><i class="fa fa-check"></i><b>2.1</b> Längsschnittdaten</a></li>
+<li class="chapter" data-level="2.2" data-path="einführung.html"><a href="einführung.html#beispiel-daten"><i class="fa fa-check"></i><b>2.2</b> Beispiel-Daten</a></li>
+<li class="chapter" data-level="2.3" data-path="einführung.html"><a href="einführung.html#pooled-ols-wrong"><i class="fa fa-check"></i><b>2.3</b> Pooled OLS (WRONG!)</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html"><i class="fa fa-check"></i><b>3</b> Fixed effects Modelle</a><ul>
+<li class="chapter" data-level="3.1" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#konzeptionelle-einführung"><i class="fa fa-check"></i><b>3.1</b> Konzeptionelle Einführung</a></li>
+<li class="chapter" data-level="3.2" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#übungsaufgaben-1"><i class="fa fa-check"></i><b>3.2</b> Übungsaufgaben 1</a></li>
+<li class="chapter" data-level="3.3" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#fixed-effects-modelle-in-der-praktischen-anwendung"><i class="fa fa-check"></i><b>3.3</b> <em>Fixed effects</em> Modelle in der praktischen Anwendung</a></li>
+<li class="chapter" data-level="3.4" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#conclusio-vor--und-nachteile-des-fixed-effects-modells"><i class="fa fa-check"></i><b>3.4</b> Conclusio: Vor- und Nachteile des <em>fixed effects</em> Modells</a></li>
+<li class="chapter" data-level="3.5" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#übungsaufgaben-2"><i class="fa fa-check"></i><b>3.5</b> Übungsaufgaben 2</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html"><i class="fa fa-check"></i><b>4</b> <em>Random effects</em> Modelle</a><ul>
+<li class="chapter" data-level="4.1" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#einführung-random-effects-modelle-für-paneldaten"><i class="fa fa-check"></i><b>4.1</b> Einführung: <em>random effects</em> Modelle für Paneldaten</a></li>
+<li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#advantages-of-the-re-model"><i class="fa fa-check"></i><b>4.2</b> Advantages of the RE model</a></li>
+<li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#is-the-re-model-ever-justified"><i class="fa fa-check"></i><b>4.3</b> Is the RE model ever justified?</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
+<li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Mini-Workshop Panel Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="random-effects-modelle" class="section level1">
+<h1><span class="header-section-number">Abschnitt 4</span> <em>Random effects</em> Modelle</h1>
+<ul>
+<li>In diesem Abschnitt beschäftigen wir uns mit <em>random effects</em> Modellen. Zuerst führen wir die Modellklasse ein. Dann betrachten wir kurz, wie die Modelle in der Tradition der Ökonometrie mit <code>plm</code> spezifiziert werden können, bevor wir zur allgemeineren Umsetzung mit dem Paket für Mehrebenen- bzw. <em>mixed effects</em> Modelle <code>lme4</code> kommen.</li>
+</ul>
+<div id="einführung-random-effects-modelle-für-paneldaten" class="section level2">
+<h2><span class="header-section-number">4.1</span> Einführung: <em>random effects</em> Modelle für Paneldaten</h2>
+<ul>
+<li>Anstatt für jede Einheit (Person) eine separate Konstante <span class="math inline">\(\alpha_i\)</span> zu schätzen, können wir den “soft constraint” <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006">2006</a>, S. 257)</span> setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
+<ul>
+<li><span class="math inline">\(\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)\)</span> mit <span class="math inline">\(i = 1,...,n\)</span></li>
+</ul></li>
+<li>The random effects model than be estimated as</li>
+</ul>
+<p><span class="math inline">\(y_{it}=x_{it}&#39;\beta + z_i&#39;\gamma + v_{it}\)</span>
+<span class="math inline">\(v_{it} = \alpha_{i}+ u_{it}\)</span></p>
+<ul>
+<li>In order to yield unbiased estimates for <span class="math inline">\(\beta&#39;\)</span>, two assumptions need to be fulfilled:
+<ol style="list-style-type: decimal">
+<li>No time-constant unobserved heterogeneity <br/>
+<span class="math inline">\({\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}\)</span></li>
+<li>No time-varying unobserved heterogeneity <br/>
+<span class="math inline">\({\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}\)</span></li>
+</ol></li>
+</ul>
+</div>
+<div id="advantages-of-the-re-model" class="section level2">
+<h2><span class="header-section-number">4.2</span> Advantages of the RE model</h2>
+<ul>
+<li>Time-invariant predictors can be incorporated while still estimating random intercepts for every person.</li>
+<li>Effects of time-varying and time-invariant predictors can be compared (e.g. is a good education more important than joining a union).</li>
+<li>Predictions for new cases (both persons and time periods) can be made using all available information.</li>
+<li>Effect heterogeneity (e.g. whether joining a union is equally effective for all) can easily be investigate (more on that later).</li>
+</ul>
+</div>
+<div id="is-the-re-model-ever-justified" class="section level2">
+<h2><span class="header-section-number">4.3</span> Is the RE model ever justified?</h2>
+<p>&quot;The only difference
+between RE and FE lies in the assumption they make about the relationship
+between υ and the observed predictors: RE models assume that the observed
+predictors in the model are not correlated with <span class="math inline">\(v\)</span> while FE models allow them
+to be correlated.</p>
+<p>A moment’s reflection on what <span class="math inline">\(v\)</span> represents—all unmeasured
+time-constant factors about the respondent—should lead anyone to
+realize that the RE assumption is heroic in social research, to say the least.</p>
+<p>The idea that the characteristics we don’t (or can’t) measure (like personality
+or genetic influences) are uncorrelated with the things we usually do
+measure (like income or church attendance) is implausible.&quot; <span class="citation">(<span class="citeproc-not-found" data-reference-id="vm"><strong>???</strong></span>)</span>, p. 4</p>
+
+</div>
+</div>
+<h3>Literatur</h3>
+<div id="refs" class="references">
+<div id="ref-gelmanDataAnalysisUsing2006">
+<p>Gelman, A., and J. Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. New York: Cambridge University Press.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="fixed-effects-modelle.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="within-between-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["workshop_panel.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

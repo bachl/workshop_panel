@@ -73,6 +73,13 @@ source("R/packages.R")
 * Nachvollziehen der Aufbereitung in `R/data.R`
 * Direkt laden (z.B. für Übungen) aus `R/data/data.rds`
 
+* Der Datensatz ist bereits im *long format*. `IDsosci` ist der Indikator für die Person, `wave` ist der Indikator für die Erhebungswelle.
+
+### Inhaltliche Variablen im Datensatz {-}
+
+* Alter, Geschlecht (Dummy für weiblich), Bildung und Kollektivismus sind konstante Personenmerkmale.
+* Alle übrigen Variablen wurden in den vier Wellen wiederholt gemessen (mit Ausnahme von `desnorm4`, `injnorm4`, `verh4-6`, `verhint4-6`, die erst ab Welle 2 erfasst wurden).
+
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/data.R")
 ```

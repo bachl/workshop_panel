@@ -1,3 +1,43 @@
-# Random effects models
+# *Random effects* Modelle
 
-XXX
+* In diesem Abschnitt beschäftigen wir uns mit *random effects* Modellen. Zuerst führen wir die Modellklasse ein. Dann betrachten wir kurz, wie die Modelle in der Tradition der Ökonometrie mit `plm` spezifiziert werden können, bevor wir zur allgemeineren Umsetzung mit dem Paket für Mehrebenen- bzw. *mixed effects* Modelle `lme4` kommen.
+
+## Einführung: *random effects* Modelle für Paneldaten
+
+* Anstatt für jede Einheit (Person) eine separate Konstante $\alpha_i$ zu schätzen, können wir den "soft constraint" [@gelmanDataAnalysisUsing2006, S. 257] setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
+  * $\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)$ mit $i = 1,...,n$
+
+* Das *random effects* Modell wird geschätzt als
+
+  * $y_{it}=x_{it}'\beta + z_i'\gamma + v_{it}$
+  * $v_{it} = \alpha_{i}+ u_{it}$
+
+* In order to yield unbiased estimates for $\beta'$, two assumptions need to be fulfilled: 
+    1. No time-constant unobserved heterogeneity <br/>
+    ${\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}$ 
+    2. No time-varying unobserved heterogeneity <br/>
+    ${\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}$
+
+## Advantages of the RE model
+
+* Time-invariant predictors can be incorporated while still estimating random intercepts for every person.
+* Effects of time-varying and time-invariant predictors can be compared (e.g. is a good education more important than joining a union).
+* Predictions for new cases (both persons and time periods) can be made using all available information.
+* Effect heterogeneity (e.g. whether joining a union is equally effective for all) can easily be investigate (more on that later).
+
+
+## Is the RE model ever justified?
+
+"The only difference
+between RE and FE lies in the assumption they make about the relationship
+between υ and the observed predictors: RE models assume that the observed
+predictors in the model are not correlated with $v$ while FE models allow them
+to be correlated. 
+
+A moment’s reflection on what $v$ represents—all unmeasured
+time-constant factors about the respondent—should lead anyone to
+realize that the RE assumption is heroic in social research, to say the least.
+
+The idea that the characteristics we don’t (or can’t) measure (like personality
+or genetic influences) are uncorrelated with the things we usually do
+measure (like income or church attendance) is implausible." --- @vaiseyWhatYouCan2017, p. 47
