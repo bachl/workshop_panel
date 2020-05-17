@@ -162,7 +162,7 @@ knitr::read_chunk("R/plm_twoway.R")
 
 * Hier die "normalen" Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.
 
-* Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle unter anderem @kingHowRobustStandard2015 zur kritischen Lektüre.
+* Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle für die Details der Umsetzung in `plm` @plm2017 und zu einer kritischen Auseinandersetzung @kingHowRobustStandard2015.
  
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/lmtest-demo.R")

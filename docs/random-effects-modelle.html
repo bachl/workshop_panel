@@ -396,18 +396,97 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="kurze-einführung-zu-mixed-effects-modellen" class="section level2">
 <h2><span class="header-section-number">4.3</span> Kurze Einführung zu mixed effects Modellen</h2>
 <ul>
-<li>Auch bekannt als <em>random effects</em>, <em>multilevel</em>/<em>Mehrebenen-</em> oder <em>hierarchical</em>/<em>hierarchische</em> Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser [gelmanDataAnalysisUsing2006].</li>
+<li>Auch bekannt als <em>random effects</em>, <em>multilevel</em>/<em>Mehrebenen-</em> oder <em>hierarchical</em>/<em>hierarchische</em> Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006">2006</a>)</span>.</li>
 <li><p>Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.</p></li>
-<li><em>Mixed effects</em> Modelle sind Regressionsmodelle für Beobachtungen von, ganz allgemein gesprochen, miteinander verbundenen Einheiten.</li>
-<li>Typosche Beispiele sind Schüler*innen in Klassen in Schulen, Patient*innen in Classic examples: pupils in classes or schools, patients in hospitals, respondents in regions or countries.</li>
-<li>Random/fixed effects in the sense that some effects (such as the intercept) vary between higher-level units, some do not.</li>
-<li><p>Panel data have an inherently hierarchical structure: measurements (level 1) are nested within persons (level 2).</p></li>
+<li>Ganz allgemein gesprochen sind <em>mixed effects</em> Modelle Regressionsmodelle für Beobachtungen von Einheiten, die in irgendeiner Art miteinander zu tun haben, also nicht unabhängig voneinander sind.</li>
+<li>Typische Beispiele sind Schüler*innen in Klassen in Schulen, Patient*innen in Krankenhäuser, Wähler*innen in Wahlkreisen, … .</li>
+<li>Die Bezeichnung <em>mixed effects</em> geht darauf zurück, dass in den Modellen sowohl <em>random effects</em> (Koeffizienten, die zwischen den Fällen innerhalb einer Gruppierung auf einer höheren Ebene variieren) als auch <em>fixed effects</em> (Koeffizienten, die für alle Fälle gleich sind) spezifiziert werden.</li>
+<li><p>Paneldaten haben immer eine hierarchische Struktur: Beobachtungen (Level 1) sind innerhalb der Personen (Level 2) gruppiert.</p></li>
+</ul>
+<div id="warum-wir-in-den-sozialwissenschaften-nicht-nur-die-traditionellen-ökonometrischen-modelle-verwenden" class="section level3 unnumbered">
+<h3>Warum wir in den Sozialwissenschaften nicht (nur) die traditionellen ökonometrischen Modelle verwenden</h3>
+<blockquote>
+<p>Econometrics deal mostly with non-experimental data. Great emphasis is put on specification procedures and misspecification testing. Model specifications tend therefore to be very simple, while great attention is put on the issues of endogeneity of the regressors, dependence structures in the errors and robustness of the estimators under deviations from normality. — <span class="citation">Croissant and Millo (<a href="#ref-plm2008">2008</a>)</span></p>
+</blockquote>
+<ul>
+<li><p>Historsiche Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.</p></li>
+<li><p>Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effkte, … . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.</p></li>
+<li><p>Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.</p></li>
+</ul>
+</div>
+<div id="vorteile-der-mixed-effects-modelle" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Vorteile der <em>mixed effects</em> Modelle</h3>
+<ul>
+<li><p><em>Mixed effects</em> Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.</p></li>
+<li><p>Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.</p></li>
+<li><p>Wenn man die Logik von <em>mixed effects</em> Modellen einmal verstanden hat, kann man die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren, … .</p></li>
+<li><p>Das Denken in Varianzkomponenten (siehe nächster Absatz) hilft uns, konzeptionell über die Bedeutung von Prädiktoren auf verschiedenen Ebenen nachzudenken.</p></li>
+<li><p>Praktische Umsetzung: Das Paket <code>lme4</code> ist einfach zu verwenden und auch ein guter Einstieg in ähnlich aufgebaute Pakte zur bayesianischen Schätzung solcher Modelle (z.B. <code>rstanarm</code>, <code>brms</code>).</p></li>
+</ul>
+</div>
+<div id="varianzdekomposition-und-intraklassen-korrelation" class="section level3 unnumbered">
+<h3>Varianzdekomposition und Intraklassen-Korrelation</h3>
+<ul>
+<li><p>Wir interessieren uns dafür, welcher Anteil in der Varianz in <span class="math inline">\(Y\)</span> auf stabile Unterschiede zwischen den Personen zurück geht und welcher auf Veränderungen innerhalb von Personen (potenielle kausale Effekte).</p></li>
+<li>In <em>mixed effects</em> Modellen können wir die Varianz-Anteile in einem sogenannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
+<ul>
+<li><span class="math inline">\(y_{it}= \alpha + v_{it}\)</span> und <span class="math inline">\(v_{it} = \alpha_{i}+ u_{it}\)</span></li>
+</ul></li>
+<li>Ohne die Konstante erhalten wir
+<ul>
+<li><span class="math inline">\(y_{it} = \alpha_{i}+ u_{it}\)</span></li>
+</ul></li>
+<li><p>Da die Varianzen von <span class="math inline">\(\alpha_i\)</span> und <span class="math inline">\(u_it\)</span> im Modell geschätzt werden, können wir den Anteil der personenspezifischen (Level 2) Varianz und den Anteil der idiosynkratischen Variance in <span class="math inline">\(Y\)</span> berechnen. Der Anteil der Level 2 Varianz an der gesamten Varianz wird auch als Intraklassen-Korrelation (intra-class correlation, ICC, <span class="math inline">\(\rho\)</span>) bezeichnet.</p></li>
+<li>In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne trifftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).</li>
+<li><p>Dazu spzifizieren wir das Null-Modell mit <code>lme4::lmer()</code>. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit <code>(1 | IDsosci)</code> jede Person eine eigene Konstante erhält (<span class="math inline">\(\alpha_i\)</span> in der Gleichung oben), die als Abweichung vom Gesamtmittel (<span class="math inline">\(\alpha\)</span>) geschätzt wird.</p></li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># Null-Modell</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">m0 =<span class="st"> </span>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> .)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">m0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+## Formula: verh1 ~ 1 + (1 | IDsosci)
+##    Data: .
+## 
+## REML criterion at convergence: 5576.4
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.1387 -0.2268 -0.1212 -0.1212  4.8131 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.5938   0.7706  
+##  Residual             0.4065   0.6376  
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  1.52865    0.03475   43.99</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># ICC &#39;von Hand&#39;</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">round</span>(<span class="fl">0.5938</span><span class="op">/</span>(<span class="fl">0.5938</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.4065</span>), <span class="dv">3</span>)</a></code></pre></div>
+<pre><code>## [1] 0.594</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># Mit performance::icc</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">icc</span>(m0)</a></code></pre></div>
+<pre><code>## # Intraclass Correlation Coefficient
+## 
+##      Adjusted ICC: 0.594
+##   Conditional ICC: 0.594</code></pre>
+<ul>
+<li>Fast 60% der Varianz im Verlassen der Wohnung geht auf Unterschiede zwischen Personen zurück.</li>
+<li><p>Im <em>fixed effects</em> Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit diesen Modellen also per Spezifikationslogik nicht aussagen.</p></li>
+<li>Kausale Effekte innerhalb der Personen können damit <em>maximal</em> für 40% der Varianz verantwortlich sein.</li>
+<li><p>Allerdings müssen wir dabei beachten, dass auch der gesamte Messfehler (zumindest die zufällige Messfehlervarianz nach der CTT) ebenfalls in diesem Varianzanteil steckt.</p></li>
 </ul>
 
 </div>
 </div>
+</div>
 <h3>Literatur</h3>
 <div id="refs" class="references">
+<div id="ref-plm2008">
+<p>Croissant, Yves, and Giovanni Millo. 2008. “Panel Data Econometrics in R: The plm Package.” <em>Journal of Statistical Software</em> 27 (2): 1–43. <a href="https://doi.org/10.18637/jss.v027.i02">https://doi.org/10.18637/jss.v027.i02</a>.</p>
+</div>
 <div id="ref-gelmanDataAnalysisUsing2006">
 <p>Gelman, A., and J. Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. New York: Cambridge University Press.</p>
 </div>

@@ -77,13 +77,61 @@ knitr::read_chunk("R/plm_re.R")
 
 ## Kurze Einführung zu mixed effects Modellen
 
-* Auch bekannt als *random effects*, *multilevel*/*Mehrebenen-* oder *hierarchical*/*hierarchische* Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser [gelmanDataAnalysisUsing2006].
+* Auch bekannt als *random effects*, *multilevel*/*Mehrebenen-* oder *hierarchical*/*hierarchische* Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser [@gelmanDataAnalysisUsing2006].
 * Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.
 
-* *Mixed effects* Modelle sind Regressionsmodelle für Beobachtungen von, ganz allgemein gesprochen, miteinander verbundenen Einheiten.
-* Typosche Beispiele sind Schüler\*innen in Klassen in Schulen, Patient\*innen in Krankenhäuser, Wähler\*innen in Wahlkreisen, ... .
-* Random/fixed effects in the sense that some effects (such as the intercept) vary between higher-level units, some do not.
-* Panel data have an inherently hierarchical structure: measurements (level 1) are nested within persons (level 2).
+* Ganz allgemein gesprochen sind *mixed effects* Modelle Regressionsmodelle für Beobachtungen von Einheiten, die in irgendeiner Art miteinander zu tun haben, also nicht unabhängig voneinander sind.
+* Typische Beispiele sind Schüler\*innen in Klassen in Schulen, Patient\*innen in Krankenhäuser, Wähler\*innen in Wahlkreisen, ... .
+* Die Bezeichnung *mixed effects* geht darauf zurück, dass in den Modellen sowohl *random effects* (Koeffizienten, die zwischen den Fällen innerhalb einer Gruppierung auf einer höheren Ebene variieren) als auch *fixed effects* (Koeffizienten, die für alle Fälle gleich sind) spezifiziert werden.
+* Paneldaten haben immer eine hierarchische Struktur: Beobachtungen (Level 1) sind innerhalb der Personen (Level 2) gruppiert.
 
+### Warum wir in den Sozialwissenschaften nicht (nur) die traditionellen ökonometrischen Modelle verwenden {-}
 
+> Econometrics deal mostly with non-experimental data. Great emphasis is put on specification procedures and misspecification testing. Model specifications tend therefore to be very simple, while great attention is put on the issues of endogeneity of the regressors, dependence structures in the errors and robustness of the estimators under deviations from normality. --- @plm2008
 
+* Historsiche Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
+
+* Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effkte, ... . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
+
+* Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.
+
+### Vorteile der *mixed effects* Modelle
+
+* *Mixed effects* Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.
+
+* Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.
+
+* Wenn man die Logik von *mixed effects* Modellen einmal verstanden hat, kann man die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren, ... .
+
+* Das Denken in Varianzkomponenten (siehe nächster Absatz) hilft uns, konzeptionell über die Bedeutung von Prädiktoren auf verschiedenen Ebenen nachzudenken.
+
+* Praktische Umsetzung: Das Paket `lme4` ist einfach zu verwenden und auch ein guter Einstieg in ähnlich aufgebaute Pakte zur bayesianischen Schätzung solcher Modelle (z.B. `rstanarm`, `brms`).
+
+### Varianzdekomposition und Intraklassen-Korrelation {-}
+
+* Wir interessieren uns dafür, welcher Anteil in der Varianz in $Y$ auf stabile Unterschiede zwischen den Personen zurück geht und welcher auf Veränderungen innerhalb von Personen (potenielle kausale Effekte).
+
+* In *mixed effects* Modellen können wir die Varianz-Anteile in einem sogenannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
+    * $y_{it}= \alpha + v_{it}$ und $v_{it} = \alpha_{i}+ u_{it}$
+* Ohne die Konstante erhalten wir
+    * $y_{it} = \alpha_{i}+ u_{it}$
+
+* Da die Varianzen von $\alpha_i$ und $u_it$ im Modell geschätzt werden, können wir den Anteil der personenspezifischen (Level 2) Varianz und den Anteil der idiosynkratischen Variance in $Y$ berechnen. Der Anteil der Level 2 Varianz an der gesamten Varianz wird auch als Intraklassen-Korrelation (intra-class correlation, ICC, $\rho$) bezeichnet.
+
+* In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne trifftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
+* Dazu spzifizieren wir das Null-Modell mit `lme4::lmer()`. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit `(1 | IDsosci)` jede Person eine eigene Konstante erhält ($\alpha_i$ in der Gleichung oben), die als Abweichung vom Gesamtmittel ($\alpha$) geschätzt wird.
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/icc.R")
+```
+
+```{r icc, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Die Informationen zu den Varianzkomponenten findet sich im Output von `summary()` unter `Random effects`.
+* Fast 60% der Varianz im Verlassen der Wohnung geht auf Unterschiede zwischen Personen zurück.
+* Im *fixed effects* Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit diesen Modellen also per Spezifikationslogik nicht aussagen.
+
+* Kausale Effekte innerhalb der Personen können damit *maximal* für 40% der Varianz verantwortlich sein.
+* Allerdings müssen wir dabei beachten, dass auch der gesamte Messfehler (zumindest die zufällige Messfehlervarianz nach der CTT) ebenfalls in diesem Varianzanteil steckt.

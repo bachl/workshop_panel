@@ -148,9 +148,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.5" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#übungsaufgaben-2"><i class="fa fa-check"></i><b>3.5</b> Übungsaufgaben 2</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html"><i class="fa fa-check"></i><b>4</b> <em>Random effects</em> Modelle</a><ul>
-<li class="chapter" data-level="4.1" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#einführung-random-effects-modelle-für-paneldaten"><i class="fa fa-check"></i><b>4.1</b> Einführung: <em>random effects</em> Modelle für Paneldaten</a></li>
-<li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#advantages-of-the-re-model"><i class="fa fa-check"></i><b>4.2</b> Advantages of the RE model</a></li>
-<li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#is-the-re-model-ever-justified"><i class="fa fa-check"></i><b>4.3</b> Is the RE model ever justified?</a></li>
+<li class="chapter" data-level="4.1" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#einführung-random-effects-modelle-für-paneldaten"><i class="fa fa-check"></i><b>4.1</b> Einführung: Random effects Modelle für Paneldaten</a></li>
+<li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#random-effects-modelle-mit-plm"><i class="fa fa-check"></i><b>4.2</b> Random effects Modelle mit <code>plm</code></a></li>
+<li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#kurze-einführung-zu-mixed-effects-modellen"><i class="fa fa-check"></i><b>4.3</b> Kurze Einführung zu mixed effects Modellen</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
@@ -475,7 +475,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>In der ökonometrischen Diskussion ist die Wahl der korrekten (robusten) Standardfehler sehr prominent. Diese sind robust gegen Verletzung verschiedener Annahmen, z.B. durch serielle Korrelationen der Residuen oder Heteroskedastizität.</li>
 <li><p>Das <code>lmtest</code> Paket <span class="citation">(Hothorn et al. <a href="#ref-R-lmtest">2019</a>)</span> ist kompatibel mit Modellen aus <code>plm</code>. Es implementiert zahlreiche robuste Schätzer bzw. Korrekturen.</p></li>
 <li><p>Hier die “normalen” Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.</p></li>
-<li><p>Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle unter anderem <span class="citation">King and Roberts (<a href="#ref-kingHowRobustStandard2015">2015</a>)</span> zur kritischen Lektüre.</p></li>
+<li><p>Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle für die Details der Umsetzung in <code>plm</code> <span class="citation">Millo (<a href="#ref-plm2017">2017</a>)</span> und zu einer kritischen Auseinandersetzung <span class="citation">King and Roberts (<a href="#ref-kingHowRobustStandard2015">2015</a>)</span>.</p></li>
 </ul>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># Normale SE und CI</span></a>
 <a class="sourceLine" id="cb18-2" data-line-number="2">mdl_pfe_pdv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coeftest</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</a></code></pre></div>
@@ -657,6 +657,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="ref-kingHowRobustStandard2015">
 <p>King, Gary, and Margaret E. Roberts. 2015. “How Robust Standard Errors Expose Methodological Problems They Do Not Fix, and What to Do About It.” <em>Political Analysis</em> 23 (2). Cambridge University Press: 159–79. <a href="https://doi.org/10.1093/pan/mpu015">https://doi.org/10.1093/pan/mpu015</a>.</p>
+</div>
+<div id="ref-plm2017">
+<p>Millo, Giovanni. 2017. “Robust Standard Error Estimators for Panel Models: A Unifying Approach.” <em>Journal of Statistical Software</em> 82 (3): 1–27. <a href="https://doi.org/10.18637/jss.v082.i03">https://doi.org/10.18637/jss.v082.i03</a>.</p>
 </div>
 <div id="ref-wooldridge10">
 <p>Wooldridge, Jeffrey M. 2010. <em>Econometric Analysis of Cross Section and Panel Data</em>. MIT press.</p>
