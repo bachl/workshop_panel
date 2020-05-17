@@ -404,6 +404,20 @@ zoo & 1.8.7\\
   Nachvollziehen der Aufbereitung in \texttt{R/data.R}
 \item
   Direkt laden (z.B. für Übungen) aus \texttt{R/data/data.rds}
+\item
+  Der Datensatz ist bereits im \emph{long format}. \texttt{IDsosci} ist der Indikator für die Person, \texttt{wave} ist der Indikator für die Erhebungswelle.
+\end{itemize}
+
+\hypertarget{inhaltliche-variablen-im-datensatz}{%
+\subsection*{Inhaltliche Variablen im Datensatz}\label{inhaltliche-variablen-im-datensatz}}
+\addcontentsline{toc}{subsection}{Inhaltliche Variablen im Datensatz}
+
+\begin{itemize}
+\tightlist
+\item
+  Alter, Geschlecht (Dummy für weiblich), Bildung und Kollektivismus sind konstante Personenmerkmale.
+\item
+  Alle übrigen Variablen wurden in den vier Wellen wiederholt gemessen (mit Ausnahme von \texttt{desnorm4}, \texttt{injnorm4}, \texttt{verh4-6}, \texttt{verhint4-6}, die erst ab Welle 2 erfasst wurden).
 \end{itemize}
 
 \begin{tabular}{l|l}
@@ -637,7 +651,6 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-9-1.pdf}
 
 \begin{itemize}
-\tightlist
 \item
   Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte auf eine nicht beobachte Drittvariable auf Ebene der Personen zurück gehen:
 
@@ -650,7 +663,11 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   \end{itemize}
 \item
   Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber \emph{alle} Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im \emph{fixed effects} Modell, das wir im nächsten Abschnitt besprechen.
+\item
+  An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für \(Z\) kontrollieren können. Wenn wir jede Panel-Welle für sich ananlysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.
 \end{itemize}
+
+\includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-10-1.pdf}
 
 \hypertarget{fixed-effects-modelle}{%
 \chapter{Fixed effects Modelle}\label{fixed-effects-modelle}}
@@ -1366,11 +1383,11 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \section{\texorpdfstring{Conclusio: Vor- und Nachteile des \emph{fixed effects} Modells}{Conclusio: Vor- und Nachteile des fixed effects Modells}}\label{conclusio-vor--und-nachteile-des-fixed-effects-modells}}
 
 \begin{quote}
-In many applications the whole point of using panel data is to allow for \(a_i\) to be arbitrarily correlated with the \(x_{it}\). A fixed effects analysis achieves this purpose explicitly. --- \citet{wooldridge10}, p.~300
+In many applications the whole point of using panel data is to allow for \(a_i\) to be arbitrarily correlated with the \(x_{it}\). A fixed effects analysis achieves this purpose explicitly. --- \citet{wooldridge10}, S. 300
 \end{quote}
 
 \begin{quote}
-By controlling out context, FE models effectively cut out much of what is going on --- goings-on that are usually of interest to the researcher, the reader and the policy maker. We contend that models that control out, rather than explicitly model, context and heterogeneity offer overly simplistic and impoverished results that can lead to misleading interpretations. --- \citet{bellExplainingFixedEffects2015}, p.~134
+By controlling out context, FE models effectively cut out much of what is going on --- goings-on that are usually of interest to the researcher, the reader and the policy maker. We contend that models that control out, rather than explicitly model, context and heterogeneity offer overly simplistic and impoverished results that can lead to misleading interpretations. --- \citet{bellExplainingFixedEffects2015}, S. 134
 \end{quote}
 
 \begin{itemize}
@@ -1406,10 +1423,83 @@ By controlling out context, FE models effectively cut out much of what is going 
   Spezifiziere, schätze und interpretiere ein eigenes \emph{fixed effects} Modell mit Daten aus dem Beispieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.
 \end{enumerate}
 
-\hypertarget{random-effects-models}{%
-\chapter{Random effects models}\label{random-effects-models}}
+\hypertarget{random-effects-modelle}{%
+\chapter{\texorpdfstring{\emph{Random effects} Modelle}{Random effects Modelle}}\label{random-effects-modelle}}
 
-XXX
+\begin{itemize}
+\tightlist
+\item
+  In diesem Abschnitt beschäftigen wir uns mit \emph{random effects} Modellen. Zuerst führen wir die Modellklasse ein. Dann betrachten wir kurz, wie die Modelle in der Tradition der Ökonometrie mit \texttt{plm} spezifiziert werden können, bevor wir zur allgemeineren Umsetzung mit dem Paket für Mehrebenen- bzw. \emph{mixed effects} Modelle \texttt{lme4} kommen.
+\end{itemize}
+
+\hypertarget{einfuxfchrung-random-effects-modelle-fuxfcr-paneldaten}{%
+\section{\texorpdfstring{Einführung: \emph{random effects} Modelle für Paneldaten}{Einführung: random effects Modelle für Paneldaten}}\label{einfuxfchrung-random-effects-modelle-fuxfcr-paneldaten}}
+
+\begin{itemize}
+\item
+  Anstatt für jede Einheit (Person) eine separate Konstante \(\alpha_i\) zu schätzen, können wir den ``soft constraint'' \citep[S. 257]{gelmanDataAnalysisUsing2006} setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)\) mit \(i = 1,...,n\)
+  \end{itemize}
+\item
+  Das \emph{random effects} Modell wird geschätzt als
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(y_{it}=x_{it}'\beta + z_i'\gamma + v_{it}\)
+  \item
+    \(v_{it} = \alpha_{i}+ u_{it}\)
+  \end{itemize}
+\item
+  In order to yield unbiased estimates for \(\beta'\), two assumptions need to be fulfilled:
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \tightlist
+  \item
+    No time-constant unobserved heterogeneity
+    \({\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}\)
+  \item
+    No time-varying unobserved heterogeneity
+    \({\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}\)
+  \end{enumerate}
+\end{itemize}
+
+\hypertarget{advantages-of-the-re-model}{%
+\section{Advantages of the RE model}\label{advantages-of-the-re-model}}
+
+\begin{itemize}
+\tightlist
+\item
+  Time-invariant predictors can be incorporated while still estimating random intercepts for every person.
+\item
+  Effects of time-varying and time-invariant predictors can be compared (e.g.~is a good education more important than joining a union).
+\item
+  Predictions for new cases (both persons and time periods) can be made using all available information.
+\item
+  Effect heterogeneity (e.g.~whether joining a union is equally effective for all) can easily be investigate (more on that later).
+\end{itemize}
+
+\hypertarget{is-the-re-model-ever-justified}{%
+\section{Is the RE model ever justified?}\label{is-the-re-model-ever-justified}}
+
+"The only difference
+between RE and FE lies in the assumption they make about the relationship
+between υ and the observed predictors: RE models assume that the observed
+predictors in the model are not correlated with \(v\) while FE models allow them
+to be correlated.
+
+A moment's reflection on what \(v\) represents---all unmeasured
+time-constant factors about the respondent---should lead anyone to
+realize that the RE assumption is heroic in social research, to say the least.
+
+The idea that the characteristics we don't (or can't) measure (like personality
+or genetic influences) are uncorrelated with the things we usually do
+measure (like income or church attendance) is implausible." --- \citet{vaiseyWhatYouCan2017}, p.~47
 
 \hypertarget{within-between-models}{%
 \chapter{Within-between models}\label{within-between-models}}

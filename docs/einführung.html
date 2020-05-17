@@ -147,7 +147,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#conclusio-vor--und-nachteile-des-fixed-effects-modells"><i class="fa fa-check"></i><b>3.4</b> Conclusio: Vor- und Nachteile des <em>fixed effects</em> Modells</a></li>
 <li class="chapter" data-level="3.5" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#übungsaufgaben-2"><i class="fa fa-check"></i><b>3.5</b> Übungsaufgaben 2</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="random-effects-models.html"><a href="random-effects-models.html"><i class="fa fa-check"></i><b>4</b> Random effects models</a></li>
+<li class="chapter" data-level="4" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html"><i class="fa fa-check"></i><b>4</b> <em>Random effects</em> Modelle</a><ul>
+<li class="chapter" data-level="4.1" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#einführung-random-effects-modelle-für-paneldaten"><i class="fa fa-check"></i><b>4.1</b> Einführung: <em>random effects</em> Modelle für Paneldaten</a></li>
+<li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#advantages-of-the-re-model"><i class="fa fa-check"></i><b>4.2</b> Advantages of the RE model</a></li>
+<li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#is-the-re-model-ever-justified"><i class="fa fa-check"></i><b>4.3</b> Is the RE model ever justified?</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
 </ul>
@@ -255,6 +259,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li>Nachvollziehen der Aufbereitung in <code>R/data.R</code></li>
 <li><p>Direkt laden (z.B. für Übungen) aus <code>R/data/data.rds</code></p></li>
+<li><p>Der Datensatz ist bereits im <em>long format</em>. <code>IDsosci</code> ist der Indikator für die Person, <code>wave</code> ist der Indikator für die Erhebungswelle.</p></li>
+</ul>
+<div id="inhaltliche-variablen-im-datensatz" class="section level3 unnumbered">
+<h3>Inhaltliche Variablen im Datensatz</h3>
+<ul>
+<li>Alter, Geschlecht (Dummy für weiblich), Bildung und Kollektivismus sind konstante Personenmerkmale.</li>
+<li>Alle übrigen Variablen wurden in den vier Wellen wiederholt gemessen (mit Ausnahme von <code>desnorm4</code>, <code>injnorm4</code>, <code>verh4-6</code>, <code>verhint4-6</code>, die erst ab Welle 2 erfasst wurden).</li>
 </ul>
 <table>
 <thead>
@@ -427,6 +438,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 </div>
+</div>
 <div id="pooled-ols-wrong" class="section level2">
 <h2><span class="header-section-number">2.3</span> Pooled OLS (WRONG!)</h2>
 <ul>
@@ -507,8 +519,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Vielleicht trinken Personen, die wissen, dass sie nicht so anfällig für einen Hangover sind, mehr, während Personen, die immer einen starken Kater haben, schon aus Angst vor dem nächsten Tag weniger trinken.</li>
 <li>Oder es ist ein Gewöhnungseffekt: Personen, die häufig viel trinken, gewöhnen sich an den Kater und nehmen ihn als weniger schlimm wahr. Oder mit Lemmy: “A kid once said to me “Do you get hangovers?” I said, “To get hangovers you have to stop drinking.”&quot;</li>
 </ul></li>
-<li>Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber <em>alle</em> Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im <em>fixed effects</em> Modell, das wir im nächsten Abschnitt besprechen.</li>
+<li><p>Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber <em>alle</em> Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im <em>fixed effects</em> Modell, das wir im nächsten Abschnitt besprechen.</p></li>
+<li><p>An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für <span class="math inline">\(Z\)</span> kontrollieren können. Wenn wir jede Panel-Welle für sich ananlysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.</p></li>
 </ul>
+<p><img src="workshop_panel_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 
 </div>
 </div>

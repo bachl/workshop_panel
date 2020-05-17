@@ -18,3 +18,7 @@ plt_pool = example_data %>%
 
 plt_nopool = example_data %>% 
   ggplot(aes(beer, hangover, color = factor(id))) + geom_point(show.legend = FALSE) + stat_smooth(method = "lm", se = FALSE, show.legend = FALSE)
+
+plt_cross = example_data %>% 
+  mutate(wave = rep(1:t, each = n)) %>% 
+  ggplot(aes(beer, hangover)) + geom_point() + stat_smooth(method = "lm", se = FALSE) + facet_wrap("wave")

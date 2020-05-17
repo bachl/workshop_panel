@@ -1,43 +1,89 @@
 # *Random effects* Modelle
 
+```{r, include=FALSE}
+source("R/packages.R")
+d = read_rds("R/data/data.rds")
+```
+
 * In diesem Abschnitt beschäftigen wir uns mit *random effects* Modellen. Zuerst führen wir die Modellklasse ein. Dann betrachten wir kurz, wie die Modelle in der Tradition der Ökonometrie mit `plm` spezifiziert werden können, bevor wir zur allgemeineren Umsetzung mit dem Paket für Mehrebenen- bzw. *mixed effects* Modelle `lme4` kommen.
 
-## Einführung: *random effects* Modelle für Paneldaten
+## Einführung: Random effects Modelle für Paneldaten
+
+### Modellspezifikation {-}
 
 * Anstatt für jede Einheit (Person) eine separate Konstante $\alpha_i$ zu schätzen, können wir den "soft constraint" [@gelmanDataAnalysisUsing2006, S. 257] setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
   * $\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)$ mit $i = 1,...,n$
 
-* Das *random effects* Modell wird geschätzt als
+* Das *random effects* Panel-Modell wird geschätzt als
 
   * $y_{it}=x_{it}'\beta + z_i'\gamma + v_{it}$
-  * $v_{it} = \alpha_{i}+ u_{it}$
+  * $v_{it} = \alpha_{i} + u_{it}$
+  * mit $y_{it}$ über Personen ($i$) und Zeit ($t$) variierendes Kriterium, $x_{it}'$ über Personen und Zeit variierende Prädiktoren, $\beta$ Koeffizienten der über Personen und Zeit variierenden Prädiktoren, $z_i'$ über Personen variierende Prädiktoren, $\gamma$ Koeffizienten der über Personen variierenden Prädiktoren, $v_{it}$ gesamter Fehlerterm, $\alpha_{i}$ personenspezifische Konstanten, $u_{it}$ Residuen. 
 
-* In order to yield unbiased estimates for $\beta'$, two assumptions need to be fulfilled: 
-    1. No time-constant unobserved heterogeneity <br/>
-    ${\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}$ 
-    2. No time-varying unobserved heterogeneity <br/>
-    ${\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}$
+* Damit die Schätzer für $\beta'$ unverzerrt sind, müssen zwei Annahmen erfüllt sein: 
+    1. Keine über die Zeit konstante Heterogenität, deren Ursache nicht im Modell ist
+    
+    * ${\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}$ 
+    
+    2. Keine über die Zeit variierende Heterogenität, deren Ursache nicht im Modell ist
+    
+    * ${\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}$
 
-## Advantages of the RE model
+### Vorteile der *random effects* Modelle für Panel-Daten {-}
 
-* Time-invariant predictors can be incorporated while still estimating random intercepts for every person.
-* Effects of time-varying and time-invariant predictors can be compared (e.g. is a good education more important than joining a union).
-* Predictions for new cases (both persons and time periods) can be made using all available information.
-* Effect heterogeneity (e.g. whether joining a union is equally effective for all) can easily be investigate (more on that later).
+* Schätzer für über die Zeit konstante Prädiktoren und gleichzeitig Konstante für jede Person.
+* Schätzer von über die Zeit variierenden und über die Zeit konstanten Prädiktoren können verglichen werden.
+* Vorhersagen für neue Personen außerhab der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
+* Die Annahme honogener Treatment-Effekte kann gelocketer werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
 
 
-## Is the RE model ever justified?
+### Sind die Annahmen des *random effects* Modell für Paneldaten jemals erfüllt? {-}
 
-"The only difference
-between RE and FE lies in the assumption they make about the relationship
-between υ and the observed predictors: RE models assume that the observed
-predictors in the model are not correlated with $v$ while FE models allow them
-to be correlated. 
+> The only difference between RE and FE lies in the assumption they make about the relationship between υ and the observed predictors: RE models assume that the observed predictors in the model are not correlated with $v$ while FE models allow them to be correlated.
 
-A moment’s reflection on what $v$ represents—all unmeasured
-time-constant factors about the respondent—should lead anyone to
-realize that the RE assumption is heroic in social research, to say the least.
+> A moment's reflection on what $v$ represents—--all unmeasured time-constant factors about the respondent—--should lead anyone to realize that the RE assumption is heroic in social research, to say the least.
 
-The idea that the characteristics we don’t (or can’t) measure (like personality
-or genetic influences) are uncorrelated with the things we usually do
-measure (like income or church attendance) is implausible." --- @vaiseyWhatYouCan2017, p. 47
+> The idea that the characteristics we don't (or can't) measure (like personality or genetic influences) are uncorrelated with the things we usually do measure (like income or church attendance) is implausible. --- @vaiseyWhatYouCan2017, S. 47
+
+### Hausman-Test {-}
+
+* Der Hausman-Test prüft, ob das *random effects* Modell konsistent ist (~ geschätzt werden darf). 
+* Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der $H_0$ im Hausman-Test gegen das Schätzen eines *random effects* Modells.
+* Da das *random effecs* Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das *fixed effects* Modell per Definition scheitert, lässt sich die Wahl des *random effects* Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
+* Der Hausman-Test kann mit der Funktion `plm::phtest()` durchgeführt werden.
+
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/hausman.R")
+```
+
+```{r hausman, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* In diesem Beispiel spricht der Hausman-Test dagegen, ein *random effects* Modell zu schätzen.
+
+## Random effects Modelle mit `plm`
+
+* *Random effects* Modelle für Paneldaten in der ökonometrischen Tradition lassen sich mit `plm` schätzen. Die Schätzung erfolgt auf Basis von Transformationen im Least-squares-Framework (ich habe keine Ahnung, wie das funktioniert). Ich selbst nutze diese Funktionalität in der Praxis nicht. Die Modellspezifikationen sind im Folgenden der Vollständigkeit halber kurz aufgeführt.
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/plm_re.R")
+```
+
+```{r plm-re, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+## Kurze Einführung zu mixed effects Modellen
+
+* Auch bekannt als *random effects*, *multilevel*/*Mehrebenen-* oder *hierarchical*/*hierarchische* Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser [gelmanDataAnalysisUsing2006].
+* Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.
+
+* *Mixed effects* Modelle sind Regressionsmodelle für Beobachtungen von, ganz allgemein gesprochen, miteinander verbundenen Einheiten.
+* Typosche Beispiele sind Schüler\*innen in Klassen in Schulen, Patient\*innen in Krankenhäuser, Wähler\*innen in Wahlkreisen, ... .
+* Random/fixed effects in the sense that some effects (such as the intercept) vary between higher-level units, some do not.
+* Panel data have an inherently hierarchical structure: measurements (level 1) are nested within persons (level 2).
+
+
+

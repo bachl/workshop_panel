@@ -81,7 +81,7 @@ knitr::read_chunk("R/lsdv.R")
 
 * Insgesamt sind viele quantitative Sozialforscher (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass *fixed effects* Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
 
-### Mehre fixed effects in einem Modell -- Perioden-Effekte
+### Mehre fixed effects in einem Modell -- Perioden-Effekte {-}
 
 * Grundsätzlich können in einem Modell beliebig viele *fixed effects* spezifiziert werden.
 * In Paneldaten ist der Erhebungszeitpunkt bzw. die Ergebungsperiode (Panelwelle) eine typische Variable, über die verschiedene, für alle Personen konstante Effekte kontrolliert werden können.
@@ -135,7 +135,7 @@ knitr::read_chunk("R/plm_intro.R")
 * Der Output von `summary()` liefert eine korrekte Beschreibung der Fallzahlen im Datensatz.
 * Beachte: Das angepasste $R^2$ ist hier (wie in vielen *fixed effects* Modellen) negativ. Das ist kein Grund zur Beunruhigung. Die Logik dahinter kann gut nachvollzogen werden, wenn wir uns die LSDV-Spezifikation in Erinnerung rufen. Zusätzlich zu den inhaltlich relevanten Prädiktoren enthält das Modell $n - 1$ Prädiktoren für die Einheiten. 
 
-### Mehre *fixed effects* in einem Modell -- Perioden-Effekte mit `plm`
+### Mehre *fixed effects* in einem Modell -- Perioden-Effekte mit `plm` {-}
 
 * `plm` bietet zwei Möglichkeiten, die Perioden-Effekte zu spezifizieren (identische Ergebnisse, anderer Output):
 
@@ -192,7 +192,9 @@ knitr::read_chunk("R/plm_twopreds.R")
 
 ### Aufnahme eines Personenmerkmals (funktioniert nicht, ohne Warnung!) {-}
 
-```{r, eval=TRUE, tidy=TRUE, message=FALSE}
+* In einer typischen Regresssionanalyse würden wir uns z.B. auch dafür interessieren, ob sich das Verhalten nach dem Geschlecht unterscheidet. Wir nehmen also `C_sex` in die Formel auf, mit der wir das Modell in `plm` spezifizieren.
+
+```{r, echo=TRUE, eval=TRUE, tidy=TRUE, message=FALSE}
 d %>% plm(verh1 ~ verhint1 + C_sex + factor(wave), data = ., index = "IDsosci", model = "within") %>% summary
 ```
 

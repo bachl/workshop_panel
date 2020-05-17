@@ -51,6 +51,68 @@
 
 
 
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
@@ -86,9 +148,9 @@
 <li class="chapter" data-level="3.5" data-path="fixed-effects-modelle.html"><a href="fixed-effects-modelle.html#übungsaufgaben-2"><i class="fa fa-check"></i><b>3.5</b> Übungsaufgaben 2</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html"><i class="fa fa-check"></i><b>4</b> <em>Random effects</em> Modelle</a><ul>
-<li class="chapter" data-level="4.1" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#einführung-random-effects-modelle-für-paneldaten"><i class="fa fa-check"></i><b>4.1</b> Einführung: <em>random effects</em> Modelle für Paneldaten</a></li>
-<li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#advantages-of-the-re-model"><i class="fa fa-check"></i><b>4.2</b> Advantages of the RE model</a></li>
-<li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#is-the-re-model-ever-justified"><i class="fa fa-check"></i><b>4.3</b> Is the RE model ever justified?</a></li>
+<li class="chapter" data-level="4.1" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#einführung-random-effects-modelle-für-paneldaten"><i class="fa fa-check"></i><b>4.1</b> Einführung: Random effects Modelle für Paneldaten</a></li>
+<li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#random-effects-modelle-mit-plm"><i class="fa fa-check"></i><b>4.2</b> Random effects Modelle mit <code>plm</code></a></li>
+<li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#kurze-einführung-zu-mixed-effects-modellen"><i class="fa fa-check"></i><b>4.3</b> Kurze Einführung zu mixed effects Modellen</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
@@ -115,48 +177,232 @@
 <li>In diesem Abschnitt beschäftigen wir uns mit <em>random effects</em> Modellen. Zuerst führen wir die Modellklasse ein. Dann betrachten wir kurz, wie die Modelle in der Tradition der Ökonometrie mit <code>plm</code> spezifiziert werden können, bevor wir zur allgemeineren Umsetzung mit dem Paket für Mehrebenen- bzw. <em>mixed effects</em> Modelle <code>lme4</code> kommen.</li>
 </ul>
 <div id="einführung-random-effects-modelle-für-paneldaten" class="section level2">
-<h2><span class="header-section-number">4.1</span> Einführung: <em>random effects</em> Modelle für Paneldaten</h2>
+<h2><span class="header-section-number">4.1</span> Einführung: Random effects Modelle für Paneldaten</h2>
+<div id="modellspezifikation" class="section level3 unnumbered">
+<h3>Modellspezifikation</h3>
 <ul>
 <li>Anstatt für jede Einheit (Person) eine separate Konstante <span class="math inline">\(\alpha_i\)</span> zu schätzen, können wir den “soft constraint” <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006">2006</a>, S. 257)</span> setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
 <ul>
 <li><span class="math inline">\(\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)\)</span> mit <span class="math inline">\(i = 1,...,n\)</span></li>
 </ul></li>
-<li>The random effects model than be estimated as</li>
-</ul>
-<p><span class="math inline">\(y_{it}=x_{it}&#39;\beta + z_i&#39;\gamma + v_{it}\)</span>
-<span class="math inline">\(v_{it} = \alpha_{i}+ u_{it}\)</span></p>
+<li><p>Das <em>random effects</em> Panel-Modell wird geschätzt als</p>
 <ul>
-<li>In order to yield unbiased estimates for <span class="math inline">\(\beta&#39;\)</span>, two assumptions need to be fulfilled:
+<li><span class="math inline">\(y_{it}=x_{it}&#39;\beta + z_i&#39;\gamma + v_{it}\)</span></li>
+<li><span class="math inline">\(v_{it} = \alpha_{i} + u_{it}\)</span></li>
+<li>mit <span class="math inline">\(y_{it}\)</span> über Personen (<span class="math inline">\(i\)</span>) und Zeit (<span class="math inline">\(t\)</span>) variierendes Kriterium, <span class="math inline">\(x_{it}&#39;\)</span> über Personen und Zeit variierende Prädiktoren, <span class="math inline">\(\beta\)</span> Koeffizienten der über Personen und Zeit variierenden Prädiktoren, <span class="math inline">\(z_i&#39;\)</span> über Personen variierende Prädiktoren, <span class="math inline">\(\gamma\)</span> Koeffizienten der über Personen variierenden Prädiktoren, <span class="math inline">\(v_{it}\)</span> gesamter Fehlerterm, <span class="math inline">\(\alpha_{i}\)</span> personenspezifische Konstanten, <span class="math inline">\(u_{it}\)</span> Residuen.</li>
+</ul></li>
+<li>Damit die Schätzer für <span class="math inline">\(\beta&#39;\)</span> unverzerrt sind, müssen zwei Annahmen erfüllt sein:
 <ol style="list-style-type: decimal">
-<li>No time-constant unobserved heterogeneity <br/>
-<span class="math inline">\({\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}\)</span></li>
-<li>No time-varying unobserved heterogeneity <br/>
-<span class="math inline">\({\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}\)</span></li>
-</ol></li>
-</ul>
-</div>
-<div id="advantages-of-the-re-model" class="section level2">
-<h2><span class="header-section-number">4.2</span> Advantages of the RE model</h2>
+<li>Keine über die Zeit konstante Heterogenität, deren Ursache nicht im Modell ist</li>
+</ol>
 <ul>
-<li>Time-invariant predictors can be incorporated while still estimating random intercepts for every person.</li>
-<li>Effects of time-varying and time-invariant predictors can be compared (e.g. is a good education more important than joining a union).</li>
-<li>Predictions for new cases (both persons and time periods) can be made using all available information.</li>
-<li>Effect heterogeneity (e.g. whether joining a union is equally effective for all) can easily be investigate (more on that later).</li>
+<li><span class="math inline">\({\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}\)</span></li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Keine über die Zeit variierende Heterogenität, deren Ursache nicht im Modell ist</li>
+</ol>
+<ul>
+<li><span class="math inline">\({\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}\)</span></li>
+</ul></li>
 </ul>
 </div>
-<div id="is-the-re-model-ever-justified" class="section level2">
-<h2><span class="header-section-number">4.3</span> Is the RE model ever justified?</h2>
-<p>&quot;The only difference
-between RE and FE lies in the assumption they make about the relationship
-between υ and the observed predictors: RE models assume that the observed
-predictors in the model are not correlated with <span class="math inline">\(v\)</span> while FE models allow them
-to be correlated.</p>
-<p>A moment’s reflection on what <span class="math inline">\(v\)</span> represents—all unmeasured
-time-constant factors about the respondent—should lead anyone to
-realize that the RE assumption is heroic in social research, to say the least.</p>
-<p>The idea that the characteristics we don’t (or can’t) measure (like personality
-or genetic influences) are uncorrelated with the things we usually do
-measure (like income or church attendance) is implausible.&quot; <span class="citation">(<span class="citeproc-not-found" data-reference-id="vm"><strong>???</strong></span>)</span>, p. 4</p>
+<div id="vorteile-der-random-effects-modelle-für-panel-daten" class="section level3 unnumbered">
+<h3>Vorteile der <em>random effects</em> Modelle für Panel-Daten</h3>
+<ul>
+<li>Schätzer für über die Zeit konstante Prädiktoren und gleichzeitig Konstante für jede Person.</li>
+<li>Schätzer von über die Zeit variierenden und über die Zeit konstanten Prädiktoren können verglichen werden.</li>
+<li>Vorhersagen für neue Personen außerhab der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.</li>
+<li>Die Annahme honogener Treatment-Effekte kann gelocketer werden (mit dem within-between-Modell; siehe nächsten Abschnitt).</li>
+</ul>
+</div>
+<div id="sind-die-annahmen-des-random-effects-modell-für-paneldaten-jemals-erfüllt" class="section level3 unnumbered">
+<h3>Sind die Annahmen des <em>random effects</em> Modell für Paneldaten jemals erfüllt?</h3>
+<blockquote>
+<p>The only difference between RE and FE lies in the assumption they make about the relationship between υ and the observed predictors: RE models assume that the observed predictors in the model are not correlated with <span class="math inline">\(v\)</span> while FE models allow them to be correlated.</p>
+</blockquote>
+<blockquote>
+<p>A moment’s reflection on what <span class="math inline">\(v\)</span> represents—–all unmeasured time-constant factors about the respondent—–should lead anyone to realize that the RE assumption is heroic in social research, to say the least.</p>
+</blockquote>
+<blockquote>
+<p>The idea that the characteristics we don’t (or can’t) measure (like personality or genetic influences) are uncorrelated with the things we usually do measure (like income or church attendance) is implausible. — <span class="citation">Vaisey and Miles (<a href="#ref-vaiseyWhatYouCan2017">2017</a>)</span>, S. 47</p>
+</blockquote>
+</div>
+<div id="hausman-test" class="section level3 unnumbered">
+<h3>Hausman-Test</h3>
+<ul>
+<li>Der Hausman-Test prüft, ob das <em>random effects</em> Modell konsistent ist (~ geschätzt werden darf).</li>
+<li>Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der <span class="math inline">\(H_0\)</span> im Hausman-Test gegen das Schätzen eines <em>random effects</em> Modells.</li>
+<li>Da das <em>random effecs</em> Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das <em>fixed effects</em> Modell per Definition scheitert, lässt sich die Wahl des <em>random effects</em> Modells auch inhaltlich begründen — ohne einen Hausman-Test durchzuführen.</li>
+<li>Der Hausman-Test kann mit der Funktion <code>plm::phtest()</code> durchgeführt werden.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">phtest</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> d, <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>)</a></code></pre></div>
+<pre><code>## 
+##  Hausman Test
+## 
+## data:  verh1 ~ verhint1
+## chisq = 300.58, df = 1, p-value &lt; 2.2e-16
+## alternative hypothesis: one model is inconsistent</code></pre>
+<ul>
+<li>In diesem Beispiel spricht der Hausman-Test dagegen, ein <em>random effects</em> Modell zu schätzen.</li>
+</ul>
+</div>
+</div>
+<div id="random-effects-modelle-mit-plm" class="section level2">
+<h2><span class="header-section-number">4.2</span> Random effects Modelle mit <code>plm</code></h2>
+<ul>
+<li><em>Random effects</em> Modelle für Paneldaten in der ökonometrischen Tradition lassen sich mit <code>plm</code> schätzen. Die Schätzung erfolgt auf Basis von Transformationen im Least-squares-Framework (ich habe keine Ahnung, wie das funktioniert). Ich selbst nutze diese Funktionalität in der Praxis nicht. Die Modellspezifikationen sind im Folgenden der Vollständigkeit halber kurz aufgeführt.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Einfaches RE Modell</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<pre><code>## Oneway (individual) effect Random Effect Model 
+##    (Swamy-Arora&#39;s transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1, data = ., model = &quot;random&quot;, index = &quot;IDsosci&quot;)
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                   var std.dev share
+## idiosyncratic 0.32064 0.56625 0.812
+## individual    0.07443 0.27283 0.188
+## theta: 0.2799
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.444787 -0.105500 -0.072748  0.038935  3.647334 
+## 
+## Coefficients:
+##             Estimate Std. Error z-value  Pr(&gt;|z|)    
+## (Intercept)  0.56905    0.02764  20.587 &lt; 2.2e-16 ***
+## verhint1     0.53198    0.01195  44.517 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Total Sum of Squares:    1531.9
+## Residual Sum of Squares: 823.22
+## R-Squared:      0.46262
+## Adj. R-Squared: 0.46239
+## Chisq: 1981.77 on 1 DF, p-value: &lt; 2.22e-16</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Mit zusätzlichem Faktor Welle</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<pre><code>## Twoways effects Random Effect Model 
+##    (Swamy-Arora&#39;s transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1, data = ., effect = &quot;twoways&quot;, 
+##     model = &quot;random&quot;, index = c(&quot;IDsosci&quot;, &quot;wave&quot;))
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                    var  std.dev share
+## idiosyncratic 0.316542 0.562621 0.802
+## individual    0.075459 0.274699 0.191
+## time          0.002634 0.051326 0.007
+## theta: 0.2845 (id) 0.5845 (time) 0.2541 (total)
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.479856 -0.114351 -0.069742  0.041790  3.672248 
+## 
+## Coefficients:
+##             Estimate Std. Error z-value  Pr(&gt;|z|)    
+## (Intercept) 0.572357   0.038978  14.684 &lt; 2.2e-16 ***
+## verhint1    0.530146   0.012141  43.666 &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Total Sum of Squares:    1494.2
+## Residual Sum of Squares: 817.26
+## R-Squared:      0.45304
+## Adj. R-Squared: 0.4528
+## Chisq: 1906.68 on 1 DF, p-value: &lt; 2.22e-16</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># Mit FE für Welle</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">    </span><span class="kw">summary</span>()</a></code></pre></div>
+<pre><code>## Oneway (individual) effect Random Effect Model 
+##    (Swamy-Arora&#39;s transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1 + factor(wave), data = ., model = &quot;random&quot;, 
+##     index = &quot;IDsosci&quot;)
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                   var std.dev share
+## idiosyncratic 0.31654 0.56262 0.808
+## individual    0.07546 0.27470 0.192
+## theta: 0.2845
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.504920 -0.134512 -0.067223  0.050991  3.693574 
+## 
+## Coefficients:
+##                 Estimate Std. Error z-value Pr(&gt;|z|)    
+## (Intercept)    0.5664150  0.0330635 17.1311  &lt; 2e-16 ***
+## verhint1       0.5300058  0.0121863 43.4918  &lt; 2e-16 ***
+## factor(wave)2 -0.0453317  0.0353413 -1.2827  0.19960    
+## factor(wave)3  0.0672896  0.0353937  1.9012  0.05728 .  
+## factor(wave)4  0.0028266  0.0358023  0.0789  0.93707    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Total Sum of Squares:    1521.3
+## Residual Sum of Squares: 816.62
+## R-Squared:      0.46322
+## Adj. R-Squared: 0.46229
+## Chisq: 1983.94 on 4 DF, p-value: &lt; 2.22e-16</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># Mit Prädiktor auf Personenebene (funktioniert nicht in FE, siehe oben)</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span>C_sex, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<pre><code>## Twoways effects Random Effect Model 
+##    (Swamy-Arora&#39;s transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1 + C_sex, data = ., effect = &quot;twoways&quot;, 
+##     model = &quot;random&quot;, index = c(&quot;IDsosci&quot;, &quot;wave&quot;))
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                    var  std.dev share
+## idiosyncratic 0.316542 0.562621 0.803
+## individual    0.074785 0.273468 0.190
+## time          0.002634 0.051326 0.007
+## theta: 0.283 (id) 0.5845 (time) 0.2527 (total)
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.443232 -0.153532 -0.048115  0.047936  3.701927 
+## 
+## Coefficients:
+##              Estimate Std. Error z-value  Pr(&gt;|z|)    
+## (Intercept)  0.642039   0.045454 14.1249 &lt; 2.2e-16 ***
+## verhint1     0.527641   0.012153 43.4168 &lt; 2.2e-16 ***
+## C_sex       -0.106628   0.035587 -2.9963  0.002733 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Total Sum of Squares:    1497.8
+## Residual Sum of Squares: 815.06
+## R-Squared:      0.45581
+## Adj. R-Squared: 0.45534
+## Chisq: 1927.32 on 2 DF, p-value: &lt; 2.22e-16</code></pre>
+</div>
+<div id="kurze-einführung-zu-mixed-effects-modellen" class="section level2">
+<h2><span class="header-section-number">4.3</span> Kurze Einführung zu mixed effects Modellen</h2>
+<ul>
+<li>Auch bekannt als <em>random effects</em>, <em>multilevel</em>/<em>Mehrebenen-</em> oder <em>hierarchical</em>/<em>hierarchische</em> Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser [gelmanDataAnalysisUsing2006].</li>
+<li><p>Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.</p></li>
+<li><em>Mixed effects</em> Modelle sind Regressionsmodelle für Beobachtungen von, ganz allgemein gesprochen, miteinander verbundenen Einheiten.</li>
+<li>Typosche Beispiele sind Schüler*innen in Klassen in Schulen, Patient*innen in Classic examples: pupils in classes or schools, patients in hospitals, respondents in regions or countries.</li>
+<li>Random/fixed effects in the sense that some effects (such as the intercept) vary between higher-level units, some do not.</li>
+<li><p>Panel data have an inherently hierarchical structure: measurements (level 1) are nested within persons (level 2).</p></li>
+</ul>
 
 </div>
 </div>
@@ -164,6 +410,9 @@ measure (like income or church attendance) is implausible.&quot; <span class="ci
 <div id="refs" class="references">
 <div id="ref-gelmanDataAnalysisUsing2006">
 <p>Gelman, A., and J. Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. New York: Cambridge University Press.</p>
+</div>
+<div id="ref-vaiseyWhatYouCan2017">
+<p>Vaisey, Stephen, and Andrew Miles. 2017. “What You Canand Can’tDo with Three-Wave Panel Data.” <em>Sociological Methods &amp; Research</em> 46 (1): 44–67. <a href="https://doi.org/10.1177/0049124114547769">https://doi.org/10.1177/0049124114547769</a>.</p>
 </div>
 </div>
             </section>
