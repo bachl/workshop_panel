@@ -1,7 +1,7 @@
 ## ---- packages
 
 if (!require("pacman")) install.packages("pacman")
-pacman::p_load(tidyverse, broom, haven, plm, lmtest, lme4, performance)
+pacman::p_load(tidyverse, ggstance, broom, broom.mixed, haven, plm, lmtest, lme4, performance)
 theme_set(theme_bw()) # ggplot theme
 
 tibble(package = c("R", sort(pacman::p_loaded()))) %>% 

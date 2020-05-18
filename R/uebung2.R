@@ -1,4 +1,4 @@
-# Übung 2: Effekt der Information via ÖR TV auf Verhaltensintion "zu wenig Abstand halten"
+# Übung 2: Effekt der Information via ÖR TV auf Verhaltensintention "zu wenig Abstand halten"
 
 # Modell mit plm
 d %>%

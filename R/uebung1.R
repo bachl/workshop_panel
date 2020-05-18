@@ -1,4 +1,4 @@
-# Übung 1: Effekt der Information via ÖR TV auf Verhaltensintion "zu wenig Abstand halten"
+# Übung 1: Effekt der Information via ÖR TV auf Verhaltensintention "zu wenig Abstand halten"
 
 # Visualisierung
 id_smple = sample(unique(d$IDsosci), 10)

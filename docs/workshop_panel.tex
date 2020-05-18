@@ -202,7 +202,8 @@ Wir verwenden die folgenden Pakete
 \begin{Shaded}
 \begin{Highlighting}[]
 \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)) }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)}
-\NormalTok{pacman}\OperatorTok{::}\KeywordTok{p_load}\NormalTok{(tidyverse, broom, haven, plm, lmtest)}
+\NormalTok{pacman}\OperatorTok{::}\KeywordTok{p_load}\NormalTok{(tidyverse, ggstance, broom, broom.mixed, haven, plm, lmtest, lme4, }
+\NormalTok{    performance)}
 \KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_bw}\NormalTok{())  }\CommentTok{# ggplot theme}
 
 \KeywordTok{tibble}\NormalTok{(}\DataTypeTok{package =} \KeywordTok{c}\NormalTok{(}\StringTok{"R"}\NormalTok{, }\KeywordTok{sort}\NormalTok{(pacman}\OperatorTok{::}\KeywordTok{p_loaded}\NormalTok{()))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{version =} \KeywordTok{map_chr}\NormalTok{(package, }
@@ -218,17 +219,27 @@ R & 3.6.2\\
 \hline
 broom & 0.5.4\\
 \hline
+broom.mixed & 0.2.4\\
+\hline
 dplyr & 0.8.4\\
 \hline
 forcats & 0.4.0\\
 \hline
 ggplot2 & 3.2.1\\
 \hline
+ggstance & 0.3.3\\
+\hline
 haven & 2.2.0\\
+\hline
+lme4 & 1.1.21\\
 \hline
 lmtest & 0.9.37\\
 \hline
+Matrix & 1.2.18\\
+\hline
 pacman & 0.5.1\\
+\hline
+performance & 0.4.6\\
 \hline
 plm & 2.2.3\\
 \hline
@@ -892,7 +903,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \end{itemize}
 
 \hypertarget{mehre-fixed-effects-in-einem-modell-perioden-effekte}{%
-\subsection{Mehre fixed effects in einem Modell -- Perioden-Effekte}\label{mehre-fixed-effects-in-einem-modell-perioden-effekte}}
+\subsection*{Mehre fixed effects in einem Modell -- Perioden-Effekte}\label{mehre-fixed-effects-in-einem-modell-perioden-effekte}}
+\addcontentsline{toc}{subsection}{Mehre fixed effects in einem Modell -- Perioden-Effekte}
 
 \begin{itemize}
 \tightlist
@@ -1040,7 +1052,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \end{itemize}
 
 \hypertarget{mehre-fixed-effects-in-einem-modell-perioden-effekte-mit-plm}{%
-\subsection{\texorpdfstring{Mehre \emph{fixed effects} in einem Modell -- Perioden-Effekte mit \texttt{plm}}{Mehre fixed effects in einem Modell -- Perioden-Effekte mit plm}}\label{mehre-fixed-effects-in-einem-modell-perioden-effekte-mit-plm}}
+\subsection*{\texorpdfstring{Mehre \emph{fixed effects} in einem Modell -- Perioden-Effekte mit \texttt{plm}}{Mehre fixed effects in einem Modell -- Perioden-Effekte mit plm}}\label{mehre-fixed-effects-in-einem-modell-perioden-effekte-mit-plm}}
+\addcontentsline{toc}{subsection}{Mehre \emph{fixed effects} in einem Modell -- Perioden-Effekte mit \texttt{plm}}
 
 \begin{itemize}
 \tightlist
@@ -1155,7 +1168,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Hier die ``normalen'' Standardfehler und bei Heteroskedastizität robuste Standardfehler sowie die darauf basierenden Konfidenzintervalle im Vergleich.
 \item
-  Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle unter anderem \citet{kingHowRobustStandard2015} zur kritischen Lektüre.
+  Weiter wollen wir dieses Thema hier nicht vertiefen. Ich empfehle für die Details der Umsetzung in \texttt{plm} \citet{plm2017} und zu einer kritischen Auseinandersetzung \citet{kingHowRobustStandard2015}.
 \end{itemize}
 
 \begin{Shaded}
@@ -1267,6 +1280,12 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \hypertarget{aufnahme-eines-personenmerkmals-funktioniert-nicht-ohne-warnung}{%
 \subsection*{Aufnahme eines Personenmerkmals (funktioniert nicht, ohne Warnung!)}\label{aufnahme-eines-personenmerkmals-funktioniert-nicht-ohne-warnung}}
 \addcontentsline{toc}{subsection}{Aufnahme eines Personenmerkmals (funktioniert nicht, ohne Warnung!)}
+
+\begin{itemize}
+\tightlist
+\item
+  In einer typischen Regresssionanalyse würden wir uns z.B. auch dafür interessieren, ob sich das Verhalten nach dem Geschlecht unterscheidet. Wir nehmen also \texttt{C\_sex} in die Formel auf, mit der wir das Modell in \texttt{plm} spezifizieren.
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1433,7 +1452,11 @@ By controlling out context, FE models effectively cut out much of what is going 
 \end{itemize}
 
 \hypertarget{einfuxfchrung-random-effects-modelle-fuxfcr-paneldaten}{%
-\section{\texorpdfstring{Einführung: \emph{random effects} Modelle für Paneldaten}{Einführung: random effects Modelle für Paneldaten}}\label{einfuxfchrung-random-effects-modelle-fuxfcr-paneldaten}}
+\section{Einführung: Random effects Modelle für Paneldaten}\label{einfuxfchrung-random-effects-modelle-fuxfcr-paneldaten}}
+
+\hypertarget{modellspezifikation}{%
+\subsection*{Modellspezifikation}\label{modellspezifikation}}
+\addcontentsline{toc}{subsection}{Modellspezifikation}
 
 \begin{itemize}
 \item
@@ -1445,61 +1468,556 @@ By controlling out context, FE models effectively cut out much of what is going 
     \(\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)\) mit \(i = 1,...,n\)
   \end{itemize}
 \item
-  Das \emph{random effects} Modell wird geschätzt als
+  Das \emph{random effects} Panel-Modell wird geschätzt als
 
   \begin{itemize}
   \tightlist
   \item
     \(y_{it}=x_{it}'\beta + z_i'\gamma + v_{it}\)
   \item
-    \(v_{it} = \alpha_{i}+ u_{it}\)
+    \(v_{it} = \alpha_{i} + u_{it}\)
+  \item
+    mit \(y_{it}\) über Personen (\(i\)) und Zeit (\(t\)) variierendes Kriterium, \(x_{it}'\) über Personen und Zeit variierende Prädiktoren, \(\beta\) Koeffizienten der über Personen und Zeit variierenden Prädiktoren, \(z_i'\) über Personen variierende Prädiktoren, \(\gamma\) Koeffizienten der über Personen variierenden Prädiktoren, \(v_{it}\) gesamter Fehlerterm, \(\alpha_{i}\) personenspezifische Konstanten, \(u_{it}\) Residuen.
   \end{itemize}
 \item
-  In order to yield unbiased estimates for \(\beta'\), two assumptions need to be fulfilled:
+  Damit die Schätzer für \(\beta'\) unverzerrt sind, müssen zwei Annahmen erfüllt sein:
 
   \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
   \tightlist
   \item
-    No time-constant unobserved heterogeneity
-    \({\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}\)
-  \item
-    No time-varying unobserved heterogeneity
-    \({\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}\)
+    Keine über die Zeit konstante Heterogenität, deren Ursache nicht im Modell ist
   \end{enumerate}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \({\displaystyle \operatorname {E} (\alpha _{i}|x_{it})=\operatorname {E} (\alpha _{i})=0}\)
+  \end{itemize}
+
+  \begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \setcounter{enumi}{1}
+  \tightlist
+  \item
+    Keine über die Zeit variierende Heterogenität, deren Ursache nicht im Modell ist
+  \end{enumerate}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \({\displaystyle \operatorname {E} (u_{it}|x_{it},\alpha _{i})=0,\quad t=1,...,T.}\)
+  \end{itemize}
 \end{itemize}
 
-\hypertarget{advantages-of-the-re-model}{%
-\section{Advantages of the RE model}\label{advantages-of-the-re-model}}
+\hypertarget{vorteile-der-random-effects-modelle-fuxfcr-panel-daten}{%
+\subsection*{\texorpdfstring{Vorteile der \emph{random effects} Modelle für Panel-Daten}{Vorteile der random effects Modelle für Panel-Daten}}\label{vorteile-der-random-effects-modelle-fuxfcr-panel-daten}}
+\addcontentsline{toc}{subsection}{Vorteile der \emph{random effects} Modelle für Panel-Daten}
 
 \begin{itemize}
 \tightlist
 \item
-  Time-invariant predictors can be incorporated while still estimating random intercepts for every person.
+  Schätzer für über die Zeit konstante Prädiktoren und gleichzeitig Konstante für jede Person.
 \item
-  Effects of time-varying and time-invariant predictors can be compared (e.g.~is a good education more important than joining a union).
+  Schätzer von über die Zeit variierenden und über die Zeit konstanten Prädiktoren können verglichen werden.
 \item
-  Predictions for new cases (both persons and time periods) can be made using all available information.
+  Vorhersagen für neue Personen außerhab der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
 \item
-  Effect heterogeneity (e.g.~whether joining a union is equally effective for all) can easily be investigate (more on that later).
+  Die Annahme honogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
 \end{itemize}
 
-\hypertarget{is-the-re-model-ever-justified}{%
-\section{Is the RE model ever justified?}\label{is-the-re-model-ever-justified}}
+\hypertarget{sind-die-annahmen-des-random-effects-modell-fuxfcr-paneldaten-jemals-erfuxfcllt}{%
+\subsection*{\texorpdfstring{Sind die Annahmen des \emph{random effects} Modell für Paneldaten jemals erfüllt?}{Sind die Annahmen des random effects Modell für Paneldaten jemals erfüllt?}}\label{sind-die-annahmen-des-random-effects-modell-fuxfcr-paneldaten-jemals-erfuxfcllt}}
+\addcontentsline{toc}{subsection}{Sind die Annahmen des \emph{random effects} Modell für Paneldaten jemals erfüllt?}
 
-"The only difference
-between RE and FE lies in the assumption they make about the relationship
-between υ and the observed predictors: RE models assume that the observed
-predictors in the model are not correlated with \(v\) while FE models allow them
-to be correlated.
+\begin{quote}
+The only difference between RE and FE lies in the assumption they make about the relationship between υ and the observed predictors: RE models assume that the observed predictors in the model are not correlated with \(v\) while FE models allow them to be correlated.
+\end{quote}
 
-A moment's reflection on what \(v\) represents---all unmeasured
-time-constant factors about the respondent---should lead anyone to
-realize that the RE assumption is heroic in social research, to say the least.
+\begin{quote}
+A moment's reflection on what \(v\) represents-----all unmeasured time-constant factors about the respondent-----should lead anyone to realize that the RE assumption is heroic in social research, to say the least.
+\end{quote}
 
-The idea that the characteristics we don't (or can't) measure (like personality
-or genetic influences) are uncorrelated with the things we usually do
-measure (like income or church attendance) is implausible." --- \citet{vaiseyWhatYouCan2017}, p.~47
+\begin{quote}
+The idea that the characteristics we don't (or can't) measure (like personality or genetic influences) are uncorrelated with the things we usually do measure (like income or church attendance) is implausible. --- \citet{vaiseyWhatYouCan2017}, S. 47
+\end{quote}
+
+\hypertarget{hausman-test}{%
+\subsection*{Hausman-Test}\label{hausman-test}}
+\addcontentsline{toc}{subsection}{Hausman-Test}
+
+\begin{itemize}
+\tightlist
+\item
+  Der Hausman-Test prüft, ob das \emph{random effects} Modell konsistent ist (\textasciitilde{} geschätzt werden darf).
+\item
+  Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der \(H_0\) im Hausman-Test gegen das Schätzen eines \emph{random effects} Modells.
+\item
+  Da das \emph{random effecs} Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das \emph{fixed effects} Modell per Definition scheitert, lässt sich die Wahl des \emph{random effects} Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
+\item
+  Der Hausman-Test kann mit der Funktion \texttt{plm::phtest()} durchgeführt werden.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{phtest}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  Hausman Test
+## 
+## data:  verh1 ~ verhint1
+## chisq = 300.58, df = 1, p-value < 2.2e-16
+## alternative hypothesis: one model is inconsistent
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  In diesem Beispiel spricht der Hausman-Test dagegen, ein \emph{random effects} Modell zu schätzen.
+\end{itemize}
+
+\hypertarget{random-effects-modelle-mit-plm}{%
+\section{\texorpdfstring{Random effects Modelle mit \texttt{plm}}{Random effects Modelle mit plm}}\label{random-effects-modelle-mit-plm}}
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Random effects} Modelle für Paneldaten in der ökonometrischen Tradition lassen sich mit \texttt{plm} schätzen. Die Schätzung erfolgt auf Basis von Transformationen im Least-squares-Framework (ich habe keine Ahnung, wie das funktioniert). Ich selbst nutze diese Funktionalität in der Praxis nicht. Die Modellspezifikationen sind im Folgenden der Vollständigkeit halber kurz aufgeführt.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Einfaches RE Modell}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Oneway (individual) effect Random Effect Model 
+##    (Swamy-Arora's transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1, data = ., model = "random", index = "IDsosci")
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                   var std.dev share
+## idiosyncratic 0.32064 0.56625 0.812
+## individual    0.07443 0.27283 0.188
+## theta: 0.2799
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.444787 -0.105500 -0.072748  0.038935  3.647334 
+## 
+## Coefficients:
+##             Estimate Std. Error z-value  Pr(>|z|)    
+## (Intercept)  0.56905    0.02764  20.587 < 2.2e-16 ***
+## verhint1     0.53198    0.01195  44.517 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    1531.9
+## Residual Sum of Squares: 823.22
+## R-Squared:      0.46262
+## Adj. R-Squared: 0.46239
+## Chisq: 1981.77 on 1 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Mit zusätzlichem Faktor Welle}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{, }
+    \DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Twoways effects Random Effect Model 
+##    (Swamy-Arora's transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1, data = ., effect = "twoways", 
+##     model = "random", index = c("IDsosci", "wave"))
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                    var  std.dev share
+## idiosyncratic 0.316542 0.562621 0.802
+## individual    0.075459 0.274699 0.191
+## time          0.002634 0.051326 0.007
+## theta: 0.2845 (id) 0.5845 (time) 0.2541 (total)
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.479856 -0.114351 -0.069742  0.041790  3.672248 
+## 
+## Coefficients:
+##             Estimate Std. Error z-value  Pr(>|z|)    
+## (Intercept) 0.572357   0.038978  14.684 < 2.2e-16 ***
+## verhint1    0.530146   0.012141  43.666 < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    1494.2
+## Residual Sum of Squares: 817.26
+## R-Squared:      0.45304
+## Adj. R-Squared: 0.4528
+## Chisq: 1906.68 on 1 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Mit FE für Welle}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Oneway (individual) effect Random Effect Model 
+##    (Swamy-Arora's transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1 + factor(wave), data = ., model = "random", 
+##     index = "IDsosci")
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                   var std.dev share
+## idiosyncratic 0.31654 0.56262 0.808
+## individual    0.07546 0.27470 0.192
+## theta: 0.2845
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.504920 -0.134512 -0.067223  0.050991  3.693574 
+## 
+## Coefficients:
+##                 Estimate Std. Error z-value Pr(>|z|)    
+## (Intercept)    0.5664150  0.0330635 17.1311  < 2e-16 ***
+## verhint1       0.5300058  0.0121863 43.4918  < 2e-16 ***
+## factor(wave)2 -0.0453317  0.0353413 -1.2827  0.19960    
+## factor(wave)3  0.0672896  0.0353937  1.9012  0.05728 .  
+## factor(wave)4  0.0028266  0.0358023  0.0789  0.93707    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    1521.3
+## Residual Sum of Squares: 816.62
+## R-Squared:      0.46322
+## Adj. R-Squared: 0.46229
+## Chisq: 1983.94 on 4 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Mit Prädiktor auf Personenebene (funktioniert nicht in FE, siehe oben)}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\NormalTok{C_sex, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{, }
+    \DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Twoways effects Random Effect Model 
+##    (Swamy-Arora's transformation)
+## 
+## Call:
+## plm(formula = verh1 ~ verhint1 + C_sex, data = ., effect = "twoways", 
+##     model = "random", index = c("IDsosci", "wave"))
+## 
+## Balanced Panel: n = 576, T = 4, N = 2304
+## 
+## Effects:
+##                    var  std.dev share
+## idiosyncratic 0.316542 0.562621 0.803
+## individual    0.074785 0.273468 0.190
+## time          0.002634 0.051326 0.007
+## theta: 0.283 (id) 0.5845 (time) 0.2527 (total)
+## 
+## Residuals:
+##      Min.   1st Qu.    Median   3rd Qu.      Max. 
+## -2.443232 -0.153532 -0.048115  0.047936  3.701927 
+## 
+## Coefficients:
+##              Estimate Std. Error z-value  Pr(>|z|)    
+## (Intercept)  0.642039   0.045454 14.1249 < 2.2e-16 ***
+## verhint1     0.527641   0.012153 43.4168 < 2.2e-16 ***
+## C_sex       -0.106628   0.035587 -2.9963  0.002733 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Total Sum of Squares:    1497.8
+## Residual Sum of Squares: 815.06
+## R-Squared:      0.45581
+## Adj. R-Squared: 0.45534
+## Chisq: 1927.32 on 2 DF, p-value: < 2.22e-16
+\end{verbatim}
+
+\hypertarget{kurze-einfuxfchrung-zu-mixed-effects-modellen}{%
+\section{Kurze Einführung zu mixed effects Modellen}\label{kurze-einfuxfchrung-zu-mixed-effects-modellen}}
+
+\begin{itemize}
+\item
+  Auch bekannt als \emph{random effects}, \emph{multilevel}/\emph{Mehrebenen-} oder \emph{hierarchical}/\emph{hierarchische} Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser \citep{gelmanDataAnalysisUsing2006}.
+\item
+  Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.
+\item
+  Ganz allgemein gesprochen sind \emph{mixed effects} Modelle Regressionsmodelle für Beobachtungen von Einheiten, die in irgendeiner Art miteinander zu tun haben, also nicht unabhängig voneinander sind.
+\item
+  Typische Beispiele sind Schüler*innen in Klassen in Schulen, Patient*innen in Krankenhäusern, Wähler*innen in Wahlkreisen, \ldots{} .
+\item
+  Paneldaten haben immer eine hierarchische Struktur: Beobachtungen (Level 1) sind innerhalb der Personen (Level 2) gruppiert.
+\item
+  Die Bezeichnung \emph{mixed effects} geht darauf zurück, dass in den Modellen sowohl \emph{random effects} (Koeffizienten, die zwischen den Fällen innerhalb einer Gruppierung auf einer höheren Ebene variieren) als auch \emph{fixed effects} (Koeffizienten, die für alle Fälle gleich sind) spezifiziert werden.
+\end{itemize}
+
+\hypertarget{warum-wir-in-den-sozialwissenschaften-nicht-nur-die-traditionellen-uxf6konometrischen-modelle-verwenden}{%
+\subsection*{Warum wir in den Sozialwissenschaften nicht nur die traditionellen ökonometrischen Modelle verwenden}\label{warum-wir-in-den-sozialwissenschaften-nicht-nur-die-traditionellen-uxf6konometrischen-modelle-verwenden}}
+\addcontentsline{toc}{subsection}{Warum wir in den Sozialwissenschaften nicht nur die traditionellen ökonometrischen Modelle verwenden}
+
+\begin{quote}
+Econometrics deal mostly with non-experimental data. Great emphasis is put on specification procedures and misspecification testing. Model specifications tend therefore to be very simple, while great attention is put on the issues of endogeneity of the regressors, dependence structures in the errors and robustness of the estimators under deviations from normality. --- \citet{plm2008}
+\end{quote}
+
+\begin{itemize}
+\item
+  Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
+\item
+  Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effkte, \ldots{} . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
+\item
+  Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.
+\end{itemize}
+
+\hypertarget{vorteile-der-mixed-effects-modelle}{%
+\subsection{\texorpdfstring{Vorteile der \emph{mixed effects} Modelle}{Vorteile der mixed effects Modelle}}\label{vorteile-der-mixed-effects-modelle}}
+
+\begin{itemize}
+\item
+  \emph{Mixed effects} Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.
+\item
+  Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.
+\item
+  Wenn man die Logik von \emph{mixed effects} Modellen einmal verstanden hat, kann man die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren, \ldots{} .
+\item
+  Das Denken in Varianzkomponenten (siehe nächster Absatz) hilft uns, konzeptionell über die Bedeutung von Prädiktoren auf verschiedenen Ebenen nachzudenken.
+\item
+  Einfache praktische Umsetzung: Das Paket \texttt{lme4} ist einfach zu verwenden, wenn man bereits etwas Erfahrung mit \texttt{stats::lm()} hat, und auch ein guter Einstieg in ähnlich aufgebaute Pakte zur bayesianischen Schätzung solcher Modelle (z.B. \texttt{rstanarm}, \texttt{brms}).
+\end{itemize}
+
+\hypertarget{varianzdekomposition-und-intraklassen-korrelation}{%
+\subsection*{Varianzdekomposition und Intraklassen-Korrelation}\label{varianzdekomposition-und-intraklassen-korrelation}}
+\addcontentsline{toc}{subsection}{Varianzdekomposition und Intraklassen-Korrelation}
+
+\begin{itemize}
+\item
+  Wir interessieren uns dafür, welcher Anteil in der Varianz in \(Y\) auf stabile Unterschiede zwischen den Personen zurück geht und welcher auf Veränderungen innerhalb von Personen (potentielle kausale Effekte).
+\item
+  In \emph{mixed effects} Modellen können wir die Varianz-Anteile in einem sogenannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(y_{it}= \alpha + v_{it}\) und \(v_{it} = \alpha_{i}+ u_{it}\)
+  \end{itemize}
+\item
+  Ohne die Konstante \(\alpha\) erhalten wir
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(y_{it} = \alpha_{i}+ u_{it}\)
+  \end{itemize}
+\item
+  Da die Varianzen von \(\alpha_i\) und \(u_{it}\) im Modell geschätzt werden, können wir den Anteil der personenspezifischen (Level 2) Varianz und den Anteil der idiosynkratischen Varianz in \(Y\) berechnen. Der Anteil der Level 2 Varianz an der gesamten Varianz wird auch als Intraklassen-Korrelation (intra-class correlation, ICC, \(\rho\)) bezeichnet.
+\item
+  In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne trifftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
+\item
+  Dazu spzifizieren wir das Null-Modell mit \texttt{lme4::lmer()}. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit \texttt{(1\ \textbar{}\ IDsosci)} jede Person eine eigene Konstante erhält (\(\alpha_i\) in der Gleichung oben), die als Abweichung vom Gesamtmittel (\(\alpha\)) geschätzt wird.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Null-Modell}
+\NormalTok{m0 =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ .)}
+
+\NormalTok{m0 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML ['lmerMod']
+## Formula: verh1 ~ 1 + (1 | IDsosci)
+##    Data: .
+## 
+## REML criterion at convergence: 5576.4
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.1387 -0.2268 -0.1212 -0.1212  4.8131 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.5938   0.7706  
+##  Residual             0.4065   0.6376  
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##             Estimate Std. Error t value
+## (Intercept)  1.52865    0.03475   43.99
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# ICC 'von Hand'}
+\KeywordTok{round}\NormalTok{(}\FloatTok{0.5938}\OperatorTok{/}\NormalTok{(}\FloatTok{0.5938} \OperatorTok{+}\StringTok{ }\FloatTok{0.4065}\NormalTok{), }\DecValTok{3}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.594
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Mit performance::icc()}
+\KeywordTok{icc}\NormalTok{(m0)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Intraclass Correlation Coefficient
+## 
+##      Adjusted ICC: 0.594
+##   Conditional ICC: 0.594
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# icc(lmer(verh1 ~ 1 + (1 | IDsosci) + (1 | wave), data = d), by_group = TRUE)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\item
+  Die Informationen zu den Varianzkomponenten findet sich im Output von \texttt{summary()} unter \texttt{Random\ effects}. Aus diesen Angaben können wir die ICC berechnen. Oder wir nutzen die Funktion \texttt{performance::icc()}.
+\item
+  Fast 60\% der Varianz im Verlassen der Wohnung geht auf Unterschiede zwischen Personen zurück.
+\item
+  Im \emph{fixed effects} Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit diesen Modellen also per Spezifikationslogik nichts aussagen.
+\item
+  Kausale Effekte innerhalb der Personen können damit \emph{maximal} für 40\% der Varianz verantwortlich sein.
+\item
+  Allerdings müssen wir dabei beachten, dass auch der gesamte Messfehler (zumindest die zufällige Messfehlervarianz nach der CTT) ebenfalls in diesem Varianzanteil steckt.
+\item
+  Wir können die Schätzer der \emph{random effects} für die Personen im Null-Modell auch dazu nutzen, uns einen Überblick zu verschaffen über die Verteilung der personenspezifischen Tendenz, die Wohnung ohne triftigen Grund zu verlassen. Die Schätzer können wir mit \texttt{ranef()} extrahieren, mit \texttt{broom.mixed::augment()} erhalten wir zusätzlich Standardfehler und Konfidenzintervalle in einem tidy data.frame.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Verteilung der RE als Histogramm}
+\NormalTok{m0 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ranef}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{augment}\NormalTok{(}\DataTypeTok{ci.level =} \FloatTok{0.95}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(estimate)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{workshop_panel_files/figure-latex/ranef-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# RE mit 95%-CIs (aus Darstellungsgründen nur jede fünfte Person)}
+\NormalTok{m0 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ranef}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{augment}\NormalTok{(}\DataTypeTok{ci.level =} \FloatTok{0.95}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{slice}\NormalTok{(}\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{nrow}\NormalTok{(.), }\DataTypeTok{by =} \DecValTok{5}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(estimate, level, }\DataTypeTok{xmin =}\NormalTok{ lb, }\DataTypeTok{xmax =}\NormalTok{ ub)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_pointrangeh}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"IDsosci"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{workshop_panel_files/figure-latex/ranef-2.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  Der \emph{random effects} Schätzer quantifziert die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.
+\item
+  Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne trifftigen Grund zu verlassen.
+\end{itemize}
+
+\hypertarget{mehr-als-ein-gruppierungsfaktor}{%
+\subsection*{Mehr als ein Gruppierungsfaktor}\label{mehr-als-ein-gruppierungsfaktor}}
+\addcontentsline{toc}{subsection}{Mehr als ein Gruppierungsfaktor}
+
+\begin{itemize}
+\tightlist
+\item
+  Mit \texttt{lme4} können prinzipiell beliebig viele und arbiträr angeordnete (sie müssen nicht hierarchisch sein) \emph{random effects} in ein Modell aufgenommen werden.
+\item
+  Zu viele Faktoren oder Faktoren mit zu wenigen Ausprägungen können aber zu Problemen bei der (restricted) maximum likelihood Schätzung führen (Bayesianische Schätzverfahren können hier helfen).
+\item
+  Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch überhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.
+\item
+  In Panel-Modellen liegt die Idee nahe, \emph{random effects} für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Spezifikation wird auch \emph{kreuzklassifiziert} / \emph{cross-classified} / \emph{crossed} genannt.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Wir nehmen den Faktor Welle auf, indem wir \texttt{+\ (1\ \textbar{}\ wave)} in der Modell-Formel ergänzen.
+  \item
+    Da wir nur Daten aus vier Wellen haben und die Varianz zwischen den Wellen sehr klein ist, kommt die \emph{restricted maximum likelihood} Schätzung hier an ihre Grenzen. Eine Warnung wird ausgegeben. Wir könnten das Problem durch Herumfrickeln an den Einstellungen des Optimizer beheben, würden aber inhaltlich zu keiner anderen Schlussfolgerungen kommen. Um den Einstieg in die technischen Details zu vermeiden, verwenden wir hier aber das Modell mit der Warnmeldung.
+  \item
+    Im Weiteren lösen wir das Problem, indem wir \emph{fixed effects} für die Wellen aufnehmen.
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Null-Modell mit zwei Gruppierungsfaktoren}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{wave), }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{icc}\NormalTok{(}\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
+## Model failed to converge with max|grad| = 0.00262857 (tol = 0.002, component 1)
+\end{verbatim}
+
+\begin{verbatim}
+## # ICC by Group
+## 
+## Group   |   ICC
+## ---------------
+## IDsosci | 0.595
+## wave    | 0.018
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Nur ein sehr geringer Teil der gesamten Varianz geht auf über alle Personen homogene Veränderungen zwischen den Wellen zurück.
+\end{itemize}
+
+\hypertarget{uxfcbungsaufgaben-3}{%
+\section{Übungsaufgaben 3}\label{uxfcbungsaufgaben-3}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Analysiere die Varianzkomponenten in der Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}).
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Spezifiziere zuerst ein Modell mit \emph{random effects} für die Personen.
+  \item
+    Nimm dann die Welle als zweiten Gruppierungsfaktor auf.
+  \end{itemize}
+\item
+  Analysiere die Varianzkomponenten in weiteren Variablen, die dich interessieren.
+\end{enumerate}
 
 \hypertarget{within-between-models}{%
 \chapter{Within-between models}\label{within-between-models}}
