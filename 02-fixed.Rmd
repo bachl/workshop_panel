@@ -49,12 +49,12 @@ knitr::read_chunk("R/wi_trans.R")
 ```
 
 * Intuitive Interpretation: Eine Abweichung vom Personen-Durchschnitt in $X$ um einen Punkt führt zu einer Abweichung vom Personen-Durchschnitt in $Y$ um $b_{X}$ Punkte.
-* Hier: Wenn eine Person um einen Punkt wahrscheinlicher rausgehen möchte als üblich, dann wird sie 0.34 Punkte häufiger rausgehen (beides auf 5er Skalen).
+* Hier: Wenn eine Person um einen Punkt wahrscheinlicher raus gehen möchte als üblich, dann wird sie 0.34 Punkte häufiger raus gehen (beides auf 5er Skalen).
 * Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß. Es scheint also auch einen Unterschied zwischen Personen zugeben. Personen, die im Durchschnitt wahrscheinlicher raus gehen wollen, gehen im Durchschnitt auf häufiger raus.
   
 ### Least Squares mit Dummy Variablen (LSDV) {-}
 
-* Es wird ein Dummy-Indiktator für jede $n-1$te Person in das Modell aufgenommen.
+* Es wird ein Dummy-Indikator für jede $n-1$te Person in das Modell aufgenommen.
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/lsdv.R")
@@ -77,14 +77,14 @@ knitr::read_chunk("R/lsdv.R")
 
 1) Die LSDV Spezifikation ist in fast jedem Softwarepaket einfach umzusetzen. Mit großen Datensätzen wird aber die Schätzung langsam und der Output unübersichtlich.
 
-* Unabhängig von der Spezifikation gelten weiterhin alle Annahmen der (OLS) Regression. Besonders gern vergessen wird der *omitted variable bias* durch nicht gemessene, über die Zeit variierdene $Z$. *Fixed effects* Modelle kontrollieren nur die $Z$, die auf konstante Merkmale der als *fixed effects* spezifizierten Einheiten zurückgehen.
+* Unabhängig von der Spezifikation gelten weiterhin alle Annahmen der (OLS) Regression. Besonders gern vergessen wird der *omitted variable bias* durch nicht gemessene, über die Zeit variierende $Z$. *Fixed effects* Modelle kontrollieren nur die $Z$, die auf konstante Merkmale der als *fixed effects* spezifizierten Einheiten zurückgehen.
 
-* Insgesamt sind viele quantitative Sozialforscher (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass *fixed effects* Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
+* Insgesamt sind viele quantitative Sozialforscher\*innen (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass *fixed effects* Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
 
 ### Mehre fixed effects in einem Modell -- Perioden-Effekte {-}
 
 * Grundsätzlich können in einem Modell beliebig viele *fixed effects* spezifiziert werden.
-* In Paneldaten ist der Erhebungszeitpunkt bzw. die Ergebungsperiode (Panelwelle) eine typische Variable, über die verschiedene, für alle Personen konstante Effekte kontrolliert werden können.
+* In Paneldaten ist der Erhebungszeitpunkt bzw. die Erhebungsperiode (Panelwelle) eine typische Variable, über die verschiedene, für alle Personen konstante Effekte kontrolliert werden können.
 * Einige Lehrbücher empfehlen, dies *immer* zu tun, da kausale Effekte von Ereignissen, die für alle Einheiten konstant sind, statistisch nicht identifiziert sind.
 * Eine typische Spezifikation ist die Aufnahme eines *fixed effects* für den Indikator der Panelwelle.
 * In der LSDV-Spezifikation kann einfach ein weiterer Dummy-Faktor hinzugefügt werden. Die within-person Transformation ist mathematisch komplizierter, wird aber in spezialisierten Software-Pakten im Hintergrund erledigt. Es können auch beide Spezifikationen kombiniert werden, wenn z.B. die Periodeneffekte von inhaltlichem Interesse sind und im Output angezeigt werden sollen (siehe nächsten Teilabschnitt).
@@ -213,7 +213,7 @@ knitr::read_chunk("R/vis_ex2.R")
 
 ```
 
-* Die Abbildung verdeutlicht dies anhand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level des berichteten Verhaltens zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
+* Die Abbildung verdeutlicht dies anhand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level des berichteten Verhaltens zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innerhalb der Personen über die Zeit.
 
 * Das gleiche gilt für Prädiktoren, die als Merkmale anderer Einheiten, die wir als *fixed effects* spezifiziert haben, konstant sind. In diesem Beispiel wären dies Eigenschaften der Perioden, also z.B. neue Schutzmaßnahmen bzw. deren Lockerung, soweit sie alle Personen gleichermaßen im gleichen Zeitraum betreffen.
 

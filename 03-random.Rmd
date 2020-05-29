@@ -33,8 +33,8 @@ d = read_rds("R/data/data.rds")
 
 * Schätzer für über die Zeit konstante Prädiktoren und gleichzeitig Konstante für jede Person.
 * Schätzer von über die Zeit variierenden und über die Zeit konstanten Prädiktoren können verglichen werden.
-* Vorhersagen für neue Personen außerhab der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
-* Die Annahme honogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
+* Vorhersagen für neue Personen außerhalb der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
+* Die Annahme homogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
 
 
 ### Sind die Annahmen des *random effects* Modell für Paneldaten jemals erfüllt? {-}
@@ -49,7 +49,7 @@ d = read_rds("R/data/data.rds")
 
 * Der Hausman-Test prüft, ob das *random effects* Modell konsistent ist (~ geschätzt werden darf). 
 * Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der $H_0$ im Hausman-Test gegen das Schätzen eines *random effects* Modells.
-* Da das *random effecs* Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das *fixed effects* Modell per Definition scheitert, lässt sich die Wahl des *random effects* Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
+* Da das *random effects* Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das *fixed effects* Modell per Definition scheitert, lässt sich die Wahl des *random effects* Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
 * Der Hausman-Test kann mit der Funktion `plm::phtest()` durchgeführt werden.
 
 
@@ -78,7 +78,8 @@ knitr::read_chunk("R/plm_re.R")
 ## Kurze Einführung zu mixed effects Modellen
 
 * Auch bekannt als *random effects*, *multilevel*/*Mehrebenen-* oder *hierarchical*/*hierarchische* Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser [@gelmanDataAnalysisUsing2006].
-* Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.
+  * siehe auch: https://twitter.com/chelseaparlett/status/1262390299785072647
+* Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz überspringen.
 
 * Ganz allgemein gesprochen sind *mixed effects* Modelle Regressionsmodelle für Beobachtungen von Einheiten, die in irgendeiner Art miteinander zu tun haben, also nicht unabhängig voneinander sind.
 * Typische Beispiele sind Schüler\*innen in Klassen in Schulen, Patient\*innen in Krankenhäusern, Wähler\*innen in Wahlkreisen, ... .
@@ -92,13 +93,13 @@ knitr::read_chunk("R/plm_re.R")
 
 * Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
 
-* Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effkte, ... . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
+* Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effekte, ... . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
 
 * Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.
 
 ### Vorteile der *mixed effects* Modelle
 
-* *Mixed effects* Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.
+* *Mixed effects* Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitsstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.
 
 * Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.
 
@@ -112,15 +113,15 @@ knitr::read_chunk("R/plm_re.R")
 
 * Wir interessieren uns dafür, welcher Anteil in der Varianz in $Y$ auf stabile Unterschiede zwischen den Personen zurück geht und welcher auf Veränderungen innerhalb von Personen (potentielle kausale Effekte).
 
-* In *mixed effects* Modellen können wir die Varianz-Anteile in einem sogenannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
+* In *mixed effects* Modellen können wir die Varianz-Anteile in einem so genannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
     * $y_{it}= \alpha + v_{it}$ und $v_{it} = \alpha_{i}+ u_{it}$
 * Ohne die Konstante $\alpha$ erhalten wir
     * $y_{it} = \alpha_{i}+ u_{it}$
 
 * Da die Varianzen von $\alpha_i$ und $u_{it}$ im Modell geschätzt werden, können wir den Anteil der personenspezifischen (Level 2) Varianz und den Anteil der idiosynkratischen Varianz in $Y$ berechnen. Der Anteil der Level 2 Varianz an der gesamten Varianz wird auch als Intraklassen-Korrelation (intra-class correlation, ICC, $\rho$) bezeichnet.
 
-* In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne trifftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
-* Dazu spzifizieren wir das Null-Modell mit `lme4::lmer()`. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit `(1 | IDsosci)` jede Person eine eigene Konstante erhält ($\alpha_i$ in der Gleichung oben), die als Abweichung vom Gesamtmittel ($\alpha$) geschätzt wird.
+* In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne triftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
+* Dazu spezifizieren wir das Null-Modell mit `lme4::lmer()`. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit `(1 | IDsosci)` jede Person eine eigene Konstante erhält ($\alpha_i$ in der Gleichung oben), die als Abweichung vom Gewaltmittel ($\alpha$) geschätzt wird.
 
 ```{r, echo=FALSE, cache=FALSE}
 knitr::read_chunk("R/icc.R")
@@ -149,13 +150,13 @@ knitr::read_chunk("R/ranef.R")
 ```
 
 * Der *random effects* Schätzer quantifziert die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.
-* Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne trifftigen Grund zu verlassen. 
+* Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne triftigen Grund zu verlassen. 
 
 ### Mehr als ein Gruppierungsfaktor {-}
 
 * Mit `lme4` können prinzipiell beliebig viele und arbiträr angeordnete (sie müssen nicht hierarchisch sein) *random effects* in ein Modell aufgenommen werden.
 * Zu viele Faktoren oder Faktoren mit zu wenigen Ausprägungen können aber zu Problemen bei der (restricted) maximum likelihood Schätzung führen (Bayesianische Schätzverfahren können hier helfen).
-* Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch überhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.
+* Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch oberhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.
 * In Panel-Modellen liegt die Idee nahe, *random effects* für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Spezifikation wird auch *kreuzklassifiziert* / *cross-classified* / *crossed* genannt.
   * Wir nehmen den Faktor Welle auf, indem wir `+ (1 | wave)` in der Modell-Formel ergänzen.
   * Da wir nur Daten aus vier Wellen haben und die Varianz zwischen den Wellen sehr klein ist, kommt die *restricted maximum likelihood* Schätzung hier an ihre Grenzen. Eine Warnung wird ausgegeben. Wir könnten das Problem durch Herumfrickeln an den Einstellungen des Optimizer beheben, würden aber inhaltlich zu keiner anderen Schlussfolgerungen kommen. Um den Einstieg in die technischen Details zu vermeiden, verwenden wir hier aber das Modell mit der Warnmeldung.
@@ -178,3 +179,46 @@ knitr::read_chunk("R/icc2.R")
     * Nimm dann die Welle als zweiten Gruppierungsfaktor auf.
 
 2) Analysiere die Varianzkomponenten in weiteren Variablen, die dich interessieren.
+
+## Random effects panel Modelle mit `lme4`
+
+### Wiederholung der wichtigsten Begriffe {-}
+
+* Ganz allgemein gesprochen ist ein *mixed effects* Modell ein Modell, das *fixed* und *random* Koeffizienten enthält.
+* gelmanDataAnalysisUsing2006 verwenden die (imo) besser verständlichen Begriffe *varying intercepts* (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und *varying slopes* (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).
+* Im *random effects* Panelmodell sind die Einheiten auf höherer Ebene die Personen. Die Konstanten bzw. Koeffizienten variieren zwischen Personen.
+* In der Sprache von *mixed effects* Modellen wird das einfachste Modell als *fixed slope, random (or varying) intercept* Modell bezeichnet.
+  * Die Regressionskonstante variiert zwischen den Personen (jede Person erhält eine eigene Konstante, die aus einer Normalverteilung mit der Populationskonstante als Mittelwert und der personenspezifischen Varianz als Streuung stammt).
+  Die übrigen Regressionskoeffizienten sind für alle Personen gleich (*fixed*).
+
+### Einfaches random effects panel Modell
+
+* Wir modellieren wieder die Häufigkeit, ohne triftigen Grund die Wohnung zu verlassen, in Abhängigkeit der Intention, dies zu tun.
+* Die Spezifikation in `lme4::lmer()` folgt der in `R` üblichen Logik. Das Modell enthält `verhint1` als Prädiktor mit einem für alle Personen gleichen Koeffizienten (homogener Treatment-Effekt) und `(1 | IDsosci)` als *varying intercept* für jede Person.
+
+* Hinweis: `lme4` selbst weist keine Freiheitsgrade und entsprechend auch keine p-Werte für die Koeffizienten aus. Wenn zusätzlich das Paket `lmerTest` geladen wurde, werden diese automatisch ergänzt.
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/lmerstart.R")
+```
+
+```{r lmerstart, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Mit jedem Punkt auf der Skala zur Verhaltensintention steigt die Häufigkeit des Rausgehens ohne triftigen Grund um 0.5 Punkte. 
+
+* Wir können das Modell mit dem Prädiktor `verhint1` mit dem Null-Modell vergleichen.
+  * Mit `anova()` erhalten wir verschiedene Informationskriterien und einen Likelihood Ratio (Wald) Test. Die Test-Statistik folgt einer  $\Chi^2$-Verteilung.
+  * Durch einen Vergleich der Varianzkomponenten der Modelle erhalten wir ein Maß, das konzeptionell ähnlich $\Delta R^2$ interpretiert werden kann. Die Funktion `performance::r2(by_group = TRUE)` implementiert diesen Vergleich für ein Modell und das Null-Modell. Die manuelle Berechnung ist auch schrittweise für mehre Modelle möglich, die zunehmend mehr Prädiktoren enthalten. Wichtig: Die $\Delta R^2$-Logik funktioniert nur in Modellen mit identischen *random effects*. 
+  
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/lmervgl.R")
+```
+
+```{r lmervgl, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+
+

@@ -52,9 +52,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -63,14 +63,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -79,9 +81,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -152,6 +154,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#random-effects-modelle-mit-plm"><i class="fa fa-check"></i><b>4.2</b> Random effects Modelle mit <code>plm</code></a></li>
 <li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#kurze-einführung-zu-mixed-effects-modellen"><i class="fa fa-check"></i><b>4.3</b> Kurze Einführung zu mixed effects Modellen</a></li>
 <li class="chapter" data-level="4.4" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#übungsaufgaben-3"><i class="fa fa-check"></i><b>4.4</b> Übungsaufgaben 3</a></li>
+<li class="chapter" data-level="4.5" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#random-effects-panel-modelle-mit-lme4"><i class="fa fa-check"></i><b>4.5</b> Random effects panel Modelle mit <code>lme4</code></a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
@@ -182,20 +185,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="inhalt-des-virtuellen-mini-workshops" class="section level2">
 <h2><span class="header-section-number">1.1</span> Inhalt des virtuellen Mini-Workshops</h2>
 <ul>
-<li><p>Der Mini-Workshop bietet eine <em>pragmatische</em> Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf sogenannten <em>micro panels</em>, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).</p></li>
+<li><p>Der Mini-Workshop bietet eine <em>pragmatische</em> Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf so genannten <em>micro panels</em>, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).</p></li>
 <li><p>In der Analyse beschränken uns hier auf Varianten der <em>linearen</em> Regressionsmodelle. Wir beginnen mit den grundlegenden <em>fixed effects</em> und <em>random effects</em> Modellen. Dann betrachten wir das <em>within-between</em> Modell, das als eine Integration des <em>fixed effects</em> Modell in das <em>random effects</em> Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.</p></li>
 <li><p>Wir schätzen die Modelle mit etablierten <em>least-squares</em> und <em>maximum likelihood</em> Methoden. Gerade bei den <em>within-between</em> Modellen sind bayesianische Schätzmethoden, z.B. <em>MCMC sampling</em> (implementiert in <a href="https://mc-stan.org/">Stan</a>), unabhängig von statistisch-philosophischen Überlegungen sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.</p></li>
-<li><p>Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir <code>R</code> mit dem <code>tidyverse</code> und eine kleine Zahl speziallisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in <code>R</code>.</p></li>
+<li><p>Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir <code>R</code> mit dem <code>tidyverse</code> und eine kleine Zahl spezialisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in <code>R</code>.</p></li>
 </ul>
 </div>
 <div id="welche-inhalte-wir-nicht-behandeln" class="section level2">
 <h2><span class="header-section-number">1.2</span> Welche Inhalte wir nicht behandeln</h2>
 <ul>
-<li><p>Der Workshop ist kein Statistik- oder Ökonometrie-Kurs. Ich bin — wie auch ihr — ausgebildeter Sozialwissenschaftler. Die statistischen Grundlagen, auf denen der Workshop aufbaut, gehen aus den Grundlagentexten <span class="citation">(Bell and Jones <a href="#ref-bellExplainingFixedEffects2015">2015</a>; Vaisey and Miles <a href="#ref-vaiseyWhatYouCan2017">2017</a>)</span> hervor.</p></li>
-<li><p>Grundkentnisse in <code>R</code> setze ich voraus, insbesondere Datentransformationen innerhalb des <code>tidyverse</code>. Wir werden aber keine komplizierten Dinge in <code>R</code> tun. Auch ohne weiterführende <code>R</code>-Kenntnisse sollten die Inhalte des Workshops in Bezug auf die datenanalystischen Verfahren klar werden.</p></li>
+<li><p>Der Workshop ist kein Statistik- oder Ökonometrie-Kurs. Ich bin — wie auch ihr — ausgebildeter Sozialwissenschaftler. Die statistischen Grundlagen, auf denen der Workshop aufbaut, gehen aus den Grundlagentexten <span class="citation">(Bell and Jones <a href="#ref-bellExplainingFixedEffects2015" role="doc-biblioref">2015</a>; Vaisey and Miles <a href="#ref-vaiseyWhatYouCan2017" role="doc-biblioref">2017</a>)</span> hervor.</p></li>
+<li><p>Grundkenntnisse in <code>R</code> setze ich voraus, insbesondere Datentransformationen innerhalb des <code>tidyverse</code>. Wir werden aber keine komplizierten Dinge in <code>R</code> tun. Auch ohne weiterführende <code>R</code>-Kenntnisse sollten die Inhalte des Workshops in Bezug auf die datenanalytischen Verfahren klar werden.</p></li>
 <li><p>Wir werden nicht viel Zeit auf die verschiedenen Schätzer, deren Effizienz und Bias, die verschiedenen Algorithmen und Datentransformationen verwenden.</p></li>
 <li><p>Wir werden keine Beweise oder Ableitungen besprechen. Wir setzen keine Kenntnisse in Matrixalgebra voraus — weder meiner- noch eurerseits.</p></li>
-<li><p>Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Wir konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.</p></li>
+<li><p>Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Wir konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfältigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.</p></li>
 <li><p>Fehlende Daten (Panelmortalität, Ausfall von Einheiten in einzelnen Wellen) sind ein großes Thema in der Längsschnittanalyse. Wir werden es hier ignorieren, bis auf den Hinweis, dass alle Fälle, die in mindestens zwei bzw. drei Wellen Daten haben, grundsätzlich Informationen zur Schätzung beitragen.</p></li>
 </ul>
 </div>
@@ -207,29 +210,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="material" class="section level3 unnumbered">
 <h3>Material</h3>
 <ul>
-<li>Dieses Dokument + R Skripte: (Hoffentlich) mehr oder weniger selbsterklärendes Material
+<li><p>Dieses Dokument + R Skripte: (Hoffentlich) mehr oder weniger selbsterklärendes Material</p>
 <ul>
 <li>Kuratierte Form ist dieses HTML-Dokument</li>
 <li>Es gibt auch ein PDF, das ich aber nicht formatiert habe</li>
 </ul></li>
 <li><p>Screencast: Ich gehe über das Material und erkläre es auf der Audio-Spur. Mal sehen, wie hilfreich das ist. Die Screencasts stelle ich über das LMS zur Verfügung.</p></li>
-<li>Übungen: Zu einigen Analysen gibt es Übungsaufgaben.
+<li><p>Übungen: Zu einigen Analysen gibt es Übungsaufgaben.</p>
 <ul>
 <li>Bei der <em>Wiederholung</em> geht es darum, die Modelle leicht zu verändern (durch Anpassen der <code>R</code>-Skripte aus dem Material) und die Ergebnisse der angepassten Modelle zu interpretieren.</li>
-<li>Bei der <em>Anwendung</em> geht es darum, in Anlehung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.</li>
+<li>Bei der <em>Anwendung</em> geht es darum, in Anlehnung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.</li>
 </ul></li>
 </ul>
 </div>
 <div id="pakete" class="section level3 unnumbered">
 <h3>Pakete</h3>
 <p>Wir verwenden die folgenden Pakete</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse, ggstance, broom, broom.mixed, haven, plm, lmtest, lme4, </a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">    performance)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())  <span class="co"># ggplot theme</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">tibble</span>(<span class="dt">package =</span> <span class="kw">c</span>(<span class="st">&quot;R&quot;</span>, <span class="kw">sort</span>(pacman<span class="op">::</span><span class="kw">p_loaded</span>()))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">version =</span> <span class="kw">map_chr</span>(package, </a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="op">~</span><span class="kw">as.character</span>(pacman<span class="op">::</span><span class="kw">p_version</span>(<span class="dt">package =</span> .x)))) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">require</span>(<span class="st">&quot;pacman&quot;</span>)) <span class="kw">install.packages</span>(<span class="st">&quot;pacman&quot;</span>)</span>
+<span id="cb1-2"><a href="index.html#cb1-2"></a>pacman<span class="op">::</span><span class="kw">p_load</span>(tidyverse, ggstance, broom, broom.mixed, haven, plm, lmtest, lme4, </span>
+<span id="cb1-3"><a href="index.html#cb1-3"></a>    lmerTest, performance)</span>
+<span id="cb1-4"><a href="index.html#cb1-4"></a><span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())  <span class="co"># ggplot theme</span></span>
+<span id="cb1-5"><a href="index.html#cb1-5"></a></span>
+<span id="cb1-6"><a href="index.html#cb1-6"></a><span class="kw">tibble</span>(<span class="dt">package =</span> <span class="kw">c</span>(<span class="st">&quot;R&quot;</span>, <span class="kw">sort</span>(pacman<span class="op">::</span><span class="kw">p_loaded</span>()))) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">version =</span> <span class="kw">map_chr</span>(package, </span>
+<span id="cb1-7"><a href="index.html#cb1-7"></a>    <span class="op">~</span><span class="kw">as.character</span>(pacman<span class="op">::</span><span class="kw">p_version</span>(<span class="dt">package =</span> .x)))) <span class="op">%&gt;%</span><span class="st"> </span>knitr<span class="op">::</span><span class="kw">kable</span>()</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -275,50 +278,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <td align="left">1.1.21</td>
 </tr>
 <tr class="even">
+<td align="left">lmerTest</td>
+<td align="left">3.1.2</td>
+</tr>
+<tr class="odd">
 <td align="left">lmtest</td>
 <td align="left">0.9.37</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">Matrix</td>
 <td align="left">1.2.18</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">pacman</td>
 <td align="left">0.5.1</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">performance</td>
 <td align="left">0.4.6</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">plm</td>
 <td align="left">2.2.3</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">purrr</td>
 <td align="left">0.3.3</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">readr</td>
 <td align="left">1.3.1</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">stringr</td>
 <td align="left">1.4.0</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">tibble</td>
 <td align="left">2.1.3</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">tidyr</td>
 <td align="left">1.0.2</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left">tidyverse</td>
 <td align="left">1.3.0</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left">zoo</td>
 <td align="left">1.8.7</td>
 </tr>
@@ -331,7 +338,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Literatur</h3>
 <div id="refs" class="references">
 <div id="ref-bellExplainingFixedEffects2015">
-<p>Bell, Andrew, and Kelvyn Jones. 2015. “Explaining Fixed Effects: Random Effects Modeling of Time-Series Cross-Sectional and Panel Data.” <em>Political Science Research and Methods</em> 3 (1). Cambridge University Press: 133–53. <a href="https://doi.org/10.1017/psrm.2014.7">https://doi.org/10.1017/psrm.2014.7</a>.</p>
+<p>Bell, Andrew, and Kelvyn Jones. 2015. “Explaining Fixed Effects: Random Effects Modeling of Time-Series Cross-Sectional and Panel Data.” <em>Political Science Research and Methods</em> 3 (1): 133–53. <a href="https://doi.org/10.1017/psrm.2014.7">https://doi.org/10.1017/psrm.2014.7</a>.</p>
 </div>
 <div id="ref-vaiseyWhatYouCan2017">
 <p>Vaisey, Stephen, and Andrew Miles. 2017. “What You Can—and Can’t—Do with Three-Wave Panel Data.” <em>Sociological Methods &amp; Research</em> 46 (1): 44–67. <a href="https://doi.org/10.1177/0049124114547769">https://doi.org/10.1177/0049124114547769</a>.</p>
@@ -393,20 +400,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:")
-      if (/^https?:/.test(src))
-        src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

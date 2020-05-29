@@ -33,7 +33,7 @@ source("R/packages.R")
 
 #### Herausforderungen (auch bzw. gerade mit Paneldaten) {-}
 
-* Entsprechung der zeitlichen Entfalltung des Effekts und des Designs (Abstände, Verläufe)
+* Entsprechung der zeitlichen Entfaltung des Effekts und des Designs (Abstände, Verläufe)
 * Reliabilität und Konstruktstabilität
   * Reliabilität: Bei geringer Reliabilität beobachten wir Veränderungen, die aber auf Rauschen in der Messung zurückgehen.
   * Konstruktstabilität: Wenn die Messungen über die Zeit ihre Bedeutung verändern, modellieren wir keine Veränderung des latenten Konstrukts von Interesse.
@@ -126,9 +126,9 @@ knitr::read_chunk("R/wrong_ols.R")
     
 1) Annahmen Homoskedastizität und unkorrelierte Residuen sind (wahrscheinlich) verletzt
     * Systematische Variation der Residuen zwischen Einheiten
-    * Wahrscheinlich serielle Korreationen durch die zeitliche Abhängigkeit der Messungen
+    * Wahrscheinlich serielle Korrelationen durch die zeitliche Abhängigkeit der Messungen
     
-1) Annahme der Unabhängigkeit der Bebobachtungen verletzt
+1) Annahme der Unabhängigkeit der Beobachtungen verletzt
     * Überschätzung der Information von abhängigen Fällen (dieselbe Information ist mehrmals im Datensatz)
       * Zu kleine Standardfehler, zu große Zahl der Freiheitsgrade in Signifikanz-Tests
     * Die wahre Fallzahl (effective sample size) ist kleiner als Zahl der Zeilen im Datensatz (*long format*)
@@ -138,8 +138,8 @@ knitr::read_chunk("R/wrong_ols.R")
 * Unser Ziel ist es, den wahren kausalen Effekt von $X$ auf $Y$ zu schätzen.
 * Pooled OLS vermischt aber zwei Quellen von Unterschieden in den Daten: Den (kausalen) Effekt innerhalb der Personen (within) und die Unterschiede zwischen Personen (between).
 * Within und between Effekte können sich in Größe und sogar in der Richtung unterscheiden!
-* Die Schätzung aus einem poold OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.
-* In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment $x$ schon höhere Werte in $y$ haben, das Treatment häufiger auswählen als Personen, die niedrig in $x§ sind?
+* Die Schätzung aus einem pooled OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.
+* In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment $x$ schon höhere Werte in $y$ haben, das Treatment häufiger auswählen als Personen, die niedrig in $x$ sind?
 * Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.
 
 ### Pooled OLS, within und between - eine Illustration {-}
@@ -150,7 +150,7 @@ knitr::read_chunk("R/wrong_ols.R")
 source("R/example_wb.R")
 ```
 
-* In der pooled OLS Analyse wird einfach die Rergressionsgerade durch alle Beobachung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
+* In der pooled OLS Analyse wird einfach die Regressionsgerade durch alle Beobachtung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
 
 ```{r, eval=TRUE, echo=FALSE}
 plt_pool
@@ -169,7 +169,7 @@ plt_nopool
   
 * Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber *alle* Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im *fixed effects* Modell, das wir im nächsten Abschnitt besprechen.
 
-* An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für $Z$ kontrollieren können. Wenn wir jede Panel-Welle für sich ananlysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.
+* An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für $Z$ kontrollieren können. Wenn wir jede Panel-Welle für sich analysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.
 
 ```{r, eval=TRUE, echo=FALSE}
 plt_cross

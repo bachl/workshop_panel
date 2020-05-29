@@ -1,39 +1,46 @@
-\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 %
-\documentclass[]{book}
+\documentclass[
+]{book}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
-\usepackage{fixltx2e} % provides \textsubscript
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provides euro and other symbols
-\else % if luatex or xelatex
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
   \usepackage{unicode-math}
-  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
-% use upquote if available, for straight quotes in verbatim environments
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-% use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage[]{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-\IfFileExists{parskip.sty}{%
-\usepackage{parskip}
-}{% else
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{6pt plus 2pt minus 1pt}
-}
-\usepackage{hyperref}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
-            pdftitle={Mini-Workshop Panel Data Analysis},
-            pdfauthor={Marko Bachl (mit Material von Michael Scharkow)},
-            pdfborder={0 0 0},
-            breaklinks=true}
-\urlstyle{same}  % don't use monospace font for urls
+  pdftitle={Mini-Workshop Panel Data Analysis},
+  pdfauthor={Marko Bachl (mit Material von Michael Scharkow)},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
 \usepackage{color}
 \usepackage{fancyvrb}
 \newcommand{\VerbBar}{|}
@@ -75,8 +82,14 @@
 \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
 \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 \usepackage{longtable,booktabs}
-% Fix footnotes in tables (requires footnote package)
-\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -86,25 +99,14 @@
 % margins by default, and it is still possible to overwrite the defaults
 % using explicit options in \includegraphics[width, height, ...]{}
 \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-\setlength{\emergencystretch}{3em}  % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\setcounter{secnumdepth}{5}
-% Redefines (sub)paragraphs to behave more like sections
-\ifx\paragraph\undefined\else
-\let\oldparagraph\paragraph
-\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-\let\oldsubparagraph\subparagraph
-\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
-
-% set default figure placement to htbp
+% Set default figure placement to htbp
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
-
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
 \usepackage{booktabs}
 \usepackage[]{natbib}
 \bibliographystyle{apalike}
@@ -128,13 +130,13 @@
 
 \begin{itemize}
 \item
-  Der Mini-Workshop bietet eine \emph{pragmatische} Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf sogenannten \emph{micro panels}, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).
+  Der Mini-Workshop bietet eine \emph{pragmatische} Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf so genannten \emph{micro panels}, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).
 \item
   In der Analyse beschränken uns hier auf Varianten der \emph{linearen} Regressionsmodelle. Wir beginnen mit den grundlegenden \emph{fixed effects} und \emph{random effects} Modellen. Dann betrachten wir das \emph{within-between} Modell, das als eine Integration des \emph{fixed effects} Modell in das \emph{random effects} Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.
 \item
   Wir schätzen die Modelle mit etablierten \emph{least-squares} und \emph{maximum likelihood} Methoden. Gerade bei den \emph{within-between} Modellen sind bayesianische Schätzmethoden, z.B. \emph{MCMC sampling} (implementiert in \href{https://mc-stan.org/}{Stan}), unabhängig von statistisch-philosophischen Überlegungen sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.
 \item
-  Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir \texttt{R} mit dem \texttt{tidyverse} und eine kleine Zahl speziallisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in \texttt{R}.
+  Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir \texttt{R} mit dem \texttt{tidyverse} und eine kleine Zahl spezialisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in \texttt{R}.
 \end{itemize}
 
 \hypertarget{welche-inhalte-wir-nicht-behandeln}{%
@@ -144,13 +146,13 @@
 \item
   Der Workshop ist kein Statistik- oder Ökonometrie-Kurs. Ich bin --- wie auch ihr --- ausgebildeter Sozialwissenschaftler. Die statistischen Grundlagen, auf denen der Workshop aufbaut, gehen aus den Grundlagentexten \citep{bellExplainingFixedEffects2015, vaiseyWhatYouCan2017} hervor.
 \item
-  Grundkentnisse in \texttt{R} setze ich voraus, insbesondere Datentransformationen innerhalb des \texttt{tidyverse}. Wir werden aber keine komplizierten Dinge in \texttt{R} tun. Auch ohne weiterführende \texttt{R}-Kenntnisse sollten die Inhalte des Workshops in Bezug auf die datenanalystischen Verfahren klar werden.
+  Grundkenntnisse in \texttt{R} setze ich voraus, insbesondere Datentransformationen innerhalb des \texttt{tidyverse}. Wir werden aber keine komplizierten Dinge in \texttt{R} tun. Auch ohne weiterführende \texttt{R}-Kenntnisse sollten die Inhalte des Workshops in Bezug auf die datenanalytischen Verfahren klar werden.
 \item
   Wir werden nicht viel Zeit auf die verschiedenen Schätzer, deren Effizienz und Bias, die verschiedenen Algorithmen und Datentransformationen verwenden.
 \item
   Wir werden keine Beweise oder Ableitungen besprechen. Wir setzen keine Kenntnisse in Matrixalgebra voraus --- weder meiner- noch eurerseits.
 \item
-  Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Wir konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfälltigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.
+  Wir behandeln einen sehr kleinen Ausschnitt möglicher Modelle für Panel-Daten. Wir konzentrieren uns auf regressionsbasierte Modelle zur Schätzung kausaler Effekte. Damit behandeln wir insbesondere nicht die vielfältigen Verfahren, die in einem SEM-Framework verortet sind: längsschnittliche Messmodelle, Prozessmodelle, (random intercept) cross-lagged panel Modelle, Latent State-Trait Modelle, etc. Auch Modelle, in denen die Zeit-Variable als kontinuierlich (z.B. Tag der Erhebung im Gegensatz zu Indikator für Panelwelle) verwendet wird (z.B. Continuous Time Structural Equation Modeling), behandeln wir nicht.
 \item
   Fehlende Daten (Panelmortalität, Ausfall von Einheiten in einzelnen Wellen) sind ein großes Thema in der Längsschnittanalyse. Wir werden es hier ignorieren, bis auf den Hinweis, dass alle Fälle, die in mindestens zwei bzw. drei Wellen Daten haben, grundsätzlich Informationen zur Schätzung beitragen.
 \end{itemize}
@@ -189,7 +191,7 @@
   \item
     Bei der \emph{Wiederholung} geht es darum, die Modelle leicht zu verändern (durch Anpassen der \texttt{R}-Skripte aus dem Material) und die Ergebnisse der angepassten Modelle zu interpretieren.
   \item
-    Bei der \emph{Anwendung} geht es darum, in Anlehung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.
+    Bei der \emph{Anwendung} geht es darum, in Anlehnung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.
   \end{itemize}
 \end{itemize}
 
@@ -203,7 +205,7 @@ Wir verwenden die folgenden Pakete
 \begin{Highlighting}[]
 \ControlFlowTok{if}\NormalTok{ (}\OperatorTok{!}\KeywordTok{require}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)) }\KeywordTok{install.packages}\NormalTok{(}\StringTok{"pacman"}\NormalTok{)}
 \NormalTok{pacman}\OperatorTok{::}\KeywordTok{p_load}\NormalTok{(tidyverse, ggstance, broom, broom.mixed, haven, plm, lmtest, lme4, }
-\NormalTok{    performance)}
+\NormalTok{    lmerTest, performance)}
 \KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_bw}\NormalTok{())  }\CommentTok{# ggplot theme}
 
 \KeywordTok{tibble}\NormalTok{(}\DataTypeTok{package =} \KeywordTok{c}\NormalTok{(}\StringTok{"R"}\NormalTok{, }\KeywordTok{sort}\NormalTok{(pacman}\OperatorTok{::}\KeywordTok{p_loaded}\NormalTok{()))) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{version =} \KeywordTok{map_chr}\NormalTok{(package, }
@@ -232,6 +234,8 @@ ggstance & 0.3.3\\
 haven & 2.2.0\\
 \hline
 lme4 & 1.1.21\\
+\hline
+lmerTest & 3.1.2\\
 \hline
 lmtest & 0.9.37\\
 \hline
@@ -335,7 +339,7 @@ zoo & 1.8.7\\
 \begin{itemize}
 \tightlist
 \item
-  Entsprechung der zeitlichen Entfalltung des Effekts und des Designs (Abstände, Verläufe)
+  Entsprechung der zeitlichen Entfaltung des Effekts und des Designs (Abstände, Verläufe)
 \item
   Reliabilität und Konstruktstabilität
 
@@ -600,10 +604,10 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   \item
     Systematische Variation der Residuen zwischen Einheiten
   \item
-    Wahrscheinlich serielle Korreationen durch die zeitliche Abhängigkeit der Messungen
+    Wahrscheinlich serielle Korrelationen durch die zeitliche Abhängigkeit der Messungen
   \end{itemize}
 \item
-  Annahme der Unabhängigkeit der Bebobachtungen verletzt
+  Annahme der Unabhängigkeit der Beobachtungen verletzt
 
   \begin{itemize}
   \tightlist
@@ -633,9 +637,9 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Within und between Effekte können sich in Größe und sogar in der Richtung unterscheiden!
 \item
-  Die Schätzung aus einem poold OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.
+  Die Schätzung aus einem pooled OLS Modell vermischt den kausalen Effekt und die interindividuellen Unterschiede.
 \item
-  In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment \(x\) schon höhere Werte in \(y\) haben, das Treatment häufiger auswählen als Personen, die niedrig in \$x§ sind?
+  In der Sprache von Interventionsstudien ist das ein Selbstselektions-Problem: Was passiert, wenn Personen, die vor dem Treatment \(x\) schon höhere Werte in \(y\) haben, das Treatment häufiger auswählen als Personen, die niedrig in \(x\) sind?
 \item
   Außerdem fällt auf, dass im einfachen OLS Modell nichts darauf hindeutet, dass es sich um Paneldaten handelt. Selbst wenn wir die genannten Probleme nicht hätten, hätten wir auch nichts durch die Paneldaten gewonnen.
 \end{itemize}
@@ -648,7 +652,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Zum Abschluss noch ein imaginäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.
 \item
-  In der pooled OLS Analyse wird einfach die Rergressionsgerade durch alle Beobachung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
+  In der pooled OLS Analyse wird einfach die Regressionsgerade durch alle Beobachtung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
 \end{itemize}
 
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-8-1.pdf}
@@ -675,7 +679,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber \emph{alle} Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im \emph{fixed effects} Modell, das wir im nächsten Abschnitt besprechen.
 \item
-  An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für \(Z\) kontrollieren können. Wenn wir jede Panel-Welle für sich ananlysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.
+  An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für \(Z\) kontrollieren können. Wenn wir jede Panel-Welle für sich analysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.
 \end{itemize}
 
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-10-1.pdf}
@@ -825,7 +829,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Intuitive Interpretation: Eine Abweichung vom Personen-Durchschnitt in \(X\) um einen Punkt führt zu einer Abweichung vom Personen-Durchschnitt in \(Y\) um \(b_{X}\) Punkte.
 \item
-  Hier: Wenn eine Person um einen Punkt wahrscheinlicher rausgehen möchte als üblich, dann wird sie 0.34 Punkte häufiger rausgehen (beides auf 5er Skalen).
+  Hier: Wenn eine Person um einen Punkt wahrscheinlicher raus gehen möchte als üblich, dann wird sie 0.34 Punkte häufiger raus gehen (beides auf 5er Skalen).
 \item
   Das ist durchaus ein bedeutsamer Effekt. Aber zur Erinnerung: Der naiven pooled OLS Schätzung zufolge war der Effekt fast doppelt so groß. Es scheint also auch einen Unterschied zwischen Personen zugeben. Personen, die im Durchschnitt wahrscheinlicher raus gehen wollen, gehen im Durchschnitt auf häufiger raus.
 \end{itemize}
@@ -837,7 +841,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \begin{itemize}
 \tightlist
 \item
-  Es wird ein Dummy-Indiktator für jede \(n-1\)te Person in das Modell aufgenommen.
+  Es wird ein Dummy-Indikator für jede \(n-1\)te Person in das Modell aufgenommen.
 \end{itemize}
 
 \begin{Shaded}
@@ -897,9 +901,9 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{itemize}
 \item
-  Unabhängig von der Spezifikation gelten weiterhin alle Annahmen der (OLS) Regression. Besonders gern vergessen wird der \emph{omitted variable bias} durch nicht gemessene, über die Zeit variierdene \(Z\). \emph{Fixed effects} Modelle kontrollieren nur die \(Z\), die auf konstante Merkmale der als \emph{fixed effects} spezifizierten Einheiten zurückgehen.
+  Unabhängig von der Spezifikation gelten weiterhin alle Annahmen der (OLS) Regression. Besonders gern vergessen wird der \emph{omitted variable bias} durch nicht gemessene, über die Zeit variierende \(Z\). \emph{Fixed effects} Modelle kontrollieren nur die \(Z\), die auf konstante Merkmale der als \emph{fixed effects} spezifizierten Einheiten zurückgehen.
 \item
-  Insgesamt sind viele quantitative Sozialforscher (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass \emph{fixed effects} Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
+  Insgesamt sind viele quantitative Sozialforscher*innen (v.a. die mit einer Ökonometrie-Ausbildung) der Ansicht, dass \emph{fixed effects} Modelle die beste Methode sind, um kausale Effekte aus nicht-experimentellen Daten zu schätzen.
 \end{itemize}
 
 \hypertarget{mehre-fixed-effects-in-einem-modell-perioden-effekte}{%
@@ -911,7 +915,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Grundsätzlich können in einem Modell beliebig viele \emph{fixed effects} spezifiziert werden.
 \item
-  In Paneldaten ist der Erhebungszeitpunkt bzw. die Ergebungsperiode (Panelwelle) eine typische Variable, über die verschiedene, für alle Personen konstante Effekte kontrolliert werden können.
+  In Paneldaten ist der Erhebungszeitpunkt bzw. die Erhebungsperiode (Panelwelle) eine typische Variable, über die verschiedene, für alle Personen konstante Effekte kontrolliert werden können.
 \item
   Einige Lehrbücher empfehlen, dies \emph{immer} zu tun, da kausale Effekte von Ereignissen, die für alle Einheiten konstant sind, statistisch nicht identifiziert sind.
 \item
@@ -1355,7 +1359,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{itemize}
 \item
-  Die Abbildung verdeutlicht dies anhand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level des berichteten Verhaltens zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innhalb der Personen über die Zeit.
+  Die Abbildung verdeutlicht dies anhand von 100 zufällig ausgewählten Personen aus dem Datensatz. Vor der Transformation gibt es (etwas) Varianz im Level des berichteten Verhaltens zwischen den Personen. Durch die Transformation verschwinden diese Unterschiede, es bleibt nur die Variation innerhalb der Personen über die Zeit.
 \item
   Das gleiche gilt für Prädiktoren, die als Merkmale anderer Einheiten, die wir als \emph{fixed effects} spezifiziert haben, konstant sind. In diesem Beispiel wären dies Eigenschaften der Perioden, also z.B. neue Schutzmaßnahmen bzw. deren Lockerung, soweit sie alle Personen gleichermaßen im gleichen Zeitraum betreffen.
 \end{itemize}
@@ -1521,9 +1525,9 @@ By controlling out context, FE models effectively cut out much of what is going 
 \item
   Schätzer von über die Zeit variierenden und über die Zeit konstanten Prädiktoren können verglichen werden.
 \item
-  Vorhersagen für neue Personen außerhab der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
+  Vorhersagen für neue Personen außerhalb der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
 \item
-  Die Annahme honogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
+  Die Annahme homogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
 \end{itemize}
 
 \hypertarget{sind-die-annahmen-des-random-effects-modell-fuxfcr-paneldaten-jemals-erfuxfcllt}{%
@@ -1553,7 +1557,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \item
   Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der \(H_0\) im Hausman-Test gegen das Schätzen eines \emph{random effects} Modells.
 \item
-  Da das \emph{random effecs} Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das \emph{fixed effects} Modell per Definition scheitert, lässt sich die Wahl des \emph{random effects} Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
+  Da das \emph{random effects} Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das \emph{fixed effects} Modell per Definition scheitert, lässt sich die Wahl des \emph{random effects} Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
 \item
   Der Hausman-Test kann mit der Funktion \texttt{plm::phtest()} durchgeführt werden.
 \end{itemize}
@@ -1766,8 +1770,14 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \begin{itemize}
 \item
   Auch bekannt als \emph{random effects}, \emph{multilevel}/\emph{Mehrebenen-} oder \emph{hierarchical}/\emph{hierarchische} Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser \citep{gelmanDataAnalysisUsing2006}.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    siehe auch: \url{https://twitter.com/chelseaparlett/status/1262390299785072647}
+  \end{itemize}
 \item
-  Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.
+  Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz überspringen.
 \item
   Ganz allgemein gesprochen sind \emph{mixed effects} Modelle Regressionsmodelle für Beobachtungen von Einheiten, die in irgendeiner Art miteinander zu tun haben, also nicht unabhängig voneinander sind.
 \item
@@ -1790,7 +1800,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
 \item
-  Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effkte, \ldots{} . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
+  Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effekte, \ldots{} . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
 \item
   Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.
 \end{itemize}
@@ -1800,7 +1810,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 
 \begin{itemize}
 \item
-  \emph{Mixed effects} Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.
+  \emph{Mixed effects} Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitsstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.
 \item
   Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.
 \item
@@ -1819,7 +1829,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Wir interessieren uns dafür, welcher Anteil in der Varianz in \(Y\) auf stabile Unterschiede zwischen den Personen zurück geht und welcher auf Veränderungen innerhalb von Personen (potentielle kausale Effekte).
 \item
-  In \emph{mixed effects} Modellen können wir die Varianz-Anteile in einem sogenannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
+  In \emph{mixed effects} Modellen können wir die Varianz-Anteile in einem so genannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
 
   \begin{itemize}
   \tightlist
@@ -1837,9 +1847,9 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Da die Varianzen von \(\alpha_i\) und \(u_{it}\) im Modell geschätzt werden, können wir den Anteil der personenspezifischen (Level 2) Varianz und den Anteil der idiosynkratischen Varianz in \(Y\) berechnen. Der Anteil der Level 2 Varianz an der gesamten Varianz wird auch als Intraklassen-Korrelation (intra-class correlation, ICC, \(\rho\)) bezeichnet.
 \item
-  In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne trifftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
+  In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne triftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
 \item
-  Dazu spzifizieren wir das Null-Modell mit \texttt{lme4::lmer()}. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit \texttt{(1\ \textbar{}\ IDsosci)} jede Person eine eigene Konstante erhält (\(\alpha_i\) in der Gleichung oben), die als Abweichung vom Gesamtmittel (\(\alpha\)) geschätzt wird.
+  Dazu spezifizieren wir das Null-Modell mit \texttt{lme4::lmer()}. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit \texttt{(1\ \textbar{}\ IDsosci)} jede Person eine eigene Konstante erhält (\(\alpha_i\) in der Gleichung oben), die als Abweichung vom Gewaltmittel (\(\alpha\)) geschätzt wird.
 \end{itemize}
 
 \begin{Shaded}
@@ -1852,7 +1862,8 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \end{Shaded}
 
 \begin{verbatim}
-## Linear mixed model fit by REML ['lmerMod']
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
 ## Formula: verh1 ~ 1 + (1 | IDsosci)
 ##    Data: .
 ## 
@@ -1869,8 +1880,10 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 ## Number of obs: 2304, groups:  IDsosci, 576
 ## 
 ## Fixed effects:
-##             Estimate Std. Error t value
-## (Intercept)  1.52865    0.03475   43.99
+##              Estimate Std. Error        df t value Pr(>|t|)    
+## (Intercept)   1.52865    0.03475 574.99999   43.99   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
 \begin{Shaded}
@@ -1921,10 +1934,30 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Verteilung der RE als Histogramm}
-\NormalTok{m0 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ranef}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{augment}\NormalTok{(}\DataTypeTok{ci.level =} \FloatTok{0.95}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(estimate)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{()}
+\CommentTok{# tibble der RE und ihre Verteilung als Histogramm}
+\NormalTok{m0 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ranef}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{augment}\NormalTok{(}\DataTypeTok{ci.level =} \FloatTok{0.95}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{as_tibble}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{n =} \DecValTok{12}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(estimate)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_histogram}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 576 x 8
+##    grp     variable    level  estimate       qq std.error     lb    ub
+##    <fct>   <fct>       <fct>     <dbl>    <dbl>     <dbl>  <dbl> <dbl>
+##  1 IDsosci (Intercept) 01PQGO  -0.451  -3.13        0.295 -1.03  0.126
+##  2 IDsosci (Intercept) 02E6C8  -0.451  -2.79        0.295 -1.03  0.126
+##  3 IDsosci (Intercept) 050IPY   1.47    1.53        0.295  0.892 2.05 
+##  4 IDsosci (Intercept) 05J4R8   0.189   0.571       0.295 -0.388 0.766
+##  5 IDsosci (Intercept) 08BDZJ   1.26    1.41        0.295  0.679 1.83 
+##  6 IDsosci (Intercept) 0BHGLF   0.402   0.779       0.295 -0.175 0.980
+##  7 IDsosci (Intercept) 0EB6C1  -0.451  -2.62        0.295 -1.03  0.126
+##  8 IDsosci (Intercept) 0EO9L2   2.32    2.02        0.295  1.75  2.90 
+##  9 IDsosci (Intercept) 0F5L9Z   1.68    1.63        0.295  1.11  2.26 
+## 10 IDsosci (Intercept) 0KAKHF   2.54    2.05        0.295  1.96  3.11 
+## 11 IDsosci (Intercept) 0KYYAJ  -0.238  -0.00653     0.295 -0.815 0.339
+## 12 IDsosci (Intercept) 0ONV4O  -0.0245  0.321       0.295 -0.602 0.553
+## # ... with 564 more rows
+\end{verbatim}
 
 \includegraphics{workshop_panel_files/figure-latex/ranef-1.pdf}
 
@@ -1943,7 +1976,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Der \emph{random effects} Schätzer quantifziert die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.
 \item
-  Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne trifftigen Grund zu verlassen.
+  Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne triftigen Grund zu verlassen.
 \end{itemize}
 
 \hypertarget{mehr-als-ein-gruppierungsfaktor}{%
@@ -1957,7 +1990,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Zu viele Faktoren oder Faktoren mit zu wenigen Ausprägungen können aber zu Problemen bei der (restricted) maximum likelihood Schätzung führen (Bayesianische Schätzverfahren können hier helfen).
 \item
-  Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch überhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.
+  Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch oberhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.
 \item
   In Panel-Modellen liegt die Idee nahe, \emph{random effects} für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Spezifikation wird auch \emph{kreuzklassifiziert} / \emph{cross-classified} / \emph{crossed} genannt.
 
@@ -2019,11 +2052,28 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
   Analysiere die Varianzkomponenten in weiteren Variablen, die dich interessieren.
 \end{enumerate}
 
+\hypertarget{random-effects-panel-modelle-mit-lme4}{%
+\section{\texorpdfstring{Random effects panel Modelle mit \texttt{lme4}}{Random effects panel Modelle mit lme4}}\label{random-effects-panel-modelle-mit-lme4}}
+
+\begin{itemize}
+\tightlist
+\item
+  In general, a mixed effects a model is comprised of fixed or random coefficients.
+\item
+  \citet{gh} use the more useful term varying intercepts or slopes, since these are allowed to vary between persons.
+\item
+  The \texttt{plm} models focus on the intercept of the model, i.e.~the person-level averages are modeled either as FE or RE.
+\item
+  The basic RE model is called a fixed slope, random (or varying) intercept model in mixed effects parlance.
+\item
+  It is equivalent to the \texttt{plm} model, except for the estimation with (restricted) maximum likelihood instead of least squares.
+\end{itemize}
+
 \hypertarget{within-between-models}{%
 \chapter{Within-between models}\label{within-between-models}}
 
 XXX
 
-\bibliography{book.bib,packages.bib,references.bib}
+  \bibliography{book.bib,packages.bib,references.bib}
 
 \end{document}

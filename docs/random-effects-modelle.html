@@ -52,9 +52,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -63,14 +63,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -79,9 +81,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -152,6 +154,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.2" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#random-effects-modelle-mit-plm"><i class="fa fa-check"></i><b>4.2</b> Random effects Modelle mit <code>plm</code></a></li>
 <li class="chapter" data-level="4.3" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#kurze-einführung-zu-mixed-effects-modellen"><i class="fa fa-check"></i><b>4.3</b> Kurze Einführung zu mixed effects Modellen</a></li>
 <li class="chapter" data-level="4.4" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#übungsaufgaben-3"><i class="fa fa-check"></i><b>4.4</b> Übungsaufgaben 3</a></li>
+<li class="chapter" data-level="4.5" data-path="random-effects-modelle.html"><a href="random-effects-modelle.html#random-effects-panel-modelle-mit-lme4"><i class="fa fa-check"></i><b>4.5</b> Random effects panel Modelle mit <code>lme4</code></a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="within-between-models.html"><a href="within-between-models.html"><i class="fa fa-check"></i><b>5</b> Within-between models</a></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
@@ -182,7 +185,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="modellspezifikation" class="section level3 unnumbered">
 <h3>Modellspezifikation</h3>
 <ul>
-<li>Anstatt für jede Einheit (Person) eine separate Konstante <span class="math inline">\(\alpha_i\)</span> zu schätzen, können wir den “soft constraint” <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006">2006</a>, S. 257)</span> setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
+<li><p>Anstatt für jede Einheit (Person) eine separate Konstante <span class="math inline">\(\alpha_i\)</span> zu schätzen, können wir den “soft constraint” <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006" role="doc-biblioref">2006</a>, S. 257)</span> setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:</p>
 <ul>
 <li><span class="math inline">\(\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)\)</span> mit <span class="math inline">\(i = 1,...,n\)</span></li>
 </ul></li>
@@ -192,7 +195,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><span class="math inline">\(v_{it} = \alpha_{i} + u_{it}\)</span></li>
 <li>mit <span class="math inline">\(y_{it}\)</span> über Personen (<span class="math inline">\(i\)</span>) und Zeit (<span class="math inline">\(t\)</span>) variierendes Kriterium, <span class="math inline">\(x_{it}&#39;\)</span> über Personen und Zeit variierende Prädiktoren, <span class="math inline">\(\beta\)</span> Koeffizienten der über Personen und Zeit variierenden Prädiktoren, <span class="math inline">\(z_i&#39;\)</span> über Personen variierende Prädiktoren, <span class="math inline">\(\gamma\)</span> Koeffizienten der über Personen variierenden Prädiktoren, <span class="math inline">\(v_{it}\)</span> gesamter Fehlerterm, <span class="math inline">\(\alpha_{i}\)</span> personenspezifische Konstanten, <span class="math inline">\(u_{it}\)</span> Residuen.</li>
 </ul></li>
-<li>Damit die Schätzer für <span class="math inline">\(\beta&#39;\)</span> unverzerrt sind, müssen zwei Annahmen erfüllt sein:
+<li><p>Damit die Schätzer für <span class="math inline">\(\beta&#39;\)</span> unverzerrt sind, müssen zwei Annahmen erfüllt sein:</p>
 <ol style="list-style-type: decimal">
 <li>Keine über die Zeit konstante Heterogenität, deren Ursache nicht im Modell ist</li>
 </ol>
@@ -212,8 +215,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Schätzer für über die Zeit konstante Prädiktoren und gleichzeitig Konstante für jede Person.</li>
 <li>Schätzer von über die Zeit variierenden und über die Zeit konstanten Prädiktoren können verglichen werden.</li>
-<li>Vorhersagen für neue Personen außerhab der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.</li>
-<li>Die Annahme honogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).</li>
+<li>Vorhersagen für neue Personen außerhalb der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.</li>
+<li>Die Annahme homogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).</li>
 </ul>
 </div>
 <div id="sind-die-annahmen-des-random-effects-modell-für-paneldaten-jemals-erfüllt" class="section level3 unnumbered">
@@ -225,7 +228,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A moment’s reflection on what <span class="math inline">\(v\)</span> represents—–all unmeasured time-constant factors about the respondent—–should lead anyone to realize that the RE assumption is heroic in social research, to say the least.</p>
 </blockquote>
 <blockquote>
-<p>The idea that the characteristics we don’t (or can’t) measure (like personality or genetic influences) are uncorrelated with the things we usually do measure (like income or church attendance) is implausible. — <span class="citation">Vaisey and Miles (<a href="#ref-vaiseyWhatYouCan2017">2017</a>)</span>, S. 47</p>
+<p>The idea that the characteristics we don’t (or can’t) measure (like personality or genetic influences) are uncorrelated with the things we usually do measure (like income or church attendance) is implausible. — <span class="citation">Vaisey and Miles (<a href="#ref-vaiseyWhatYouCan2017" role="doc-biblioref">2017</a>)</span>, S. 47</p>
 </blockquote>
 </div>
 <div id="hausman-test" class="section level3 unnumbered">
@@ -233,10 +236,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Der Hausman-Test prüft, ob das <em>random effects</em> Modell konsistent ist (~ geschätzt werden darf).</li>
 <li>Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der <span class="math inline">\(H_0\)</span> im Hausman-Test gegen das Schätzen eines <em>random effects</em> Modells.</li>
-<li>Da das <em>random effecs</em> Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das <em>fixed effects</em> Modell per Definition scheitert, lässt sich die Wahl des <em>random effects</em> Modells auch inhaltlich begründen — ohne einen Hausman-Test durchzuführen.</li>
+<li>Da das <em>random effects</em> Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das <em>fixed effects</em> Modell per Definition scheitert, lässt sich die Wahl des <em>random effects</em> Modells auch inhaltlich begründen — ohne einen Hausman-Test durchzuführen.</li>
 <li>Der Hausman-Test kann mit der Funktion <code>plm::phtest()</code> durchgeführt werden.</li>
 </ul>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">phtest</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> d, <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="random-effects-modelle.html#cb1-1"></a><span class="kw">phtest</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> d, <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>)</span></code></pre></div>
 <pre><code>## 
 ##  Hausman Test
 ## 
@@ -253,8 +256,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li><em>Random effects</em> Modelle für Paneldaten in der ökonometrischen Tradition lassen sich mit <code>plm</code> schätzen. Die Schätzung erfolgt auf Basis von Transformationen im Least-squares-Framework (ich habe keine Ahnung, wie das funktioniert). Ich selbst nutze diese Funktionalität in der Praxis nicht. Die Modellspezifikationen sind im Folgenden der Vollständigkeit halber kurz aufgeführt.</li>
 </ul>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># Einfaches RE Modell</span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="random-effects-modelle.html#cb3-1"></a><span class="co"># Einfaches RE Modell</span></span>
+<span id="cb3-2"><a href="random-effects-modelle.html#cb3-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>## Oneway (individual) effect Random Effect Model 
 ##    (Swamy-Arora&#39;s transformation)
 ## 
@@ -285,9 +288,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## R-Squared:      0.46262
 ## Adj. R-Squared: 0.46239
 ## Chisq: 1981.77 on 1 DF, p-value: &lt; 2.22e-16</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># Mit zusätzlichem Faktor Welle</span></a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </a>
-<a class="sourceLine" id="cb41-3" data-line-number="3">    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="random-effects-modelle.html#cb5-1"></a><span class="co"># Mit zusätzlichem Faktor Welle</span></span>
+<span id="cb5-2"><a href="random-effects-modelle.html#cb5-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </span>
+<span id="cb5-3"><a href="random-effects-modelle.html#cb5-3"></a>    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>## Twoways effects Random Effect Model 
 ##    (Swamy-Arora&#39;s transformation)
 ## 
@@ -320,9 +323,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## R-Squared:      0.45304
 ## Adj. R-Squared: 0.4528
 ## Chisq: 1906.68 on 1 DF, p-value: &lt; 2.22e-16</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># Mit FE für Welle</span></a>
-<a class="sourceLine" id="cb43-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="st">    </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="random-effects-modelle.html#cb7-1"></a><span class="co"># Mit FE für Welle</span></span>
+<span id="cb7-2"><a href="random-effects-modelle.html#cb7-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-3"><a href="random-effects-modelle.html#cb7-3"></a><span class="st">    </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>## Oneway (individual) effect Random Effect Model 
 ##    (Swamy-Arora&#39;s transformation)
 ## 
@@ -357,9 +360,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## R-Squared:      0.46322
 ## Adj. R-Squared: 0.46229
 ## Chisq: 1983.94 on 4 DF, p-value: &lt; 2.22e-16</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># Mit Prädiktor auf Personenebene (funktioniert nicht in FE, siehe oben)</span></a>
-<a class="sourceLine" id="cb45-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span>C_sex, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </a>
-<a class="sourceLine" id="cb45-3" data-line-number="3">    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="random-effects-modelle.html#cb9-1"></a><span class="co"># Mit Prädiktor auf Personenebene (funktioniert nicht in FE, siehe oben)</span></span>
+<span id="cb9-2"><a href="random-effects-modelle.html#cb9-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span>C_sex, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </span>
+<span id="cb9-3"><a href="random-effects-modelle.html#cb9-3"></a>    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
 <pre><code>## Twoways effects Random Effect Model 
 ##    (Swamy-Arora&#39;s transformation)
 ## 
@@ -397,28 +400,31 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="kurze-einführung-zu-mixed-effects-modellen" class="section level2">
 <h2><span class="header-section-number">4.3</span> Kurze Einführung zu mixed effects Modellen</h2>
 <ul>
-<li>Auch bekannt als <em>random effects</em>, <em>multilevel</em>/<em>Mehrebenen-</em> oder <em>hierarchical</em>/<em>hierarchische</em> Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006">2006</a>)</span>.</li>
-<li><p>Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz übersrpingen.</p></li>
-<li>Ganz allgemein gesprochen sind <em>mixed effects</em> Modelle Regressionsmodelle für Beobachtungen von Einheiten, die in irgendeiner Art miteinander zu tun haben, also nicht unabhängig voneinander sind.</li>
-<li>Typische Beispiele sind Schüler*innen in Klassen in Schulen, Patient*innen in Krankenhäusern, Wähler*innen in Wahlkreisen, … .</li>
+<li><p>Auch bekannt als <em>random effects</em>, <em>multilevel</em>/<em>Mehrebenen-</em> oder <em>hierarchical</em>/<em>hierarchische</em> Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006" role="doc-biblioref">2006</a>)</span>.</p>
+<ul>
+<li>siehe auch: <a href="https://twitter.com/chelseaparlett/status/1262390299785072647" class="uri">https://twitter.com/chelseaparlett/status/1262390299785072647</a></li>
+</ul></li>
+<li><p>Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz überspringen.</p></li>
+<li><p>Ganz allgemein gesprochen sind <em>mixed effects</em> Modelle Regressionsmodelle für Beobachtungen von Einheiten, die in irgendeiner Art miteinander zu tun haben, also nicht unabhängig voneinander sind.</p></li>
+<li><p>Typische Beispiele sind Schüler*innen in Klassen in Schulen, Patient*innen in Krankenhäusern, Wähler*innen in Wahlkreisen, … .</p></li>
 <li><p>Paneldaten haben immer eine hierarchische Struktur: Beobachtungen (Level 1) sind innerhalb der Personen (Level 2) gruppiert.</p></li>
 <li><p>Die Bezeichnung <em>mixed effects</em> geht darauf zurück, dass in den Modellen sowohl <em>random effects</em> (Koeffizienten, die zwischen den Fällen innerhalb einer Gruppierung auf einer höheren Ebene variieren) als auch <em>fixed effects</em> (Koeffizienten, die für alle Fälle gleich sind) spezifiziert werden.</p></li>
 </ul>
 <div id="warum-wir-in-den-sozialwissenschaften-nicht-nur-die-traditionellen-ökonometrischen-modelle-verwenden" class="section level3 unnumbered">
 <h3>Warum wir in den Sozialwissenschaften nicht nur die traditionellen ökonometrischen Modelle verwenden</h3>
 <blockquote>
-<p>Econometrics deal mostly with non-experimental data. Great emphasis is put on specification procedures and misspecification testing. Model specifications tend therefore to be very simple, while great attention is put on the issues of endogeneity of the regressors, dependence structures in the errors and robustness of the estimators under deviations from normality. — <span class="citation">Croissant and Millo (<a href="#ref-plm2008">2008</a>)</span></p>
+<p>Econometrics deal mostly with non-experimental data. Great emphasis is put on specification procedures and misspecification testing. Model specifications tend therefore to be very simple, while great attention is put on the issues of endogeneity of the regressors, dependence structures in the errors and robustness of the estimators under deviations from normality. — <span class="citation">Croissant and Millo (<a href="#ref-plm2008" role="doc-biblioref">2008</a>)</span></p>
 </blockquote>
 <ul>
 <li><p>Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.</p></li>
-<li><p>Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effkte, … . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.</p></li>
+<li><p>Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effekte, … . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.</p></li>
 <li><p>Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.</p></li>
 </ul>
 </div>
 <div id="vorteile-der-mixed-effects-modelle" class="section level3">
 <h3><span class="header-section-number">4.3.1</span> Vorteile der <em>mixed effects</em> Modelle</h3>
 <ul>
-<li><p><em>Mixed effects</em> Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.</p></li>
+<li><p><em>Mixed effects</em> Modelle bieten einen einheitlichen Rahmen für die Modellierung von Datensätzen mit jeder Art von Abhängigkeitsstrukturen, seien sie hierarchisch, längsschnittlich oder eine Kombination aus beidem.</p></li>
 <li><p>Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.</p></li>
 <li><p>Wenn man die Logik von <em>mixed effects</em> Modellen einmal verstanden hat, kann man die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren, … .</p></li>
 <li><p>Das Denken in Varianzkomponenten (siehe nächster Absatz) hilft uns, konzeptionell über die Bedeutung von Prädiktoren auf verschiedenen Ebenen nachzudenken.</p></li>
@@ -429,25 +435,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Varianzdekomposition und Intraklassen-Korrelation</h3>
 <ul>
 <li><p>Wir interessieren uns dafür, welcher Anteil in der Varianz in <span class="math inline">\(Y\)</span> auf stabile Unterschiede zwischen den Personen zurück geht und welcher auf Veränderungen innerhalb von Personen (potentielle kausale Effekte).</p></li>
-<li>In <em>mixed effects</em> Modellen können wir die Varianz-Anteile in einem sogenannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:
+<li><p>In <em>mixed effects</em> Modellen können wir die Varianz-Anteile in einem so genannten Null-Modell, das nur die Struktur der Daten abbildet, aber keine Prädiktoren enthält, bestimmen:</p>
 <ul>
 <li><span class="math inline">\(y_{it}= \alpha + v_{it}\)</span> und <span class="math inline">\(v_{it} = \alpha_{i}+ u_{it}\)</span></li>
 </ul></li>
-<li>Ohne die Konstante <span class="math inline">\(\alpha\)</span> erhalten wir
+<li><p>Ohne die Konstante <span class="math inline">\(\alpha\)</span> erhalten wir</p>
 <ul>
 <li><span class="math inline">\(y_{it} = \alpha_{i}+ u_{it}\)</span></li>
 </ul></li>
 <li><p>Da die Varianzen von <span class="math inline">\(\alpha_i\)</span> und <span class="math inline">\(u_{it}\)</span> im Modell geschätzt werden, können wir den Anteil der personenspezifischen (Level 2) Varianz und den Anteil der idiosynkratischen Varianz in <span class="math inline">\(Y\)</span> berechnen. Der Anteil der Level 2 Varianz an der gesamten Varianz wird auch als Intraklassen-Korrelation (intra-class correlation, ICC, <span class="math inline">\(\rho\)</span>) bezeichnet.</p></li>
-<li>In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne trifftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).</li>
-<li><p>Dazu spzifizieren wir das Null-Modell mit <code>lme4::lmer()</code>. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit <code>(1 | IDsosci)</code> jede Person eine eigene Konstante erhält (<span class="math inline">\(\alpha_i\)</span> in der Gleichung oben), die als Abweichung vom Gesamtmittel (<span class="math inline">\(\alpha\)</span>) geschätzt wird.</p></li>
+<li><p>In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne triftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).</p></li>
+<li><p>Dazu spezifizieren wir das Null-Modell mit <code>lme4::lmer()</code>. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit <code>(1 | IDsosci)</code> jede Person eine eigene Konstante erhält (<span class="math inline">\(\alpha_i\)</span> in der Gleichung oben), die als Abweichung vom Gewaltmittel (<span class="math inline">\(\alpha\)</span>) geschätzt wird.</p></li>
 </ul>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="co"># Null-Modell</span></a>
-<a class="sourceLine" id="cb47-2" data-line-number="2">m0 =<span class="st"> </span>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> .)</a>
-<a class="sourceLine" id="cb47-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb47-4" data-line-number="4">m0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</a></code></pre></div>
-<pre><code>## Linear mixed model fit by REML [&#39;lmerMod&#39;]
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="random-effects-modelle.html#cb11-1"></a><span class="co"># Null-Modell</span></span>
+<span id="cb11-2"><a href="random-effects-modelle.html#cb11-2"></a>m0 =<span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb11-3"><a href="random-effects-modelle.html#cb11-3"></a></span>
+<span id="cb11-4"><a href="random-effects-modelle.html#cb11-4"></a>m0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
 ## Formula: verh1 ~ 1 + (1 | IDsosci)
-##    Data: .
+##    Data: d
 ## 
 ## REML criterion at convergence: 5576.4
 ## 
@@ -462,36 +469,54 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Number of obs: 2304, groups:  IDsosci, 576
 ## 
 ## Fixed effects:
-##             Estimate Std. Error t value
-## (Intercept)  1.52865    0.03475   43.99</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="co"># ICC &#39;von Hand&#39;</span></a>
-<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="kw">round</span>(<span class="fl">0.5938</span><span class="op">/</span>(<span class="fl">0.5938</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.4065</span>), <span class="dv">3</span>)</a></code></pre></div>
+##              Estimate Std. Error        df t value Pr(&gt;|t|)    
+## (Intercept)   1.52865    0.03475 574.99999   43.99   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="random-effects-modelle.html#cb13-1"></a><span class="co"># ICC &#39;von Hand&#39;</span></span>
+<span id="cb13-2"><a href="random-effects-modelle.html#cb13-2"></a><span class="kw">round</span>(<span class="fl">0.5938</span><span class="op">/</span>(<span class="fl">0.5938</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.4065</span>), <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1] 0.594</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># Mit performance::icc()</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="kw">icc</span>(m0)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="random-effects-modelle.html#cb15-1"></a><span class="co"># Mit performance::icc()</span></span>
+<span id="cb15-2"><a href="random-effects-modelle.html#cb15-2"></a><span class="kw">icc</span>(m0)</span></code></pre></div>
 <pre><code>## # Intraclass Correlation Coefficient
 ## 
 ##      Adjusted ICC: 0.594
 ##   Conditional ICC: 0.594</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># icc(lmer(verh1 ~ 1 + (1 | IDsosci) + (1 | wave), data = d), by_group = TRUE)</span></a></code></pre></div>
 <ul>
 <li><p>Die Informationen zu den Varianzkomponenten findet sich im Output von <code>summary()</code> unter <code>Random effects</code>. Aus diesen Angaben können wir die ICC berechnen. Oder wir nutzen die Funktion <code>performance::icc()</code>.</p></li>
-<li>Fast 60% der Varianz im Verlassen der Wohnung geht auf Unterschiede zwischen Personen zurück.</li>
+<li><p>Fast 60% der Varianz im Verlassen der Wohnung geht auf Unterschiede zwischen Personen zurück.</p></li>
 <li><p>Im <em>fixed effects</em> Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit diesen Modellen also per Spezifikationslogik nichts aussagen.</p></li>
-<li>Kausale Effekte innerhalb der Personen können damit <em>maximal</em> für 40% der Varianz verantwortlich sein.</li>
+<li><p>Kausale Effekte innerhalb der Personen können damit <em>maximal</em> für 40% der Varianz verantwortlich sein.</p></li>
 <li><p>Allerdings müssen wir dabei beachten, dass auch der gesamte Messfehler (zumindest die zufällige Messfehlervarianz nach der CTT) ebenfalls in diesem Varianzanteil steckt.</p></li>
 <li><p>Wir können die Schätzer der <em>random effects</em> für die Personen im Null-Modell auch dazu nutzen, uns einen Überblick zu verschaffen über die Verteilung der personenspezifischen Tendenz, die Wohnung ohne triftigen Grund zu verlassen. Die Schätzer können wir mit <code>ranef()</code> extrahieren, mit <code>broom.mixed::augment()</code> erhalten wir zusätzlich Standardfehler und Konfidenzintervalle in einem tidy data.frame.</p></li>
 </ul>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># Verteilung der RE als Histogramm</span></a>
-<a class="sourceLine" id="cb54-2" data-line-number="2">m0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ranef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">augment</span>(<span class="dt">ci.level =</span> <span class="fl">0.95</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="random-effects-modelle.html#cb17-1"></a><span class="co"># tibble der RE und ihre Verteilung als Histogramm</span></span>
+<span id="cb17-2"><a href="random-effects-modelle.html#cb17-2"></a>m0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ranef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">augment</span>(<span class="dt">ci.level =</span> <span class="fl">0.95</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">12</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb17-3"><a href="random-effects-modelle.html#cb17-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(estimate)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
+<pre><code>## # A tibble: 576 x 8
+##    grp     variable    level  estimate       qq std.error     lb    ub
+##    &lt;fct&gt;   &lt;fct&gt;       &lt;fct&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+##  1 IDsosci (Intercept) 01PQGO  -0.451  -3.13        0.295 -1.03  0.126
+##  2 IDsosci (Intercept) 02E6C8  -0.451  -2.79        0.295 -1.03  0.126
+##  3 IDsosci (Intercept) 050IPY   1.47    1.53        0.295  0.892 2.05 
+##  4 IDsosci (Intercept) 05J4R8   0.189   0.571       0.295 -0.388 0.766
+##  5 IDsosci (Intercept) 08BDZJ   1.26    1.41        0.295  0.679 1.83 
+##  6 IDsosci (Intercept) 0BHGLF   0.402   0.779       0.295 -0.175 0.980
+##  7 IDsosci (Intercept) 0EB6C1  -0.451  -2.62        0.295 -1.03  0.126
+##  8 IDsosci (Intercept) 0EO9L2   2.32    2.02        0.295  1.75  2.90 
+##  9 IDsosci (Intercept) 0F5L9Z   1.68    1.63        0.295  1.11  2.26 
+## 10 IDsosci (Intercept) 0KAKHF   2.54    2.05        0.295  1.96  3.11 
+## 11 IDsosci (Intercept) 0KYYAJ  -0.238  -0.00653     0.295 -0.815 0.339
+## 12 IDsosci (Intercept) 0ONV4O  -0.0245  0.321       0.295 -0.602 0.553
+## # … with 564 more rows</code></pre>
 <p><img src="workshop_panel_files/figure-html/ranef-1.png" width="672" /></p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># RE mit 95%-CIs (aus Darstellungsgründen nur jede fünfte Person)</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2">m0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ranef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">augment</span>(<span class="dt">ci.level =</span> <span class="fl">0.95</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(.), <span class="dt">by =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb55-3" data-line-number="3"><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(estimate, level, <span class="dt">xmin =</span> lb, <span class="dt">xmax =</span> ub)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_pointrangeh</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;IDsosci&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="random-effects-modelle.html#cb19-1"></a><span class="co"># RE mit 95%-CIs (aus Darstellungsgründen nur jede fünfte Person)</span></span>
+<span id="cb19-2"><a href="random-effects-modelle.html#cb19-2"></a>m0 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ranef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">augment</span>(<span class="dt">ci.level =</span> <span class="fl">0.95</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(.), <span class="dt">by =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb19-3"><a href="random-effects-modelle.html#cb19-3"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(estimate, level, <span class="dt">xmin =</span> lb, <span class="dt">xmax =</span> ub)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_pointrangeh</span>() <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;IDsosci&quot;</span>)</span></code></pre></div>
 <p><img src="workshop_panel_files/figure-html/ranef-2.png" width="672" /></p>
 <ul>
 <li>Der <em>random effects</em> Schätzer quantifziert die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.</li>
-<li>Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne trifftigen Grund zu verlassen.</li>
+<li>Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne triftigen Grund zu verlassen.</li>
 </ul>
 </div>
 <div id="mehr-als-ein-gruppierungsfaktor" class="section level3 unnumbered">
@@ -499,7 +524,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ul>
 <li>Mit <code>lme4</code> können prinzipiell beliebig viele und arbiträr angeordnete (sie müssen nicht hierarchisch sein) <em>random effects</em> in ein Modell aufgenommen werden.</li>
 <li>Zu viele Faktoren oder Faktoren mit zu wenigen Ausprägungen können aber zu Problemen bei der (restricted) maximum likelihood Schätzung führen (Bayesianische Schätzverfahren können hier helfen).</li>
-<li>Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch überhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.</li>
+<li>Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch oberhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.</li>
 <li>In Panel-Modellen liegt die Idee nahe, <em>random effects</em> für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Spezifikation wird auch <em>kreuzklassifiziert</em> / <em>cross-classified</em> / <em>crossed</em> genannt.
 <ul>
 <li>Wir nehmen den Faktor Welle auf, indem wir <code>+ (1 | wave)</code> in der Modell-Formel ergänzen.</li>
@@ -507,8 +532,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Im Weiteren lösen wir das Problem, indem wir <em>fixed effects</em> für die Wellen aufnehmen.</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># Null-Modell mit zwei Gruppierungsfaktoren</span></a>
-<a class="sourceLine" id="cb56-2" data-line-number="2">d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>wave), <span class="dt">data =</span> .) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">icc</span>(<span class="dt">by_group =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="random-effects-modelle.html#cb20-1"></a><span class="co"># Null-Modell mit zwei Gruppierungsfaktoren</span></span>
+<span id="cb20-2"><a href="random-effects-modelle.html#cb20-2"></a><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>wave), <span class="dt">data =</span> d) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">icc</span>(<span class="dt">by_group =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control$checkConv, :
 ## Model failed to converge with max|grad| = 0.00262857 (tol = 0.002, component 1)</code></pre>
 <pre><code>## # ICC by Group
@@ -532,7 +557,94 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li>Analysiere die Varianzkomponenten in weiteren Variablen, die dich interessieren.</li>
 </ol>
+</div>
+<div id="random-effects-panel-modelle-mit-lme4" class="section level2">
+<h2><span class="header-section-number">4.5</span> Random effects panel Modelle mit <code>lme4</code></h2>
+<div id="wiederholung-der-wichtigsten-begriffe" class="section level3 unnumbered">
+<h3>Wiederholung der wichtigsten Begriffe</h3>
+<ul>
+<li>Ganz allgemein gesprochen ist ein <em>mixed effects</em> Modell ein Modell, das <em>fixed</em> und <em>random</em> Koeffizienten enthält.</li>
+<li>gelmanDataAnalysisUsing2006 verwenden die (imo) besser verständlichen Begriffe <em>varying intercepts</em> (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und <em>varying slopes</em> (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).</li>
+<li>Im <em>random effects</em> Panelmodell sind die Einheiten auf höherer Ebene die Personen. Die Konstanten bzw. Koeffizienten variieren zwischen Personen.</li>
+<li>In der Sprache von <em>mixed effects</em> Modellen wird das einfachste Modell als <em>fixed slope, random (or varying) intercept</em> Modell bezeichnet.
+<ul>
+<li>Die Regressionskonstante variiert zwischen den Personen (jede Person erhält eine eigene Konstante, die aus einer Normalverteilung mit der Populationskonstante als Mittelwert und der personenspezifischen Varianz als Streuung stammt).
+Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed</em>).</li>
+</ul></li>
+</ul>
+</div>
+<div id="einfaches-random-effects-panel-modell" class="section level3">
+<h3><span class="header-section-number">4.5.1</span> Einfaches random effects panel Modell</h3>
+<ul>
+<li><p>Wir modellieren wieder die Häufigkeit, ohne triftigen Grund die Wohnung zu verlassen, in Abhängigkeit der Intention, dies zu tun.</p></li>
+<li><p>Die Spezifikation in <code>lme4::lmer()</code> folgt der in <code>R</code> üblichen Logik. Das Modell enthält <code>verhint1</code> als Prädiktor mit einem für alle Personen gleichen Koeffizienten (homogener Treatment-Effekt) und <code>(1 | IDsosci)</code> als <em>varying intercept</em> für jede Person.</p></li>
+<li><p>Hinweis: <code>lme4</code> selbst weist keine Freiheitsgrade und entsprechend auch keine p-Werte für die Koeffizienten aus. Wenn zusätzlich das Paket <code>lmerTest</code> geladen wurde, werden diese automatisch ergänzt.</p></li>
+</ul>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="random-effects-modelle.html#cb23-1"></a>m1 =<span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb23-2"><a href="random-effects-modelle.html#cb23-2"></a></span>
+<span id="cb23-3"><a href="random-effects-modelle.html#cb23-3"></a>m1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1 + (1 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4553.7
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.5240 -0.2022 -0.0848  0.1650  5.7931 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.1114   0.3338  
+##  Residual             0.3412   0.5842  
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##              Estimate Std. Error        df t value Pr(&gt;|t|)    
+## (Intercept) 5.987e-01  2.872e-02 9.754e+02   20.85   &lt;2e-16 ***
+## verhint1    5.155e-01  1.219e-02 1.747e+03   42.30   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Correlation of Fixed Effects:
+##          (Intr)
+## verhint1 -0.765</code></pre>
+<ul>
+<li><p>Mit jedem Punkt auf der Skala zur Verhaltensintention steigt die Häufigkeit des Rausgehens ohne triftigen Grund um 0.5 Punkte.</p></li>
+<li><p>Wir können das Modell mit dem Prädiktor <code>verhint1</code> mit dem Null-Modell vergleichen.</p>
+<ul>
+<li>Mit <code>anova()</code> erhalten wir verschiedene Informationskriterien und einen Likelihood Ratio (Wald) Test. Die Test-Statistik folgt einer <span class="math inline">\(\Chi^2\)</span>-Verteilung.</li>
+<li>Durch einen Vergleich der Varianzkomponenten der Modelle erhalten wir ein Maß, das konzeptionell ähnlich <span class="math inline">\(\Delta R^2\)</span> interpretiert werden kann. Die Funktion <code>performance::r2(by_group = TRUE)</code> implementiert diesen Vergleich für ein Modell und das Null-Modell. Die manuelle Berechnung ist auch schrittweise für mehre Modelle möglich, die zunehmend mehr Prädiktoren enthalten. Wichtig: Die <span class="math inline">\(\Delta R^2\)</span>-Logik funktioniert nur in Modellen mit identischen <em>random effects</em>.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="random-effects-modelle.html#cb25-1"></a><span class="co"># Wald Test</span></span>
+<span id="cb25-2"><a href="random-effects-modelle.html#cb25-2"></a><span class="kw">anova</span>(m0, m1)</span></code></pre></div>
+<pre><code>## Data: d
+## Models:
+## m0: verh1 ~ 1 + (1 | IDsosci)
+## m1: verh1 ~ verhint1 + (1 | IDsosci)
+##    Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
+## m0  3 5577.5 5594.7 -2785.7   5571.5                             
+## m1  4 4548.5 4571.5 -2270.3   4540.5 1030.9      1  &lt; 2.2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="random-effects-modelle.html#cb27-1"></a><span class="co"># Reduktion der Varianz (delta R^2) - manuell</span></span>
+<span id="cb27-2"><a href="random-effects-modelle.html#cb27-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(m1)<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sigma</span>(m0)<span class="op">^</span><span class="dv">2</span>)  <span class="co"># L1</span></span></code></pre></div>
+<pre><code>## [1] 0.1606004</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="random-effects-modelle.html#cb29-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m1)<span class="op">$</span>IDsosci)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m0)<span class="op">$</span>IDsosci))  <span class="co"># L2</span></span></code></pre></div>
+<pre><code>## [1] 0.8124145</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="random-effects-modelle.html#cb31-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) - mit performance::r2 (Vergleicht immer mit</span></span>
+<span id="cb31-2"><a href="random-effects-modelle.html#cb31-2"></a><span class="co"># Null-Modell)</span></span>
+<span id="cb31-3"><a href="random-effects-modelle.html#cb31-3"></a><span class="kw">r2</span>(m1, <span class="dt">by_group =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## # Explained Variance by Level
+## 
+## Level   |    R2
+## ---------------
+## Level 1 | 0.161
+## IDsosci | 0.812</code></pre>
 
+</div>
 </div>
 </div>
 <h3>Literatur</h3>

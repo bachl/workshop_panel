@@ -1,9 +1,11 @@
 ## ---- ranef
 
-# Verteilung der RE als Histogramm
+# tibble der RE und ihre Verteilung als Histogramm
 m0 %>% 
   ranef() %>%
   augment(ci.level = 0.95) %>% 
+  as_tibble() %>% 
+  print(n = 12) %>% 
   ggplot(aes(estimate)) + geom_histogram()
 
 # RE mit 95%-CIs (aus Darstellungsgründen nur jede fünfte Person)
