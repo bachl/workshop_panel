@@ -233,7 +233,7 @@ knitr::read_chunk("R/plm_mod.R")
 
 * Der Effekt ist in der Stichprobe für Frauen minimal schwächer als für Männer. Der Unterschied ist jedoch weder substantiell noch statistisch bedeutsam.
 
-## Conclusio: Vor- und Nachteile des *fixed effects* Modells
+## Zusammenfassung: Vor- und Nachteile des *fixed effects* Modells
 
 > In many applications the whole point of using panel data is to allow for $a_i$ to be arbitrarily correlated with the $x_{it}$. A fixed effects analysis achieves this purpose explicitly. --- @wooldridge10, S. 300
 

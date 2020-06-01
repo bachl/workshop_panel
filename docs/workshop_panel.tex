@@ -1402,8 +1402,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   Der Effekt ist in der Stichprobe für Frauen minimal schwächer als für Männer. Der Unterschied ist jedoch weder substantiell noch statistisch bedeutsam.
 \end{itemize}
 
-\hypertarget{conclusio-vor--und-nachteile-des-fixed-effects-modells}{%
-\section{\texorpdfstring{Conclusio: Vor- und Nachteile des \emph{fixed effects} Modells}{Conclusio: Vor- und Nachteile des fixed effects Modells}}\label{conclusio-vor--und-nachteile-des-fixed-effects-modells}}
+\hypertarget{zusammenfassung-vor--und-nachteile-des-fixed-effects-modells}{%
+\section{\texorpdfstring{Zusammenfassung: Vor- und Nachteile des \emph{fixed effects} Modells}{Zusammenfassung: Vor- und Nachteile des fixed effects Modells}}\label{zusammenfassung-vor--und-nachteile-des-fixed-effects-modells}}
 
 \begin{quote}
 In many applications the whole point of using panel data is to allow for \(a_i\) to be arbitrarily correlated with the \(x_{it}\). A fixed effects analysis achieves this purpose explicitly. --- \citet{wooldridge10}, S. 300
@@ -1855,7 +1855,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Null-Modell}
-\NormalTok{m0 =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ .)}
+\NormalTok{m0 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
 
 \NormalTok{m0 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
@@ -1865,7 +1865,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 ## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
 ## lmerModLmerTest]
 ## Formula: verh1 ~ 1 + (1 | IDsosci)
-##    Data: .
+##    Data: d
 ## 
 ## REML criterion at convergence: 5576.4
 ## 
@@ -1910,12 +1910,6 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 ##      Adjusted ICC: 0.594
 ##   Conditional ICC: 0.594
 \end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\CommentTok{# icc(lmer(verh1 ~ 1 + (1 | IDsosci) + (1 | wave), data = d), by_group = TRUE)}
-\end{Highlighting}
-\end{Shaded}
 
 \begin{itemize}
 \item
@@ -2008,7 +2002,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Null-Modell mit zwei Gruppierungsfaktoren}
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{wave), }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{icc}\NormalTok{(}\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{wave), }\DataTypeTok{data =}\NormalTok{ d) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{icc}\NormalTok{(}\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -2055,19 +2049,622 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \hypertarget{random-effects-panel-modelle-mit-lme4}{%
 \section{\texorpdfstring{Random effects panel Modelle mit \texttt{lme4}}{Random effects panel Modelle mit lme4}}\label{random-effects-panel-modelle-mit-lme4}}
 
+\hypertarget{wiederholung-der-wichtigsten-begriffe}{%
+\subsection*{Wiederholung der wichtigsten Begriffe}\label{wiederholung-der-wichtigsten-begriffe}}
+\addcontentsline{toc}{subsection}{Wiederholung der wichtigsten Begriffe}
+
 \begin{itemize}
 \tightlist
 \item
-  In general, a mixed effects a model is comprised of fixed or random coefficients.
+  Ganz allgemein gesprochen ist ein \emph{mixed effects} Modell ein Modell, das \emph{fixed} und \emph{random} Koeffizienten enthält.
 \item
-  \citet{gh} use the more useful term varying intercepts or slopes, since these are allowed to vary between persons.
+  gelmanDataAnalysisUsing2006 verwenden die (imo) besser verständlichen Begriffe \emph{varying intercepts} (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und \emph{varying slopes} (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).
 \item
-  The \texttt{plm} models focus on the intercept of the model, i.e.~the person-level averages are modeled either as FE or RE.
+  Im \emph{random effects} Panelmodell sind die Einheiten auf höherer Ebene die Personen. Die Konstanten bzw. Koeffizienten variieren zwischen Personen.
 \item
-  The basic RE model is called a fixed slope, random (or varying) intercept model in mixed effects parlance.
-\item
-  It is equivalent to the \texttt{plm} model, except for the estimation with (restricted) maximum likelihood instead of least squares.
+  In der Sprache von \emph{mixed effects} Modellen wird das einfachste Modell als \emph{fixed slope, random (or varying) intercept} Modell bezeichnet.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Die Regressionskonstante variiert zwischen den Personen (jede Person erhält eine eigene Konstante, die aus einer Normalverteilung mit der Populationskonstante als Mittelwert und der personenspezifischen Varianz als Streuung stammt).
+    Die übrigen Regressionskoeffizienten sind für alle Personen gleich (\emph{fixed}).
+  \end{itemize}
 \end{itemize}
+
+\hypertarget{einfaches-random-effects-panel-modell}{%
+\subsection*{Einfaches random effects panel Modell}\label{einfaches-random-effects-panel-modell}}
+\addcontentsline{toc}{subsection}{Einfaches random effects panel Modell}
+
+\begin{itemize}
+\item
+  Wir modellieren wieder die Häufigkeit, ohne triftigen Grund die Wohnung zu verlassen, in Abhängigkeit der Intention, dies zu tun.
+\item
+  Die Spezifikation in \texttt{lme4::lmer()} folgt der in \texttt{R} üblichen Logik. Das Modell enthält \texttt{verhint1} als Prädiktor mit einem für alle Personen gleichen Koeffizienten (homogener Treatment-Effekt) und \texttt{(1\ \textbar{}~IDsosci)} als \emph{varying intercept} für jede Person.
+\item
+  Hinweis: \texttt{lme4} selbst weist keine Freiheitsgrade und entsprechend auch keine p-Werte für die Koeffizienten aus. Wenn zusätzlich das Paket \texttt{lmerTest} geladen wurde, werden diese automatisch ergänzt.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m1 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+
+\NormalTok{m1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1 + (1 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4553.7
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.5240 -0.2022 -0.0848  0.1650  5.7931 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.1114   0.3338  
+##  Residual             0.3412   0.5842  
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##              Estimate Std. Error        df t value Pr(>|t|)    
+## (Intercept) 5.987e-01  2.872e-02 9.754e+02   20.85   <2e-16 ***
+## verhint1    5.155e-01  1.219e-02 1.747e+03   42.30   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{itemize}
+\item
+  Mit jedem Punkt auf der Skala zur Verhaltensintention steigt die Häufigkeit des Rausgehens ohne triftigen Grund um 0.5 Punkte.
+\item
+  Wir können das Modell mit dem Prädiktor \texttt{verhint1} mit dem Null-Modell vergleichen.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Mit \texttt{anova()} erhalten wir verschiedene Informationskriterien und einen Likelihood Ratio (Wald) Test. Die Test-Statistik folgt einer \(\chi^2\)-Verteilung.
+  \item
+    Durch einen Vergleich der Varianzkomponenten der Modelle erhalten wir ein Maß, das konzeptionell ähnlich \(\Delta R^2\) interpretiert werden kann. Die Funktion \texttt{performance::r2(by\_group\ =\ TRUE)} implementiert diesen Vergleich für ein Modell und das Null-Modell. Die manuelle Berechnung ist auch schrittweise für mehre Modelle möglich, die zunehmend mehr Prädiktoren enthalten. Wichtig: Die \(\Delta R^2\)-Logik funktioniert nur in Modellen mit identischen \emph{random effects}.
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Wald Test und Informationskriterien}
+\KeywordTok{anova}\NormalTok{(m0, m1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: d
+## Models:
+## m0: verh1 ~ 1 + (1 | IDsosci)
+## m1: verh1 ~ verhint1 + (1 | IDsosci)
+##    Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(>Chisq)    
+## m0  3 5577.5 5594.7 -2785.7   5571.5                             
+## m1  4 4548.5 4571.5 -2270.3   4540.5 1030.9      1  < 2.2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz (Delta R^2) - manuell}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(m1)}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\KeywordTok{sigma}\NormalTok{(m0)}\OperatorTok{^}\DecValTok{2}\NormalTok{)  }\CommentTok{# L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.1606004
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m1)}\OperatorTok{$}\NormalTok{IDsosci)}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m0)}\OperatorTok{$}\NormalTok{IDsosci))  }\CommentTok{# L2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8124145
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz (Delta R^2) - mit performance::r2() (Vergleicht immer mit}
+\CommentTok{# Null-Modell)}
+\KeywordTok{r2}\NormalTok{(m1, }\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Explained Variance by Level
+## 
+## Level   |    R2
+## ---------------
+## Level 1 | 0.161
+## IDsosci | 0.812
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Die Berücksichtigung der Verhaltensintention verbessert das Modell.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Die Werte der Informationskriterien \emph{AIC} und \emph{BIC} liegen deutlich unter dem Null-Modell (niedriger ist besser).
+  \item
+    Nach dem \emph{Wald-Test} wird die \(H_0\), dass beide Modelle gleich gut zu den Daten passen, verworfen.
+  \item
+    Die Aufnahme der Verhaltensintention erklärt über 80\% der Varianz zwischen den Personen und 16\% der Varianz innerhalb der Personen --- TPB ftw! ;)
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{einfache-erweiterungen-des-random-effects-panel-modells}{%
+\subsection*{Einfache Erweiterungen des random effects panel Modells}\label{einfache-erweiterungen-des-random-effects-panel-modells}}
+\addcontentsline{toc}{subsection}{Einfache Erweiterungen des random effects panel Modells}
+
+\begin{itemize}
+\tightlist
+\item
+  In den folgenden Absätzen erweitern wir das einfache Modell. Wir berücksichtigen \emph{fixed effects} für die Panelwellen und ergänzen dann weitere über die Zeit konstante und variierende Prädiktoren.
+\item
+  Die Texte dazu halte ich an den meisten Stellen knapp, da die grundsätzliche Spezifikation und Interpretation nun klar sein dürfte.
+\end{itemize}
+
+\hypertarget{fixed-effects-fuxfcr-die-panelwellen}{%
+\subsection*{Fixed effects für die Panelwellen}\label{fixed-effects-fuxfcr-die-panelwellen}}
+\addcontentsline{toc}{subsection}{Fixed effects für die Panelwellen}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modellspezifikation}
+\NormalTok{m2 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+
+\NormalTok{m2 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1 + factor(wave) + (1 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4557.9
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.6468 -0.2201 -0.0657  0.1861  5.8909 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.1131   0.3364  
+##  Residual             0.3390   0.5822  
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                 Estimate Std. Error         df t value Pr(>|t|)    
+## (Intercept)      0.59208    0.03359 1776.78875  17.624   <2e-16 ***
+## verhint1         0.51277    0.01245 1668.82709  41.201   <2e-16 ***
+## factor(wave)2   -0.03974    0.03454 1599.10544  -1.150   0.2502    
+## factor(wave)3    0.07351    0.03460 1605.18457   2.125   0.0338 *  
+## factor(wave)4    0.01267    0.03504 1651.71074   0.362   0.7177    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modellvergleich Wald und Info-Kriterien}
+\KeywordTok{anova}\NormalTok{(m0, m1, m2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: d
+## Models:
+## m0: verh1 ~ 1 + (1 | IDsosci)
+## m1: verh1 ~ verhint1 + (1 | IDsosci)
+## m2: verh1 ~ verhint1 + factor(wave) + (1 | IDsosci)
+##    Df    AIC    BIC  logLik deviance    Chisq Chi Df Pr(>Chisq)    
+## m0  3 5577.5 5594.7 -2785.7   5571.5                               
+## m1  4 4548.5 4571.5 -2270.3   4540.5 1030.937      1    < 2e-16 ***
+## m2  7 4543.4 4583.6 -2264.7   4529.4   11.164      3    0.01087 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz (Delta R^2) gegenüber M0}
+\KeywordTok{r2}\NormalTok{(m2, }\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Explained Variance by Level
+## 
+## Level   |    R2
+## ---------------
+## Level 1 | 0.166
+## IDsosci | 0.809
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz (Delta R^2) gegenüber M1}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(m2)}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\KeywordTok{sigma}\NormalTok{(m1)}\OperatorTok{^}\DecValTok{2}\NormalTok{)  }\CommentTok{# L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.006686114
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m2)}\OperatorTok{$}\NormalTok{IDsosci)}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m1)}\OperatorTok{$}\NormalTok{IDsosci))  }\CommentTok{# L2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.01567278
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Der Effekt der Verhaltensintention bleibt auch bei Berücksichtigung von Periodeneffekten praktisch unverändert.
+\item
+  Die Periodeneffekte sind substantiell relativ unbedeutend.
+\item
+  Die statistischen Indikatoren für oder gegen die Aufnahme der Periodeneffekte sind gemischt. Der \emph{Wald-Test} (signifikant) und das \emph{AIC} (etwas niedriger im Vergleich zu M1) sprechen dafür. Das \emph{BIC}, das Modellkomplexität stärker bestraft, spricht dagegen (etwas höher im Vergleich zu M1).
+\item
+  Die Varianzaufklärung gegenüber M0 entspricht substantiell der von M1.
+\item
+  Im Vergleich zu M1 wird minimal mehr Varianz innerhalb der Personen erklärt. Die Varianzaufklärung auf Ebene der Personen sinkt sogar leicht. Dieses auf den ersten Blick wenig intuitive Ergebnis erklärt sich dadurch, dass die Periodeneffekte im Design mit den Personen kreuzklassifiziert sind. Ein geringer Varianzanteil, der in M1 fälschlicherweise den Personen zugerechnet wurde (hier konkret: die zwischen den Personen konstanten, parallelen Veränderungen von Intention und Handlung), wird nun auf die ``korrekte'' Ebene verschoben.
+\item
+  Mein Fazit: Ich würde die Periodeneffekte immer berücksichtigen, da sie einen wichtigen Bestandteil des datengenerierenden Prozesses im Modell abbildet. Diese Entscheidung hängt nicht von den Ergebnissen der statistischen Tests ab. Substantiell lernen wir an dieser Stelle lediglich, dass homogene Veränderungen über die Zeit relativ unbedeutend waren.
+\end{itemize}
+
+\hypertarget{aufnahme-eines-personenmerkmals}{%
+\subsection*{Aufnahme eines Personenmerkmals}\label{aufnahme-eines-personenmerkmals}}
+\addcontentsline{toc}{subsection}{Aufnahme eines Personenmerkmals}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modellspezifikation}
+\NormalTok{m3 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+
+\NormalTok{m3 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1 + C_sex + factor(wave) + (1 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4554.1
+## 
+## Scaled residuals: 
+##     Min      1Q  Median      3Q     Max 
+## -4.6094 -0.2443 -0.0585  0.2150  5.9304 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.1116   0.3341  
+##  Residual             0.3384   0.5818  
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                 Estimate Std. Error         df t value Pr(>|t|)    
+## (Intercept)      0.66287    0.04160 1145.43136  15.935  < 2e-16 ***
+## verhint1         0.51064    0.01245 1675.19655  41.006  < 2e-16 ***
+## C_sex           -0.11063    0.03797  450.43520  -2.913  0.00376 ** 
+## factor(wave)2   -0.03904    0.03452 1602.57999  -1.131  0.25818    
+## factor(wave)3    0.07428    0.03457 1608.64174   2.149  0.03182 *  
+## factor(wave)4    0.01389    0.03501 1655.02256   0.397  0.69163    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modellvergleich Wald und Info-Kriterien}
+\KeywordTok{anova}\NormalTok{(m0, m1, m2, m3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: d
+## Models:
+## m0: verh1 ~ 1 + (1 | IDsosci)
+## m1: verh1 ~ verhint1 + (1 | IDsosci)
+## m2: verh1 ~ verhint1 + factor(wave) + (1 | IDsosci)
+## m3: verh1 ~ verhint1 + C_sex + factor(wave) + (1 | IDsosci)
+##    Df    AIC    BIC  logLik deviance     Chisq Chi Df Pr(>Chisq)    
+## m0  3 5577.5 5594.7 -2785.7   5571.5                                
+## m1  4 4548.5 4571.5 -2270.3   4540.5 1030.9373      1  < 2.2e-16 ***
+## m2  7 4543.4 4583.6 -2264.7   4529.4   11.1638      3   0.010872 *  
+## m3  8 4536.9 4582.8 -2260.4   4520.9    8.4888      1   0.003573 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz (Delta R^2) gegenüber M0}
+\KeywordTok{r2}\NormalTok{(m3, }\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Explained Variance by Level
+## 
+## Level   |    R2
+## ---------------
+## Level 1 | 0.167
+## IDsosci | 0.812
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz (Delta R^2) gegenüber M2}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(m3)}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\KeywordTok{sigma}\NormalTok{(m2)}\OperatorTok{^}\DecValTok{2}\NormalTok{)  }\CommentTok{# L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.001532503
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m3)}\OperatorTok{$}\NormalTok{IDsosci)}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m2)}\OperatorTok{$}\NormalTok{IDsosci))  }\CommentTok{# L2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.01347101
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Im Gegensatz zum \emph{fixed effects} Modell können wir nun auch Personenmerkmale als Prädiktoren berücksichtigen. Frauen gehen im Durchschnitt etwas seltener ohne triftigen Grund aus dem Haus als Männer. Hier wird ein wichtiger Vorteil des \emph{random effects} Modells gegenüber dem \emph{fixed effects} Modell deutlich. Es könnte aus verschiedensten Gründen relevant sein, zu wissen, dass eher Männer als Frauen zu diesem riskanten Verhalten neigen. Beispielsweise könnte eine Fokussierung einer Kampagne auf Männer sinnvoll sein.
+\item
+  Wald-Test und Informationskriterien sprechen für die Berücksichtigung des Geschlechts.
+\item
+  Die Varianzaufklärung auf Ebene der Personen macht ca. 1\% aus. Die Aufklärung zwischen Personen kann ignoriert werden.
+\end{itemize}
+
+\hypertarget{aufnahme-eines-weiteren-uxfcber-die-zeit-variierender-pruxe4diktors}{%
+\subsection*{Aufnahme eines weiteren, über die Zeit variierender Prädiktors}\label{aufnahme-eines-weiteren-uxfcber-die-zeit-variierender-pruxe4diktors}}
+\addcontentsline{toc}{subsection}{Aufnahme eines weiteren, über die Zeit variierender Prädiktors}
+
+\begin{itemize}
+\tightlist
+\item
+  Wie im Beispiel zu \emph{fixed effects} wechseln wir hier das Modell, damit wir die kausale Interpretierbarkeit aller Koeffizienten von über die Zeit variablen Prädiktoren beibehalten.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \emph{Zur Wiederholung}: Nach der TPB dürfen wir dieses Modell annehmen, da die drei Prädiktoren auf derselben kausalen Stufe stehen: Verhaltensintention \textasciitilde{} Einstellung + Deskriptive Norm + Injunktive Norm. Hier schätzen wir das Modell für die Verhaltensintention \emph{Rausgehen ohne triftigen Grund}.
+  \item
+    Der folgende Code wiederholt damit auch nochmals den schrittweisen Aufbau des Modells und das modellvergleichende Vorgehen. Es bietet auch eine Gelegenheit, eine leicht angepasste Spezifikationslogik zu erklären.
+  \end{itemize}
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Null-Modell}
+\NormalTok{m0_int1 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{m0_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{(}\DataTypeTok{effects =} \StringTok{"fixed"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 7
+##   effect term          estimate std.error statistic    df p.value
+##   <chr>  <chr>            <dbl>     <dbl>     <dbl> <dbl>   <dbl>
+## 1 fixed  (Intercept)      1.49       0.05     28.7  1159.       0
+## 2 fixed  factor(wave)2    0.32       0.05      6.76 1725        0
+## 3 fixed  factor(wave)3    0.36       0.05      7.52 1725        0
+## 4 fixed  factor(wave)4    0.570      0.05     11.9  1725        0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{icc}\NormalTok{(m0_int1)  }\CommentTok{# conditional ICC takes the fixed effects variances into account}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Intraclass Correlation Coefficient
+## 
+##      Adjusted ICC: 0.573
+##   Conditional ICC: 0.558
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modelle mit Prädiktoren}
+\NormalTok{m1_int1 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\NormalTok{ein1 }\OperatorTok{+}\StringTok{ }\NormalTok{desnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{injnormp1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }
+    \DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{m1_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{(}\DataTypeTok{effects =} \StringTok{"fixed"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 7 x 7
+##   effect term          estimate std.error statistic    df p.value
+##   <chr>  <chr>            <dbl>     <dbl>     <dbl> <dbl>   <dbl>
+## 1 fixed  (Intercept)      0.21       0.05      3.92 1623.       0
+## 2 fixed  ein1             0.48       0.02     25.6  1950        0
+## 3 fixed  desnormp1        0.1        0.03      3.94 2297.       0
+## 4 fixed  injnormp1        0.12       0.03      4.55 2292.       0
+## 5 fixed  factor(wave)2    0.15       0.05      3.35 1686.       0
+## 6 fixed  factor(wave)3    0.18       0.05      3.85 1703.       0
+## 7 fixed  factor(wave)4    0.290      0.05      6.22 1740.       0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m2_int1 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\NormalTok{ein1 }\OperatorTok{+}\StringTok{ }\NormalTok{desnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{injnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }
+\StringTok{    }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{m2_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{(}\DataTypeTok{effects =} \StringTok{"fixed"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 8 x 7
+##   effect term          estimate std.error statistic    df p.value
+##   <chr>  <chr>            <dbl>     <dbl>     <dbl> <dbl>   <dbl>
+## 1 fixed  (Intercept)      0.31       0.06      5.01 1211.       0
+## 2 fixed  ein1             0.48       0.02     25.6  1938.       0
+## 3 fixed  desnormp1        0.1        0.03      3.94 2296.       0
+## 4 fixed  injnormp1        0.12       0.03      4.52 2292.       0
+## 5 fixed  C_sex           -0.16       0.05     -3.24  518.       0
+## 6 fixed  factor(wave)2    0.16       0.05      3.36 1687.       0
+## 7 fixed  factor(wave)3    0.18       0.05      3.86 1704.       0
+## 8 fixed  factor(wave)4    0.290      0.05      6.23 1741.       0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modellvergleiche Wald und Info-Kriterien}
+\KeywordTok{anova}\NormalTok{(m0_int1, m1_int1, m2_int1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: d
+## Models:
+## m0_int1: verhint1 ~ 1 + factor(wave) + (1 | IDsosci)
+## m1_int1: verhint1 ~ ein1 + desnormp1 + injnormp1 + factor(wave) + (1 | 
+## m1_int1:     IDsosci)
+## m2_int1: verhint1 ~ ein1 + desnormp1 + injnormp1 + C_sex + factor(wave) + 
+## m2_int1:     (1 | IDsosci)
+##         Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(>Chisq)    
+## m0_int1  6 6671.7 6706.1 -3329.8   6659.7                              
+## m1_int1  9 5884.8 5936.5 -2933.4   5866.8 792.866      3  < 2.2e-16 ***
+## m2_int1 10 5876.3 5933.8 -2928.2   5856.3  10.484      1   0.001204 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Varianzreduktion Vorsicht: Das ergibt hier keinen Sinn, da Vergleich mit M00}
+\CommentTok{# (ohne Periodeneffekte) Reduktion der Varianz (Delta R^2) gegenüber M0}
+\KeywordTok{r2}\NormalTok{(m1_int1, }\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Explained Variance by Level
+## 
+## Level   |    R2
+## ---------------
+## Level 1 | 0.155
+## IDsosci | 0.773
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Wir sehen stattdessen das Modell mit Perioden-FE als Null-Referenz Reduktion}
+\CommentTok{# der Varianz (Delta R^2) in M1_int gegenüber M0_int}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(m1_int1)}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\KeywordTok{sigma}\NormalTok{(m0_int1)}\OperatorTok{^}\DecValTok{2}\NormalTok{)  }\CommentTok{# L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.08581985
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m1_int1)}\OperatorTok{$}\NormalTok{IDsosci)}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m0_int1)}\OperatorTok{$}\NormalTok{IDsosci))  }\CommentTok{# L2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7763478
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz (Delta R^2) in M2_int gegenüber M1_int}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(m2_int1)}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\KeywordTok{sigma}\NormalTok{(m1_int1)}\OperatorTok{^}\DecValTok{2}\NormalTok{)  }\CommentTok{# L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.0002454245
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m2_int1)}\OperatorTok{$}\NormalTok{IDsosci)}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(m1_int1)}\OperatorTok{$}\NormalTok{IDsosci))  }\CommentTok{# L2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.02729841
+\end{verbatim}
+
+\begin{itemize}
+\item
+  Als Null-Modell spezifizieren wir ein Modell mit \emph{random effects} für Personen und \emph{fixed effects} für Panelwellen. Meiner Meinung nach ist dies ein angemessenes Null-Modell, da nur die Eigenschaften des Designs abgebildet werden. Für die Panelwellen eigenen sich \emph{fixed effects}, da es nur vier Messzeitpunkte gibt.
+\item
+  Für das Null-Modell können wir die ICC ausweisen. Da im Modell auch \emph{fixed effects} sind, interpretieren wir den \emph{conditional ICC}. Mehr als die Hälfte der Varianz in der Intention, ohne triftigen Grund die Wohnung zu verlassen, liegt zwischen den Personen.
+\item
+  Die Einstellung hat einen deutlichen Effekt auf die Verhaltensintention. Die Wahrnehmungen deskriptiver und injunktiver Normen haben vergleichsweise geringe, statistisch signifikante Effekte.
+\item
+  Die Informationskriterien und der Wald-Test zeigen klar, dass sich das Modell durch die Aufnahme der drei Prädiktoren verbessert.
+\item
+  Die drei Prädiktoren erklären 9\% der Varianz innerhalb der Personen und 78\% der Varianz zwischen den Personen. Da wir ein angepasstes Null-Modell mit \emph{fixed effects} für die Wellen als Referenz wählen, müssen wir die Varianzreduktion selbst berechnen. \texttt{performance::r2()} bezieht sich immer auf das ``leere'' Null-Modell. Es bezieht in diesem Fall die Erklärungskraft der \emph{fixed effects} für die Wellen mit ein.
+\item
+  Zusätzlich wollen wir Geschlecht als Prädiktor auf Personen-Ebene berücksichtigen. Frauen haben im Vergleich zu Männern seltener vor, die Wohnung ohne triftigen Grund zu verlassen.
+\item
+  Informationskriterien und Wald-Test zeigen eine Modellverbesserung an. Das Geschlecht erklärt zusätzliche 3\% der Varianz zwischen den Personen.
+\end{itemize}
+
+\hypertarget{uxfcbungsaufgaben-4}{%
+\section{Übungsaufgaben 4}\label{uxfcbungsaufgaben-4}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (\texttt{med2}) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}), mit einem \emph{random effects} Panelmodell. Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 2.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Schätze zuerst ein geeignetes Null-Modell als Referenz. Betrachte die ICC.
+  \item
+    Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (\texttt{med1}) in das Modell auf.
+  \item
+    Prüfe, ob sich die Intention zwischen Männer und Frauen unterscheidet (\texttt{C\_sex}).
+  \end{itemize}
+\item
+  Spezifiziere, schätze und interpretiere ein eigenes \emph{random effects} Panelmodell mit Daten aus dem Beispieldatensatz. Gehe dabei von einem geeigneten Null-Modell aus und erweitere das Modell dann.
+\end{enumerate}
+
+\hypertarget{variierende-koeffizienten-random-slopes-und-ebenen-uxfcberschreitende-interaktionen-cross-level-interactions}{%
+\section{Variierende Koeffizienten (random slopes) und Ebenen-überschreitende Interaktionen (cross-level interactions)}\label{variierende-koeffizienten-random-slopes-und-ebenen-uxfcberschreitende-interaktionen-cross-level-interactions}}
 
 \hypertarget{within-between-models}{%
 \chapter{Within-between models}\label{within-between-models}}

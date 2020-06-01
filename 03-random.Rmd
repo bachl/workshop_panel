@@ -5,6 +5,19 @@ source("R/packages.R")
 d = read_rds("R/data/data.rds")
 ```
 
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/hausman.R")
+knitr::read_chunk("R/plm_re.R")
+knitr::read_chunk("R/icc.R")
+knitr::read_chunk("R/ranef.R")
+knitr::read_chunk("R/icc2.R")
+knitr::read_chunk("R/lmerstart.R")
+knitr::read_chunk("R/lmervgl.R")
+knitr::read_chunk("R/lmer_periodfe.R")
+knitr::read_chunk("R/lmer_person.R")
+knitr::read_chunk("R/lmer_2ndtv.R")
+```
+
 * In diesem Abschnitt beschäftigen wir uns mit *random effects* Modellen. Zuerst führen wir die Modellklasse ein. Dann betrachten wir kurz, wie die Modelle in der Tradition der Ökonometrie mit `plm` spezifiziert werden können, bevor wir zur allgemeineren Umsetzung mit dem Paket für Mehrebenen- bzw. *mixed effects* Modelle `lme4` kommen.
 
 ## Einführung: Random effects Modelle für Paneldaten
@@ -53,10 +66,6 @@ d = read_rds("R/data/data.rds")
 * Der Hausman-Test kann mit der Funktion `plm::phtest()` durchgeführt werden.
 
 
-```{r, echo=FALSE, cache=FALSE}
-knitr::read_chunk("R/hausman.R")
-```
-
 ```{r hausman, eval=TRUE, tidy=TRUE, message=FALSE}
 
 ```
@@ -67,9 +76,6 @@ knitr::read_chunk("R/hausman.R")
 
 * *Random effects* Modelle für Paneldaten in der ökonometrischen Tradition lassen sich mit `plm` schätzen. Die Schätzung erfolgt auf Basis von Transformationen im Least-squares-Framework (ich habe keine Ahnung, wie das funktioniert). Ich selbst nutze diese Funktionalität in der Praxis nicht. Die Modellspezifikationen sind im Folgenden der Vollständigkeit halber kurz aufgeführt.
 
-```{r, echo=FALSE, cache=FALSE}
-knitr::read_chunk("R/plm_re.R")
-```
 
 ```{r plm-re, eval=TRUE, tidy=TRUE, message=FALSE}
 
@@ -123,9 +129,6 @@ knitr::read_chunk("R/plm_re.R")
 * In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne triftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
 * Dazu spezifizieren wir das Null-Modell mit `lme4::lmer()`. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit `(1 | IDsosci)` jede Person eine eigene Konstante erhält ($\alpha_i$ in der Gleichung oben), die als Abweichung vom Gewaltmittel ($\alpha$) geschätzt wird.
 
-```{r, echo=FALSE, cache=FALSE}
-knitr::read_chunk("R/icc.R")
-```
 
 ```{r icc, eval=TRUE, tidy=TRUE, message=FALSE}
 
@@ -141,9 +144,6 @@ knitr::read_chunk("R/icc.R")
 
 * Wir können die Schätzer der *random effects* für die Personen im Null-Modell auch dazu nutzen, uns einen Überblick zu verschaffen über die Verteilung der personenspezifischen Tendenz, die Wohnung ohne triftigen Grund zu verlassen. Die Schätzer können wir mit `ranef()` extrahieren, mit `broom.mixed::augment()` erhalten wir zusätzlich Standardfehler und Konfidenzintervalle in einem tidy data.frame.
 
-```{r, echo=FALSE, cache=FALSE}
-knitr::read_chunk("R/ranef.R")
-```
 
 ```{r ranef, eval=TRUE, tidy=TRUE, message=FALSE}
 
@@ -162,9 +162,6 @@ knitr::read_chunk("R/ranef.R")
   * Da wir nur Daten aus vier Wellen haben und die Varianz zwischen den Wellen sehr klein ist, kommt die *restricted maximum likelihood* Schätzung hier an ihre Grenzen. Eine Warnung wird ausgegeben. Wir könnten das Problem durch Herumfrickeln an den Einstellungen des Optimizer beheben, würden aber inhaltlich zu keiner anderen Schlussfolgerungen kommen. Um den Einstieg in die technischen Details zu vermeiden, verwenden wir hier aber das Modell mit der Warnmeldung.
   * Im Weiteren lösen wir das Problem, indem wir *fixed effects* für die Wellen aufnehmen.
 
-```{r, echo=FALSE, cache=FALSE}
-knitr::read_chunk("R/icc2.R")
-```
 
 ```{r icc2, eval=TRUE, tidy=TRUE, message=FALSE}
 
@@ -185,22 +182,19 @@ knitr::read_chunk("R/icc2.R")
 ### Wiederholung der wichtigsten Begriffe {-}
 
 * Ganz allgemein gesprochen ist ein *mixed effects* Modell ein Modell, das *fixed* und *random* Koeffizienten enthält.
-* gelmanDataAnalysisUsing2006 verwenden die (imo) besser verständlichen Begriffe *varying intercepts* (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und *varying slopes* (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).
+* @gelmanDataAnalysisUsing2006 verwenden die (imo) besser verständlichen Begriffe *varying intercepts* (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und *varying slopes* (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).
 * Im *random effects* Panelmodell sind die Einheiten auf höherer Ebene die Personen. Die Konstanten bzw. Koeffizienten variieren zwischen Personen.
 * In der Sprache von *mixed effects* Modellen wird das einfachste Modell als *fixed slope, random (or varying) intercept* Modell bezeichnet.
   * Die Regressionskonstante variiert zwischen den Personen (jede Person erhält eine eigene Konstante, die aus einer Normalverteilung mit der Populationskonstante als Mittelwert und der personenspezifischen Varianz als Streuung stammt).
   Die übrigen Regressionskoeffizienten sind für alle Personen gleich (*fixed*).
 
-### Einfaches random effects panel Modell
+### Einfaches random effects panel Modell {-}
 
 * Wir modellieren wieder die Häufigkeit, ohne triftigen Grund die Wohnung zu verlassen, in Abhängigkeit der Intention, dies zu tun.
 * Die Spezifikation in `lme4::lmer()` folgt der in `R` üblichen Logik. Das Modell enthält `verhint1` als Prädiktor mit einem für alle Personen gleichen Koeffizienten (homogener Treatment-Effekt) und `(1 | IDsosci)` als *varying intercept* für jede Person.
 
 * Hinweis: `lme4` selbst weist keine Freiheitsgrade und entsprechend auch keine p-Werte für die Koeffizienten aus. Wenn zusätzlich das Paket `lmerTest` geladen wurde, werden diese automatisch ergänzt.
 
-```{r, echo=FALSE, cache=FALSE}
-knitr::read_chunk("R/lmerstart.R")
-```
 
 ```{r lmerstart, eval=TRUE, tidy=TRUE, message=FALSE}
 
@@ -209,16 +203,76 @@ knitr::read_chunk("R/lmerstart.R")
 * Mit jedem Punkt auf der Skala zur Verhaltensintention steigt die Häufigkeit des Rausgehens ohne triftigen Grund um 0.5 Punkte. 
 
 * Wir können das Modell mit dem Prädiktor `verhint1` mit dem Null-Modell vergleichen.
-  * Mit `anova()` erhalten wir verschiedene Informationskriterien und einen Likelihood Ratio (Wald) Test. Die Test-Statistik folgt einer  $\Chi^2$-Verteilung.
+  * Mit `anova()` erhalten wir verschiedene Informationskriterien und einen Likelihood Ratio (Wald) Test. Die Test-Statistik folgt einer $\chi^2$-Verteilung.
   * Durch einen Vergleich der Varianzkomponenten der Modelle erhalten wir ein Maß, das konzeptionell ähnlich $\Delta R^2$ interpretiert werden kann. Die Funktion `performance::r2(by_group = TRUE)` implementiert diesen Vergleich für ein Modell und das Null-Modell. Die manuelle Berechnung ist auch schrittweise für mehre Modelle möglich, die zunehmend mehr Prädiktoren enthalten. Wichtig: Die $\Delta R^2$-Logik funktioniert nur in Modellen mit identischen *random effects*. 
   
-```{r, echo=FALSE, cache=FALSE}
-knitr::read_chunk("R/lmervgl.R")
-```
 
 ```{r lmervgl, eval=TRUE, tidy=TRUE, message=FALSE}
 
 ```
 
+* Die Berücksichtigung der Verhaltensintention verbessert das Modell.
+  * Die Werte der Informationskriterien *AIC* und *BIC* liegen deutlich unter dem Null-Modell (niedriger ist besser).
+  * Nach dem *Wald-Test* wird die $H_0$, dass beide Modelle gleich gut zu den Daten passen, verworfen.
+  * Die Aufnahme der Verhaltensintention erklärt über 80% der Varianz zwischen den Personen und 16% der Varianz innerhalb der Personen --- TPB ftw! ;)
 
+### Einfache Erweiterungen des random effects panel Modells {-}
+
+* In den folgenden Absätzen erweitern wir das einfache Modell. Wir berücksichtigen *fixed effects* für die Panelwellen und ergänzen dann weitere über die Zeit konstante und variierende Prädiktoren.
+* Die Texte dazu halte ich an den meisten Stellen knapp, da die grundsätzliche Spezifikation und Interpretation nun klar sein dürfte.
+
+### Fixed effects für die Panelwellen {-}
+
+```{r lmer-periodfe, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Der Effekt der Verhaltensintention bleibt auch bei Berücksichtigung von Periodeneffekten praktisch unverändert.
+* Die Periodeneffekte sind substantiell relativ unbedeutend.
+* Die statistischen Indikatoren für oder gegen die Aufnahme der Periodeneffekte sind gemischt. Der *Wald-Test* (signifikant) und das *AIC* (etwas niedriger im Vergleich zu M1) sprechen dafür. Das *BIC*, das Modellkomplexität stärker bestraft, spricht dagegen (etwas höher im Vergleich zu M1).
+* Die Varianzaufklärung gegenüber M0 entspricht substantiell der von M1.
+* Im Vergleich zu M1 wird minimal mehr Varianz innerhalb der Personen erklärt. Die Varianzaufklärung auf Ebene der Personen sinkt sogar leicht. Dieses auf den ersten Blick wenig intuitive Ergebnis erklärt sich dadurch, dass die Periodeneffekte im Design mit den Personen kreuzklassifiziert sind. Ein geringer Varianzanteil, der in M1 fälschlicherweise den Personen zugerechnet wurde (hier konkret: die zwischen den Personen konstanten, parallelen Veränderungen von Intention und Handlung), wird nun auf die "korrekte" Ebene verschoben.
+* Mein Fazit: Ich würde die Periodeneffekte immer berücksichtigen, da sie einen wichtigen Bestandteil des datengenerierenden Prozesses im Modell abbildet. Diese Entscheidung hängt nicht von den Ergebnissen der statistischen Tests ab. Substantiell lernen wir an dieser Stelle lediglich, dass homogene Veränderungen über die Zeit relativ unbedeutend waren.
+
+
+### Aufnahme eines Personenmerkmals {-}
+
+```{r lmer-person, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Im Gegensatz zum *fixed effects* Modell können wir nun auch Personenmerkmale als Prädiktoren berücksichtigen. Frauen gehen im Durchschnitt etwas seltener ohne triftigen Grund aus dem Haus als Männer. Hier wird ein wichtiger Vorteil des *random effects* Modells gegenüber dem *fixed effects* Modell deutlich. Es könnte aus verschiedensten Gründen relevant sein, zu wissen, dass eher Männer als Frauen zu diesem riskanten Verhalten neigen. Beispielsweise könnte eine Fokussierung einer Kampagne auf Männer sinnvoll sein. 
+* Wald-Test und Informationskriterien sprechen für die Berücksichtigung des Geschlechts.
+* Die Varianzaufklärung auf Ebene der Personen macht ca. 1% aus. Die Aufklärung zwischen Personen kann ignoriert werden.
+
+### Aufnahme eines weiteren, über die Zeit variierender Prädiktors {-}
+
+* Wie im Beispiel zu *fixed effects* wechseln wir hier das Modell, damit wir die kausale Interpretierbarkeit aller Koeffizienten von über die Zeit variablen Prädiktoren beibehalten.
+  * *Zur Wiederholung*: Nach der TPB dürfen wir dieses Modell annehmen, da die drei Prädiktoren auf derselben kausalen Stufe stehen: Verhaltensintention ~ Einstellung + Deskriptive Norm + Injunktive Norm. Hier schätzen wir das Modell für die Verhaltensintention *Rausgehen ohne triftigen Grund*.
+  * Der folgende Code wiederholt damit auch nochmals den schrittweisen Aufbau des Modells und das modellvergleichende Vorgehen. Es bietet auch eine Gelegenheit, eine leicht angepasste Spezifikationslogik zu erklären.
+  
+```{r lmer-2ndtv, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+  
+* Als Null-Modell spezifizieren wir ein Modell mit *random effects* für Personen und *fixed effects* für Panelwellen. Meiner Meinung nach ist dies ein angemessenes Null-Modell, da nur die Eigenschaften des Designs abgebildet werden. Für die Panelwellen eigenen sich *fixed effects*, da es nur vier Messzeitpunkte gibt.
+* Für das Null-Modell können wir die ICC ausweisen. Da im Modell auch *fixed effects* sind, interpretieren wir den *conditional ICC*. Mehr als die Hälfte der Varianz in der Intention, ohne triftigen Grund die Wohnung zu verlassen, liegt zwischen den Personen.
+
+* Die Einstellung hat einen deutlichen Effekt auf die Verhaltensintention. Die Wahrnehmungen deskriptiver und injunktiver Normen haben vergleichsweise geringe, statistisch signifikante Effekte.
+* Die Informationskriterien und der Wald-Test zeigen klar, dass sich das Modell durch die Aufnahme der drei Prädiktoren verbessert.
+* Die drei Prädiktoren erklären 9% der Varianz innerhalb der Personen und 78% der Varianz zwischen den Personen. Da wir ein angepasstes Null-Modell mit *fixed effects* für die Wellen als Referenz wählen, müssen wir die Varianzreduktion selbst berechnen. `performance::r2()` bezieht sich immer auf das "leere" Null-Modell. Es bezieht in diesem Fall die Erklärungskraft der *fixed effects* für die Wellen mit ein.
+
+* Zusätzlich wollen wir Geschlecht als Prädiktor auf Personen-Ebene berücksichtigen. Frauen haben im Vergleich zu Männern seltener vor, die Wohnung ohne triftigen Grund zu verlassen.
+* Informationskriterien und Wald-Test zeigen eine Modellverbesserung an. Das Geschlecht erklärt zusätzliche 3% der Varianz zwischen den Personen.
+
+## Übungsaufgaben 4
+
+1) Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (`med2`) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`), mit einem *random effects* Panelmodell. Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 2.
+    * Schätze zuerst ein geeignetes Null-Modell als Referenz. Betrachte die ICC.
+    * Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (`med1`) in das Modell auf.
+    * Prüfe, ob sich die Intention zwischen Männer und Frauen unterscheidet (`C_sex`).
+
+2) Spezifiziere, schätze und interpretiere ein eigenes *random effects* Panelmodell mit Daten aus dem Beispieldatensatz. Gehe dabei von einem geeigneten Null-Modell aus und erweitere das Modell dann.
+
+## Variierende Koeffizienten (random slopes) und Ebenen-überschreitende Interaktionen (cross-level interactions) 
 
