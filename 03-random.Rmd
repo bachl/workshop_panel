@@ -216,6 +216,8 @@ knitr::read_chunk("R/lmer_2ndtv.R")
   * Nach dem *Wald-Test* wird die $H_0$, dass beide Modelle gleich gut zu den Daten passen, verworfen.
   * Die Aufnahme der Verhaltensintention erklärt über 80% der Varianz zwischen den Personen und 16% der Varianz innerhalb der Personen --- TPB ftw! ;)
 
+* Es zeigt sich, dass die über die Zeit variierenden Prädiktoren sowohl Varianz innerhalb als auch Varianz zwischen den Personen erklären. Das macht die Interpretation des Koeffizienten schwieriger als die des entsprechenden Koeffizienten im *fixed effects* Modell, der sich klar nur auf die kausalen Effekte innerhalb von Personen bezieht. Auf diesen Punkt kommen wir in der Überleitung zum *within-between*-Modell im letzten Abschnitt zurück.
+
 ### Einfache Erweiterungen des random effects panel Modells {-}
 
 * In den folgenden Absätzen erweitern wir das einfache Modell. Wir berücksichtigen *fixed effects* für die Panelwellen und ergänzen dann weitere über die Zeit konstante und variierende Prädiktoren.
@@ -256,7 +258,7 @@ knitr::read_chunk("R/lmer_2ndtv.R")
 ```
   
 * Als Null-Modell spezifizieren wir ein Modell mit *random effects* für Personen und *fixed effects* für Panelwellen. Meiner Meinung nach ist dies ein angemessenes Null-Modell, da nur die Eigenschaften des Designs abgebildet werden. Für die Panelwellen eigenen sich *fixed effects*, da es nur vier Messzeitpunkte gibt.
-* Für das Null-Modell können wir die ICC ausweisen. Da im Modell auch *fixed effects* sind, interpretieren wir den *conditional ICC*. Mehr als die Hälfte der Varianz in der Intention, ohne triftigen Grund die Wohnung zu verlassen, liegt zwischen den Personen.
+* Für das Null-Modell können wir die ICC ausweisen. Da im Modell auch *fixed effects* sind, interpretieren wir die *conditional ICC*. Mehr als die Hälfte der Varianz in der Intention, ohne triftigen Grund die Wohnung zu verlassen, liegt zwischen den Personen.
 
 * Die Einstellung hat einen deutlichen Effekt auf die Verhaltensintention. Die Wahrnehmungen deskriptiver und injunktiver Normen haben vergleichsweise geringe, statistisch signifikante Effekte.
 * Die Informationskriterien und der Wald-Test zeigen klar, dass sich das Modell durch die Aufnahme der drei Prädiktoren verbessert.
