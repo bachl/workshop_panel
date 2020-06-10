@@ -1,4 +1,41 @@
-# Hybride with-between Modelle
+# Hybride *within-between* Modelle
+
+```{r, include=FALSE}
+source("R/packages.R")
+d = read_rds("R/data/data.rds")
+source("R/icc.R")
+source("R/lmerstart.R")
+source("R/lmervgl.R")
+```
+
+```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/wb1.R")
+```
 
 ## Das Beste aus beiden Welten?
 
+* Ein häufiger Einwand gegen *random effects* Panelmodelle ist, dass die Annahme nicht korrelierter über die Zeit konstanter Variablen (beobachtet wie unbeobachtet) so stark ist, dass sie in den Sozialwissenschaften eigentlich nie einzuhalten ist (siehe Abschnitt 4.1).
+* Trotzdem sind *random effects* Panelmodelle weit verbreitet, da sie uns erlauben, über die Zeit variierende Variablen und über die Zeit konstante Personenmerkmale als Prädiktoren in ein Modell aufzunehmen. Häufig sind wir eben sowohl an kausalen Effekten als auch an Unterschieden zwischen Personen interessiert.
+* Außerdem ist gerade die Möglichkeit, unspezifische Heterogenität in Treatment-Effekten zuzulassen, in den Sozialwissenschaften sehr attraktiv. Eigentlich gehen wir fast immer davon aus, dass Effekte variabel sind und nicht alle Personen gleichermaßen betreffen.
+
+* Das hybride *within-between* Modell verspricht, unverzerrte kausale *within-person* Effekte der über die Zeit variierenden Prädiktoren _und_ *between-person* Vergleiche innerhalb eines Modells zu schätzen.
+* Dazu werden die über die Zeit variierenden Prädiktoren transformiert und in zwei Variablen aufgeteilt:
+  * $x_{it}-\bar{x_i}$ ist der um den Personen-Mittelwert bereinigte *within-person* Prädiktor.
+  * $\bar{x_i}$ ist der Personen-Mittelwert als *between-person* Prädiktor.
+* Der Koeffizient des *within-person* Prädiktors entspricht dem *fixed effects* Schätzer (siehe Abschnitt 3.1, Within Transformation). Der Koeffizient des *between-person* Prädiktors quantifiziert die Unterschiede der Personen in $y$, die durch über die Zeit stabile Unterschiede in $x$ erklärt werden.
+
+* Ein Blick auf die Varianzaufklärung im ersten Beispiel zum *random effects* Panelmodell in Abschnitt 4.5 zeigt, warum die Trennung dieser beiden Effekte sinnvoll ist. Das Ergebnis ist hier noch einmal reproduziert.
+
+```{r, eval=TRUE, tidy=TRUE, message=FALSE}
+m1 %>% summary(correlation=FALSE)
+r2(m1, by_group = TRUE)
+```
+
+* Die Verhaltensintention erklärt sowohl 81% der Varianz zwischen den Personen als auch 16% der Varianz innerhalb der Personen. Trotzdem erhalten wir nur einen Koeffizienten, in dem der *within-person* Effekt und der *between-person* Unterschied untrennbar vermischt sind.
+
+## Spezifikation des *within-between* Modells
+
+
+```{r wb1, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```

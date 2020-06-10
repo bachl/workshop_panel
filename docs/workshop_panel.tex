@@ -3060,11 +3060,203 @@ While singular models are statistically well defined (it is theoretically sensib
   Spezifiziere, schätze und interpretiere ein eigenes \emph{random effects} Panelmodell mit \emph{random slope} und \emph{cross-level interaction} mit Daten aus dem Beispieldatensatz. Beachte dabei, dass wir hier an die Grenzen der Informationshaltigkeit der Daten für eine ML-Schätzung stoßen. Es ist recht wahrscheinlich, dass singuläre Fits oder nicht konvergierte Modelle vorkommen werden.
 \end{enumerate}
 
-\hypertarget{hybride-with-between-modelle}{%
-\chapter{Hybride with-between Modelle}\label{hybride-with-between-modelle}}
+\hypertarget{hybride-within-between-modelle}{%
+\chapter{\texorpdfstring{Hybride \emph{within-between} Modelle}{Hybride within-between Modelle}}\label{hybride-within-between-modelle}}
 
 \hypertarget{das-beste-aus-beiden-welten}{%
 \section{Das Beste aus beiden Welten?}\label{das-beste-aus-beiden-welten}}
+
+\begin{itemize}
+\item
+  Ein häufiger Einwand gegen \emph{random effects} Panelmodelle ist, dass die Annahme nicht korrelierter über die Zeit konstanter Variablen (beobachtet wie unbeobachtet) so stark ist, dass sie in den Sozialwissenschaften eigentlich nie einzuhalten ist (siehe Abschnitt 4.1).
+\item
+  Trotzdem sind \emph{random effects} Panelmodelle weit verbreitet, da sie uns erlauben, über die Zeit variierende Variablen und über die Zeit konstante Personenmerkmale als Prädiktoren in ein Modell aufzunehmen. Häufig sind wir eben sowohl an kausalen Effekten als auch an Unterschieden zwischen Personen interessiert.
+\item
+  Außerdem ist gerade die Möglichkeit, unspezifische Heterogenität in Treatment-Effekten zuzulassen, in den Sozialwissenschaften sehr attraktiv. Eigentlich gehen wir fast immer davon aus, dass Effekte variabel sind und nicht alle Personen gleichermaßen betreffen.
+\item
+  Das hybride \emph{within-between} Modell verspricht, unverzerrte kausale \emph{within-person} Effekte der über die Zeit variierenden Prädiktoren \emph{und} \emph{between-person} Vergleiche innerhalb eines Modells zu schätzen.
+\item
+  Dazu werden die über die Zeit variierenden Prädiktoren transformiert und in zwei Variablen aufgeteilt:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \(x_{it}-\bar{x_i}\) ist der um den Personen-Mittelwert bereinigte \emph{within-person} Prädiktor.
+  \item
+    \(\bar{x_i}\) ist der Personen-Mittelwert als \emph{between-person} Prädiktor.
+  \end{itemize}
+\item
+  Der Koeffizient des \emph{within-person} Prädiktors entspricht dem \emph{fixed effects} Schätzer (siehe Abschnitt 3.1, Within Transformation). Der Koeffizient des \emph{between-person} Prädiktors quantifiziert die Unterschiede der Personen in \(y\), die durch über die Zeit stabile Unterschiede in \(x\) erklärt werden.
+\item
+  Ein Blick auf die Varianzaufklärung im ersten Beispiel zum \emph{random effects} Panelmodell in Abschnitt 4.5 zeigt, warum die Trennung dieser beiden Effekte sinnvoll ist. Das Ergebnis ist hier noch einmal reproduziert.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{m1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1 + (1 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4554
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -4.524 -0.202 -0.085  0.165  5.793 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.111    0.334   
+##  Residual             0.341    0.584   
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##              Estimate Std. Error        df t value Pr(>|t|)    
+## (Intercept)    0.5987     0.0287  975.4311    20.9   <2e-16 ***
+## verhint1       0.5155     0.0122 1747.0982    42.3   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{r2}\NormalTok{(m1, }\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # Explained Variance by Level
+## 
+## Level   |    R2
+## ---------------
+## Level 1 | 0.161
+## IDsosci | 0.812
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Die Verhaltensintention erklärt sowohl 81\% der Varianz zwischen den Personen als auch 16\% der Varianz innerhalb der Personen. Trotzdem erhalten wir nur einen Koeffizienten, in dem der \emph{within-person} Effekt und der \emph{between-person} Unterschied untrennbar vermischt sind.
+\end{itemize}
+
+\hypertarget{spezifikation-des-within-between-modells}{%
+\subsection*{\texorpdfstring{Spezifikation des \emph{within-between} Modells}{Spezifikation des within-between Modells}}\label{spezifikation-des-within-between-modells}}
+\addcontentsline{toc}{subsection}{Spezifikation des \emph{within-between} Modells}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Transformation: Trennen von within- und between-Präditor}
+\NormalTok{d =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(IDsosci) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{verhint1_w =}\NormalTok{ verhint1 }\OperatorTok{-}\StringTok{ }\KeywordTok{mean}\NormalTok{(verhint1), }\CommentTok{# within}
+         \DataTypeTok{verhint1_b =} \KeywordTok{mean}\NormalTok{(verhint1)) }\OperatorTok{%>%}\StringTok{ }\CommentTok{# between}
+\StringTok{  }\KeywordTok{ungroup}\NormalTok{()}
+\CommentTok{# Zwei Personen zur Illustration}
+\NormalTok{d }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(IDsosci }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"050IPY"}\NormalTok{, }\StringTok{"02E6C8"}\NormalTok{)) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{select}\NormalTok{(IDsosci, wave, }\KeywordTok{starts_with}\NormalTok{(}\StringTok{"verhint1"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 8 x 5
+##   IDsosci  wave verhint1 verhint1_w verhint1_b
+##   <chr>   <int>    <dbl>      <dbl>      <dbl>
+## 1 02E6C8      1        1         -1          2
+## 2 02E6C8      2        2          0          2
+## 3 02E6C8      3        2          0          2
+## 4 02E6C8      4        3          1          2
+## 5 050IPY      1        3         -1          4
+## 6 050IPY      2        3         -1          4
+## 7 050IPY      3        5          1          4
+## 8 050IPY      4        5          1          4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Null-Modell als Referenz}
+\NormalTok{wb_}\DecValTok{0}\NormalTok{ =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+
+\CommentTok{# Within-between Modell mit random intercept}
+\NormalTok{wb_ri =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_w }\OperatorTok{+}\StringTok{ }\NormalTok{verhint1_b }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{wb_ri }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation=}\OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1_w + verhint1_b + factor(wave) + (1 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4303
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -5.289 -0.318 -0.044  0.166  6.372 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev.
+##  IDsosci  (Intercept) 0.0755   0.275   
+##  Residual             0.3165   0.563   
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                Estimate Std. Error        df t value Pr(>|t|)    
+## (Intercept)      0.1689     0.0392 1069.4869    4.31 0.000018 ***
+## verhint1_w       0.3288     0.0166 1724.0000   19.79  < 2e-16 ***
+## verhint1_b       0.7153     0.0159  574.0000   44.86  < 2e-16 ***
+## factor(wave)2    0.0200     0.0336 1724.0000    0.60  0.55169    
+## factor(wave)3    0.1400     0.0337 1724.0000    4.15 0.000034 ***
+## factor(wave)4    0.1178     0.0345 1724.0000    3.41  0.00065 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Varianzreduktion}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(wb_ri)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\KeywordTok{sigma}\NormalTok{(wb_}\DecValTok{0}\NormalTok{)}\OperatorTok{^}\DecValTok{2}\NormalTok{) }\CommentTok{# L1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_ri)}\OperatorTok{$}\NormalTok{IDsosci) }\OperatorTok{/}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_}\DecValTok{0}\NormalTok{)}\OperatorTok{$}\NormalTok{IDsosci)) }\CommentTok{# L2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.87
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Vergleich mit fixed effects Modell}
+\NormalTok{fe =}\StringTok{  }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{)}
+\NormalTok{fe }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{summary}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{coef}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##               Estimate Std. Error t-value Pr(>|t|)
+## verhint1          0.33      0.017    19.8  1.0e-78
+## factor(wave)2     0.02      0.034     0.6  5.5e-01
+## factor(wave)3     0.14      0.034     4.2  3.4e-05
+## factor(wave)4     0.12      0.034     3.4  6.5e-04
+\end{verbatim}
 
   \bibliography{book.bib,packages.bib,references.bib}
 
