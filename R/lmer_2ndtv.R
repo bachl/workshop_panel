@@ -2,9 +2,6 @@
 
 # Null-Modell 
 m0_int1 = lmer(verhint1 ~ 1 + factor(wave) + (1 | IDsosci), data = d)
-m0_int1 %>% 
-  tidy(effects = "fixed") %>% 
-  mutate_if(is.numeric, round, 2)
 icc(m0_int1) # conditional ICC takes the fixed effects variances into account
 
 # Modelle mit Prädiktoren

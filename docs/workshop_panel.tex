@@ -1466,7 +1466,7 @@ By controlling out context, FE models effectively cut out much of what is going 
 
 \begin{itemize}
 \item
-  Anstatt für jede Einheit (Person) eine separate Konstante \(\alpha_i\) zu schätzen, können wir den ``soft constraint'' \citep[S. 257]{gelmanDataAnalysisUsing2006} setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
+  Anstatt wie im \emph{fixed effects} Modell für jede Einheit (Person) eine separate Konstante \(\alpha_i\) zu schätzen, können wir einen ``soft constraint'' \citep[S. 257]{gelmanDataAnalysisUsing2006} setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
 
   \begin{itemize}
   \tightlist
@@ -1529,7 +1529,7 @@ By controlling out context, FE models effectively cut out much of what is going 
 \item
   Vorhersagen für neue Personen außerhalb der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
 \item
-  Die Annahme homogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
+  Die Annahme homogener Treatment-Effekte kann gelockert werden.
 \end{itemize}
 
 \hypertarget{sind-die-annahmen-des-random-effects-modell-fuxfcr-paneldaten-jemals-erfuxfcllt}{%
@@ -1541,7 +1541,7 @@ The only difference between RE and FE lies in the assumption they make about the
 \end{quote}
 
 \begin{quote}
-A moment's reflection on what \(v\) represents-----all unmeasured time-constant factors about the respondent-----should lead anyone to realize that the RE assumption is heroic in social research, to say the least.
+A moment's reflection on what \(v\) represents----all unmeasured time-constant factors about the respondent----should lead anyone to realize that the RE assumption is heroic in social research, to say the least.
 \end{quote}
 
 \begin{quote}
@@ -1555,7 +1555,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \begin{itemize}
 \tightlist
 \item
-  Der Hausman-Test prüft, ob das \emph{random effects} Modell konsistent ist (\textasciitilde{} geschätzt werden darf).
+  Der Hausman-Test prüft, ob das \emph{random effects} Modell konsistent ist.
 \item
   Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der \(H_0\) im Hausman-Test gegen das Schätzen eines \emph{random effects} Modells.
 \item
@@ -1816,7 +1816,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.
 \item
-  Wenn man die Logik von \emph{mixed effects} Modellen einmal verstanden hat, kann man die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren, \ldots{} .
+  Wer die Logik von \emph{mixed effects} Modellen einmal verstanden hat, kann die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren (z.B. Kommentare zu Posts auf Social Media Plattformen), \ldots{} Mehrebenenstrukturen sind überall.
 \item
   Das Denken in Varianzkomponenten (siehe nächster Absatz) hilft uns, konzeptionell über die Bedeutung von Prädiktoren auf verschiedenen Ebenen nachzudenken.
 \item
@@ -1851,7 +1851,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne triftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
 \item
-  Dazu spezifizieren wir das Null-Modell mit \texttt{lme4::lmer()}. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit \texttt{(1\ \textbar{}\ IDsosci)} jede Person eine eigene Konstante erhält (\(\alpha_i\) in der Gleichung oben), die als Abweichung vom Gewaltmittel (\(\alpha\)) geschätzt wird.
+  Dazu spezifizieren wir das Null-Modell mit \texttt{lme4::lmer()}. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit \texttt{(1\ \textbar{}\ IDsosci)} jede Person eine eigene Konstante erhält (\(\alpha_i\) in der Gleichung oben), die als Abweichung vom Gesamtmittel (\(\alpha\)) geschätzt wird.
 \end{itemize}
 
 \begin{Shaded}
@@ -1891,7 +1891,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# ICC 'von Hand'}
-\KeywordTok{round}\NormalTok{(}\FloatTok{0.5938}\OperatorTok{/}\NormalTok{(}\FloatTok{0.5938} \OperatorTok{+}\StringTok{ }\FloatTok{0.4065}\NormalTok{), }\DecValTok{3}\NormalTok{)}
+\FloatTok{0.5938}\OperatorTok{/}\NormalTok{(}\FloatTok{0.5938} \OperatorTok{+}\StringTok{ }\FloatTok{0.4065}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1919,13 +1919,13 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Fast 60\% der Varianz im Verlassen der Wohnung geht auf Unterschiede zwischen Personen zurück.
 \item
-  Im \emph{fixed effects} Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit diesen Modellen also per Spezifikationslogik nichts aussagen.
+  Im \emph{fixed effects} Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit \emph{fixed effects} Modellen also per Spezifikationslogik nichts aussagen.
 \item
   Kausale Effekte innerhalb der Personen können damit \emph{maximal} für 40\% der Varianz verantwortlich sein.
 \item
   Allerdings müssen wir dabei beachten, dass auch der gesamte Messfehler (zumindest die zufällige Messfehlervarianz nach der CTT) ebenfalls in diesem Varianzanteil steckt.
 \item
-  Wir können die Schätzer der \emph{random effects} für die Personen im Null-Modell auch dazu nutzen, uns einen Überblick zu verschaffen über die Verteilung der personenspezifischen Tendenz, die Wohnung ohne triftigen Grund zu verlassen. Die Schätzer können wir mit \texttt{ranef()} extrahieren, mit \texttt{broom.mixed::augment()} erhalten wir zusätzlich Standardfehler und Konfidenzintervalle in einem tidy data.frame.
+  Wir können die Schätzer der \emph{random intercepts} für die Personen im Null-Modell auch dazu nutzen, uns einen Überblick zu verschaffen über die Verteilung der personenspezifischen Tendenz, die Wohnung ohne triftigen Grund zu verlassen. Die Schätzer können wir mit \texttt{ranef()} extrahieren, mit \texttt{broom.mixed::augment()} erhalten wir zusätzlich Standardfehler und Konfidenzintervalle in einem tidy data.frame.
 \end{itemize}
 
 \begin{Shaded}
@@ -1970,7 +1970,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \begin{itemize}
 \tightlist
 \item
-  Der \emph{random effects} Schätzer quantifziert die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.
+  Die \emph{random intercepts} Schätzer quantifizieren die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.
 \item
   Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne triftigen Grund zu verlassen.
 \end{itemize}
@@ -2064,7 +2064,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Im \emph{random effects} Panelmodell sind die Einheiten auf höherer Ebene die Personen. Die Konstanten bzw. Koeffizienten variieren zwischen Personen.
 \item
-  In der Sprache von \emph{mixed effects} Modellen wird das einfachste Modell als \emph{fixed slope, random (or varying) intercept} Modell bezeichnet.
+  In der Sprache von \emph{mixed effects} Modellen wird das einfachste Modell als \emph{fixed slope, random} (oder \emph{varying}) \emph{intercept} Modell bezeichnet.
 
   \begin{itemize}
   \tightlist
@@ -2084,7 +2084,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Die Spezifikation in \texttt{lme4::lmer()} folgt der in \texttt{R} üblichen Logik. Das Modell enthält \texttt{verhint1} als Prädiktor mit einem für alle Personen gleichen Koeffizienten (homogener Treatment-Effekt) und \texttt{(1\ \textbar{}~IDsosci)} als \emph{varying intercept} für jede Person.
 \item
-  Hinweis: \texttt{lme4} selbst weist keine Freiheitsgrade und entsprechend auch keine p-Werte für die Koeffizienten aus. Wenn zusätzlich das Paket \texttt{lmerTest} geladen wurde, werden diese automatisch ergänzt.
+  Hinweis: \texttt{lme4} selbst weist keine Freiheitsgrade und entsprechend auch keine \emph{p}-Werte für die Koeffizienten aus. Wenn -- wie hier -- zusätzlich das Paket \texttt{lmerTest} geladen wurde, werden diese automatisch ergänzt.
 \end{itemize}
 
 \begin{Shaded}
@@ -2336,7 +2336,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Im Vergleich zu M1 wird minimal mehr Varianz innerhalb der Personen erklärt. Die Varianzaufklärung auf Ebene der Personen sinkt sogar leicht. Dieses auf den ersten Blick wenig intuitive Ergebnis erklärt sich dadurch, dass die Periodeneffekte im Design mit den Personen kreuzklassifiziert sind. Ein geringer Varianzanteil, der in M1 fälschlicherweise den Personen zugerechnet wurde (hier konkret: die zwischen den Personen konstanten, parallelen Veränderungen von Intention und Handlung), wird nun auf die ``korrekte'' Ebene verschoben.
 \item
-  Mein Fazit: Ich würde die Periodeneffekte immer berücksichtigen, da sie einen wichtigen Bestandteil des datengenerierenden Prozesses im Modell abbildet. Diese Entscheidung hängt nicht von den Ergebnissen der statistischen Tests ab. Substantiell lernen wir an dieser Stelle lediglich, dass homogene Veränderungen über die Zeit relativ unbedeutend waren.
+  Mein Fazit: Ich würde die Periodeneffekte immer berücksichtigen, da sie einen wichtigen Bestandteil des datengenerierenden Prozesses im Modell abbildet. Diese Entscheidung hängt nicht von den Ergebnissen der statistischen Tests ab. Substantiell lernen wir an dieser Stelle lediglich, dass homogene Veränderungen über die Zeit relativ unbedeutend waren (siehe auch ICC des Modells mit \emph{random effects} für die Perioden.
 \end{itemize}
 
 \hypertarget{aufnahme-eines-personenmerkmals}{%
@@ -2449,7 +2449,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Wald-Test und Informationskriterien sprechen für die Berücksichtigung des Geschlechts.
 \item
-  Die Varianzaufklärung auf Ebene der Personen macht ca. 1\% aus. Die Aufklärung zwischen Personen kann ignoriert werden.
+  Die Varianzaufklärung auf Ebene der Personen macht ca. 1\% aus. Die Aufklärung innerhalb der Personen kann ignoriert werden.
 \end{itemize}
 
 \hypertarget{aufnahme-eines-weiteren-uxfcber-die-zeit-variierender-pruxe4diktors}{%
@@ -2474,22 +2474,6 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \begin{Highlighting}[]
 \CommentTok{# Null-Modell}
 \NormalTok{m0_int1 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
-\NormalTok{m0_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{(}\DataTypeTok{effects =} \StringTok{"fixed"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## # A tibble: 4 x 7
-##   effect term          estimate std.error statistic    df p.value
-##   <chr>  <chr>            <dbl>     <dbl>     <dbl> <dbl>   <dbl>
-## 1 fixed  (Intercept)      1.49       0.05     28.7  1159.       0
-## 2 fixed  factor(wave)2    0.32       0.05      6.76 1725        0
-## 3 fixed  factor(wave)3    0.36       0.05      7.52 1725        0
-## 4 fixed  factor(wave)4    0.570      0.05     11.9  1725        0
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
 \KeywordTok{icc}\NormalTok{(m0_int1)  }\CommentTok{# conditional ICC takes the fixed effects variances into account}
 \end{Highlighting}
 \end{Shaded}
@@ -2673,11 +2657,11 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \begin{itemize}
 \tightlist
 \item
-  Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren. Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen.
+  Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren (\emph{varying intercepts}). Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen (\emph{varying slopes}).
 \item
   Damit lockern wir die Annahme eines homogenen Treatment-Effekts: Wir gehen nicht mehr davon aus, dass der Effekt eines Prädiktors für alle Personen gleich ist, sondern lassen eine Streuung um den durchschnittlichen Treatment-Effekt zu.
 \item
-  Die Standardabweichung (oder die Varianz) des \emph{random slope} (oder \emph{varying coefficient}) ist ein Indikator dafür, wie stark ein Effekt zwischen den Personen variiert.
+  Die Standardabweichung (oder die Varianz) des \emph{random} oder \emph{varying slope} ist ein Indikator dafür, wie stark ein Effekt zwischen den Personen variiert.
 \item
   Wir können testen, ob sich diese Varianz der Koeffizienten von 0 unterscheidet. Dazu werden zwei Tests empfohlen:
 
@@ -3048,12 +3032,39 @@ While singular models are statistically well defined (it is theoretically sensib
   Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass weder die Aufnahme des Geschlechts noch die Interaktion der Einstellungen mit dem Geschlecht zur Verbesserung des Modells beitragen.
 \item
   Durch den Vergleich der Varianz der \emph{random slopes} zwischen \texttt{m\_rs\_sex1} und \texttt{m\_rs\_sex2} können wir quantifizieren, welchen Anteil der Effekt-Heterogenität durch die Interaktion erklärt werden kann. In diesem Beispiel ist die Erklärungskraft der Interaktion zu vernachlässigen.
+\item
+  Ein ``erfolgreiches'' Modell mit \emph{random slopes} und \emph{cross-level interaction} findet ihr in der folgenden Übungsaufgabe.
 \end{itemize}
 
-\hypertarget{within-between-models}{%
-\chapter{Within-between models}\label{within-between-models}}
+\hypertarget{uxfcbungsaufgaben-5}{%
+\section{Übungsaufgaben 5}\label{uxfcbungsaufgaben-5}}
 
-XXX
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Schätze den Effekt des gesamten Medienkonsums (Summenindex aus \texttt{med1} bis \texttt{med5} auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}), mit einem \emph{random effects} Panelmodell. Um Probleme beim Schätzen zu vermeiden, muss der Medienkonsum-Index z-transformiert werden. Berücksichtige auch die Periodeneffekte der Panelwellen.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Schätze zuerst ein Modell mit \emph{random intercept}.
+  \item
+    Schätze dann ein Modell mit einem \emph{random slope} für den Medienkonsum.
+  \item
+    Nimm zusätzlich das Geschlecht in das Modell auf (\texttt{C\_sex}).
+  \item
+    Prüfe, ob sich der Effekt der Intention zwischen Männer und Frauen unterscheidet.
+  \end{itemize}
+\item
+  Spezifiziere, schätze und interpretiere ein eigenes \emph{random effects} Panelmodell mit \emph{random slope} und \emph{cross-level interaction} mit Daten aus dem Beispieldatensatz. Beachte dabei, dass wir hier an die Grenzen der Informationshaltigkeit der Daten für eine ML-Schätzung stoßen. Es ist recht wahrscheinlich, dass singuläre Fits oder nicht konvergierte Modelle vorkommen werden.
+\end{enumerate}
+
+\hypertarget{hybride-with-between-modelle}{%
+\chapter{Hybride with-between Modelle}\label{hybride-with-between-modelle}}
+
+\hypertarget{das-beste-aus-beiden-welten}{%
+\section{Das Beste aus beiden Welten?}\label{das-beste-aus-beiden-welten}}
 
   \bibliography{book.bib,packages.bib,references.bib}
 

@@ -7,7 +7,7 @@ m0 %>%
   summary()
 
 # ICC "von Hand"
-round(0.5938 / (0.5938 + 0.4065), 3)
+0.5938 / (0.5938 + 0.4065)
 
 # Mit performance::icc()
 icc(m0)

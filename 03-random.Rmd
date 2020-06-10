@@ -27,7 +27,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 ### Modellspezifikation {-}
 
-* Anstatt für jede Einheit (Person) eine separate Konstante $\alpha_i$ zu schätzen, können wir den "soft constraint" [@gelmanDataAnalysisUsing2006, S. 257] setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
+* Anstatt wie im *fixed effects* Modell für jede Einheit (Person) eine separate Konstante $\alpha_i$ zu schätzen, können wir einen "soft constraint" [@gelmanDataAnalysisUsing2006, S. 257] setzen, dass die personenspezifischen Konstanten bzw. Residuen einer Verteilung folgen:
   * $\alpha_{i} ∼ \mathcal{N}(\mu_{\alpha},\sigma^2_\alpha)$ mit $i = 1,...,n$
 
 * Das *random effects* Panel-Modell wird geschätzt als
@@ -50,20 +50,20 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Schätzer für über die Zeit konstante Prädiktoren und gleichzeitig Konstante für jede Person.
 * Schätzer von über die Zeit variierenden und über die Zeit konstanten Prädiktoren können verglichen werden.
 * Vorhersagen für neue Personen außerhalb der Stichprobe können unter Einbeziehung aller Informationen und unter Berücksichtigung der gesamten Unsicherheit gemacht werden.
-* Die Annahme homogener Treatment-Effekte kann gelockert werden (mit dem within-between-Modell; siehe nächsten Abschnitt).
+* Die Annahme homogener Treatment-Effekte kann gelockert werden.
 
 
 ### Sind die Annahmen des *random effects* Modell für Paneldaten jemals erfüllt? {-}
 
 > The only difference between RE and FE lies in the assumption they make about the relationship between υ and the observed predictors: RE models assume that the observed predictors in the model are not correlated with $v$ while FE models allow them to be correlated.
 
-> A moment's reflection on what $v$ represents—--all unmeasured time-constant factors about the respondent—--should lead anyone to realize that the RE assumption is heroic in social research, to say the least.
+> A moment's reflection on what $v$ represents—-all unmeasured time-constant factors about the respondent—-should lead anyone to realize that the RE assumption is heroic in social research, to say the least.
 
 > The idea that the characteristics we don't (or can't) measure (like personality or genetic influences) are uncorrelated with the things we usually do measure (like income or church attendance) is implausible. --- @vaiseyWhatYouCan2017, S. 47
 
 ### Hausman-Test {-}
 
-* Der Hausman-Test prüft, ob das *random effects* Modell konsistent ist (~ geschätzt werden darf). 
+* Der Hausman-Test prüft, ob das *random effects* Modell konsistent ist. 
 * Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der $H_0$ im Hausman-Test gegen das Schätzen eines *random effects* Modells.
 * Da das *random effects* Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das *fixed effects* Modell per Definition scheitert, lässt sich die Wahl des *random effects* Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
 * Der Hausman-Test kann mit der Funktion `plm::phtest()` durchgeführt werden.
@@ -112,7 +112,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 * Die Schätzung basiert auf (Restricted) Maximum Likelihood, der Umstieg auf bayesianische Schätzmethoden ist relativ einfach. Im Vergleich dazu erfordern die Optionen, Tests und transformationsbasierten Least-Squares-Schätzer in der ökonometrischen Tradition erheblich mehr Einarbeitung, wenn man nicht auf eine entsprechende Ausbildung aufbauen kann.
 
-* Wenn man die Logik von *mixed effects* Modellen einmal verstanden hat, kann man die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren, ... .
+* Wer die Logik von *mixed effects* Modellen einmal verstanden hat, kann die Modelle für verschiedenste Forschungsfragen und -desings einsetzen, u.a. Ländervergleiche in der komparativen Forschung, experimentelle within-subject Desings, verschiedene Längsschnittsdesigns wie experience sampling, Tagebücher, digitale Kommunikations- und Verhaltensspuren (z.B. Kommentare zu Posts auf Social Media Plattformen), ... Mehrebenenstrukturen sind überall.
 
 * Das Denken in Varianzkomponenten (siehe nächster Absatz) hilft uns, konzeptionell über die Bedeutung von Prädiktoren auf verschiedenen Ebenen nachzudenken.
 
@@ -130,7 +130,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Da die Varianzen von $\alpha_i$ und $u_{it}$ im Modell geschätzt werden, können wir den Anteil der personenspezifischen (Level 2) Varianz und den Anteil der idiosynkratischen Varianz in $Y$ berechnen. Der Anteil der Level 2 Varianz an der gesamten Varianz wird auch als Intraklassen-Korrelation (intra-class correlation, ICC, $\rho$) bezeichnet.
 
 * In unserem Beispiel möchten wir wissen, welcher Anteil der Varianz im Verlassen der Wohnung ohne triftigen Grund auf konstante Unterschiede zwischen den Personen zurückgeht (manche Personen wollen oder müssen, aus welchen Gründen auch immer, die Wohnung häufiger verlassen als andere).
-* Dazu spezifizieren wir das Null-Modell mit `lme4::lmer()`. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit `(1 | IDsosci)` jede Person eine eigene Konstante erhält ($\alpha_i$ in der Gleichung oben), die als Abweichung vom Gewaltmittel ($\alpha$) geschätzt wird.
+* Dazu spezifizieren wir das Null-Modell mit `lme4::lmer()`. Das genaue Vorgehen beim Spezifizieren der Modelle folgt im nächsten Abschnitt. Wichtig ist an dieser Stelle, dass mit `(1 | IDsosci)` jede Person eine eigene Konstante erhält ($\alpha_i$ in der Gleichung oben), die als Abweichung vom Gesamtmittel ($\alpha$) geschätzt wird.
 
 
 ```{r icc, eval=TRUE, tidy=TRUE, message=FALSE}
@@ -140,19 +140,19 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Die Informationen zu den Varianzkomponenten findet sich im Output von `summary()` unter `Random effects`. Aus diesen Angaben können wir die ICC berechnen. Oder wir nutzen die Funktion `performance::icc()`.
 
 * Fast 60% der Varianz im Verlassen der Wohnung geht auf Unterschiede zwischen Personen zurück.
-* Im *fixed effects* Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit diesen Modellen also per Spezifikationslogik nichts aussagen.
+* Im *fixed effects* Modell wird diese Varianz einfach aus den Daten entfernt. Über mehr als die Hälfte der Unterschiede können wir mit *fixed effects* Modellen also per Spezifikationslogik nichts aussagen.
 
 * Kausale Effekte innerhalb der Personen können damit *maximal* für 40% der Varianz verantwortlich sein.
 * Allerdings müssen wir dabei beachten, dass auch der gesamte Messfehler (zumindest die zufällige Messfehlervarianz nach der CTT) ebenfalls in diesem Varianzanteil steckt.
 
-* Wir können die Schätzer der *random effects* für die Personen im Null-Modell auch dazu nutzen, uns einen Überblick zu verschaffen über die Verteilung der personenspezifischen Tendenz, die Wohnung ohne triftigen Grund zu verlassen. Die Schätzer können wir mit `ranef()` extrahieren, mit `broom.mixed::augment()` erhalten wir zusätzlich Standardfehler und Konfidenzintervalle in einem tidy data.frame.
+* Wir können die Schätzer der *random intercepts* für die Personen im Null-Modell auch dazu nutzen, uns einen Überblick zu verschaffen über die Verteilung der personenspezifischen Tendenz, die Wohnung ohne triftigen Grund zu verlassen. Die Schätzer können wir mit `ranef()` extrahieren, mit `broom.mixed::augment()` erhalten wir zusätzlich Standardfehler und Konfidenzintervalle in einem tidy data.frame.
 
 
 ```{r ranef, eval=TRUE, tidy=TRUE, message=FALSE}
 
 ```
 
-* Der *random effects* Schätzer quantifziert die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.
+* Die *random intercepts* Schätzer quantifizieren die Abweichung vom Schätzer der Konstanten in der Gesamtpopulation, hier die Abweichung von 1.5. Die diskreten Werte kommen zustande, da es (wie bei einer Index-Bildung) mit 5 Ausprägungen und 4 Wellen nur eine begrenzte Anzahl an möglichen Personen-Mittelwerten gibt.
 * Die Mehrheit der Personen tendiert dazu, eher selten ihre Wohnung ohne triftigen Grund zu verlassen. 
 
 ### Mehr als ein Gruppierungsfaktor {-}
@@ -187,7 +187,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Ganz allgemein gesprochen ist ein *mixed effects* Modell ein Modell, das *fixed* und *random* Koeffizienten enthält.
 * @gelmanDataAnalysisUsing2006 verwenden die (imo) besser verständlichen Begriffe *varying intercepts* (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und *varying slopes* (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).
 * Im *random effects* Panelmodell sind die Einheiten auf höherer Ebene die Personen. Die Konstanten bzw. Koeffizienten variieren zwischen Personen.
-* In der Sprache von *mixed effects* Modellen wird das einfachste Modell als *fixed slope, random (or varying) intercept* Modell bezeichnet.
+* In der Sprache von *mixed effects* Modellen wird das einfachste Modell als *fixed slope, random* (oder *varying*) *intercept* Modell bezeichnet.
   * Die Regressionskonstante variiert zwischen den Personen (jede Person erhält eine eigene Konstante, die aus einer Normalverteilung mit der Populationskonstante als Mittelwert und der personenspezifischen Varianz als Streuung stammt).
   Die übrigen Regressionskoeffizienten sind für alle Personen gleich (*fixed*).
 
@@ -196,7 +196,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Wir modellieren wieder die Häufigkeit, ohne triftigen Grund die Wohnung zu verlassen, in Abhängigkeit der Intention, dies zu tun.
 * Die Spezifikation in `lme4::lmer()` folgt der in `R` üblichen Logik. Das Modell enthält `verhint1` als Prädiktor mit einem für alle Personen gleichen Koeffizienten (homogener Treatment-Effekt) und `(1 | IDsosci)` als *varying intercept* für jede Person.
 
-* Hinweis: `lme4` selbst weist keine Freiheitsgrade und entsprechend auch keine p-Werte für die Koeffizienten aus. Wenn zusätzlich das Paket `lmerTest` geladen wurde, werden diese automatisch ergänzt.
+* Hinweis: `lme4` selbst weist keine Freiheitsgrade und entsprechend auch keine *p*-Werte für die Koeffizienten aus. Wenn -- wie hier -- zusätzlich das Paket `lmerTest` geladen wurde, werden diese automatisch ergänzt.
 
 
 ```{r lmerstart, eval=TRUE, tidy=TRUE, message=FALSE}
@@ -237,7 +237,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Die statistischen Indikatoren für oder gegen die Aufnahme der Periodeneffekte sind gemischt. Der *Wald-Test* (signifikant) und das *AIC* (etwas niedriger im Vergleich zu M1) sprechen dafür. Das *BIC*, das Modellkomplexität stärker bestraft, spricht dagegen (etwas höher im Vergleich zu M1).
 * Die Varianzaufklärung gegenüber M0 entspricht substantiell der von M1.
 * Im Vergleich zu M1 wird minimal mehr Varianz innerhalb der Personen erklärt. Die Varianzaufklärung auf Ebene der Personen sinkt sogar leicht. Dieses auf den ersten Blick wenig intuitive Ergebnis erklärt sich dadurch, dass die Periodeneffekte im Design mit den Personen kreuzklassifiziert sind. Ein geringer Varianzanteil, der in M1 fälschlicherweise den Personen zugerechnet wurde (hier konkret: die zwischen den Personen konstanten, parallelen Veränderungen von Intention und Handlung), wird nun auf die "korrekte" Ebene verschoben.
-* Mein Fazit: Ich würde die Periodeneffekte immer berücksichtigen, da sie einen wichtigen Bestandteil des datengenerierenden Prozesses im Modell abbildet. Diese Entscheidung hängt nicht von den Ergebnissen der statistischen Tests ab. Substantiell lernen wir an dieser Stelle lediglich, dass homogene Veränderungen über die Zeit relativ unbedeutend waren.
+* Mein Fazit: Ich würde die Periodeneffekte immer berücksichtigen, da sie einen wichtigen Bestandteil des datengenerierenden Prozesses im Modell abbildet. Diese Entscheidung hängt nicht von den Ergebnissen der statistischen Tests ab. Substantiell lernen wir an dieser Stelle lediglich, dass homogene Veränderungen über die Zeit relativ unbedeutend waren (siehe auch ICC des Modells mit *random effects* für die Perioden.
 
 
 ### Aufnahme eines Personenmerkmals {-}
@@ -248,7 +248,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 * Im Gegensatz zum *fixed effects* Modell können wir nun auch Personenmerkmale als Prädiktoren berücksichtigen. Frauen gehen im Durchschnitt etwas seltener ohne triftigen Grund aus dem Haus als Männer. Hier wird ein wichtiger Vorteil des *random effects* Modells gegenüber dem *fixed effects* Modell deutlich. Es könnte aus verschiedensten Gründen relevant sein, zu wissen, dass eher Männer als Frauen zu diesem riskanten Verhalten neigen. Beispielsweise könnte eine Fokussierung einer Kampagne auf Männer sinnvoll sein. 
 * Wald-Test und Informationskriterien sprechen für die Berücksichtigung des Geschlechts.
-* Die Varianzaufklärung auf Ebene der Personen macht ca. 1% aus. Die Aufklärung zwischen Personen kann ignoriert werden.
+* Die Varianzaufklärung auf Ebene der Personen macht ca. 1% aus. Die Aufklärung innerhalb der Personen kann ignoriert werden.
 
 ### Aufnahme eines weiteren, über die Zeit variierender Prädiktors {-}
 
@@ -281,9 +281,9 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 ## Variierende Koeffizienten (random slopes) und Ebenen-überschreitende Interaktionen (cross-level interactions) 
 
-* Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren. Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen.
+* Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren (*varying intercepts*). Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen (*varying slopes*).
 * Damit lockern wir die Annahme eines homogenen Treatment-Effekts: Wir gehen nicht mehr davon aus, dass der Effekt eines Prädiktors für alle Personen gleich ist, sondern lassen eine Streuung um den durchschnittlichen Treatment-Effekt zu.
-* Die Standardabweichung (oder die Varianz) des *random slope* (oder *varying coefficient*) ist ein Indikator dafür, wie stark ein Effekt zwischen den Personen variiert.
+* Die Standardabweichung (oder die Varianz) des *random* oder *varying slope* ist ein Indikator dafür, wie stark ein Effekt zwischen den Personen variiert.
 * Wir können testen, ob sich diese Varianz der Koeffizienten von 0 unterscheidet. Dazu werden zwei Tests empfohlen:
   * Vergleich der Modelle mit und ohne *random slopes* mit einem Likelihood-Ratio-Test (Wald-Test)
   * Prüfen, ob das Konfidenzintervalls um die Varianzkomponente die 0 enthält.
@@ -340,6 +340,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Der Effekt der Einstellung auf die Intention unterscheidet sich kaum für Männer und Frauen (`m_rs_sex2`). Wichtig: In diesem Modell mit Interaktionseffekt haben die Koeffizienten der Prädiktoren eine andere Bedeutung als im Modell ohne Interaktionseffekt. Sie quantifizieren nicht mehr "Haupteffekte", sondern "einfache" Effekte (*simple effects*). Der Koeffizient für `ein2` quantifiziert den Effekt, wenn `C_sex` gleich 0 ist --- also den Effekt für Männer. Der Koeffizient des Interaktionsterms `ein2:C_sex` quantifiziert den Unterschied im Effekt zwischen Männern und Frauen.
 * Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass weder die Aufnahme des Geschlechts noch die Interaktion der Einstellungen mit dem Geschlecht zur Verbesserung des Modells beitragen.
 * Durch den Vergleich der Varianz der *random slopes* zwischen `m_rs_sex1` und `m_rs_sex2` können wir quantifizieren, welchen Anteil der Effekt-Heterogenität durch die Interaktion erklärt werden kann. In diesem Beispiel ist die Erklärungskraft der Interaktion zu vernachlässigen.
+* Ein "erfolgreiches" Modell mit *random slopes* und *cross-level interaction* findet ihr in der folgenden Übungsaufgabe.
 
 ## Übungsaufgaben 5
 
