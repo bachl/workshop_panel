@@ -242,13 +242,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb8-2"><a href="fixed-effects-modelle.html#cb8-2"></a><span class="st">    </span><span class="kw">mean</span>(verh1), <span class="dt">verhint1_wi =</span> verhint1 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(verhint1)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ungroup</span>()</span>
 <span id="cb8-3"><a href="fixed-effects-modelle.html#cb8-3"></a></span>
 <span id="cb8-4"><a href="fixed-effects-modelle.html#cb8-4"></a>d_wi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(<span class="op">-</span>IDsosci) <span class="op">%&gt;%</span><span class="st"> </span>summary</span></code></pre></div>
-<pre><code>##      verh1          verhint1        verh1_wi      verhint1_wi   
-##  Min.   :1.000   Min.   :1.000   Min.   :-3.00   Min.   :-3.00  
-##  1st Qu.:1.000   1st Qu.:1.000   1st Qu.:-0.25   1st Qu.:-0.25  
-##  Median :1.000   Median :1.000   Median : 0.00   Median : 0.00  
-##  Mean   :1.529   Mean   :1.804   Mean   : 0.00   Mean   : 0.00  
-##  3rd Qu.:2.000   3rd Qu.:2.000   3rd Qu.: 0.00   3rd Qu.: 0.00  
-##  Max.   :5.000   Max.   :5.000   Max.   : 3.00   Max.   : 3.00</code></pre>
+<pre><code>##      verh1        verhint1      verh1_wi      verhint1_wi   
+##  Min.   :1.0   Min.   :1.0   Min.   :-3.00   Min.   :-3.00  
+##  1st Qu.:1.0   1st Qu.:1.0   1st Qu.:-0.25   1st Qu.:-0.25  
+##  Median :1.0   Median :1.0   Median : 0.00   Median : 0.00  
+##  Mean   :1.5   Mean   :1.8   Mean   : 0.00   Mean   : 0.00  
+##  3rd Qu.:2.0   3rd Qu.:2.0   3rd Qu.: 0.00   3rd Qu.: 0.00  
+##  Max.   :5.0   Max.   :5.0   Max.   : 3.00   Max.   : 3.00</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="fixed-effects-modelle.html#cb10-1"></a>d_wi <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">lm</span>(verh1_wi <span class="op">~</span><span class="st"> </span>verhint1_wi, <span class="dt">data =</span> .) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">tidy</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate_if</span>(is.numeric, </span>
 <span id="cb10-2"><a href="fixed-effects-modelle.html#cb10-2"></a>    round, <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 5
@@ -384,20 +384,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -3.000000 -0.163516  0.000000  0.095937  3.000000 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -3.0000 -0.1635  0.0000  0.0959  3.0000 
 ## 
 ## Coefficients:
-##          Estimate Std. Error t-value  Pr(&gt;|t|)    
-## verhint1 0.345937   0.016061  21.539 &lt; 2.2e-16 ***
+##          Estimate Std. Error t-value Pr(&gt;|t|)    
+## verhint1   0.3459     0.0161    21.5   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    702.5
-## Residual Sum of Squares: 553.75
-## R-Squared:      0.21175
-## Adj. R-Squared: -0.051155
-## F-statistic: 463.924 on 1 and 1727 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    702
+## Residual Sum of Squares: 554
+## R-Squared:      0.212
+## Adj. R-Squared: -0.0512
+## F-statistic: 463.924 on 1 and 1727 DF, p-value: &lt;2e-16</code></pre>
 <ul>
 <li>Der Output von <code>summary()</code> liefert eine korrekte Beschreibung der Fallzahlen im Datensatz.</li>
 <li>Beachte: Das angepasste <span class="math inline">\(R^2\)</span> ist hier (wie in vielen <em>fixed effects</em> Modellen) negativ. Das ist kein Grund zur Beunruhigung. Die Logik dahinter kann gut nachvollzogen werden, wenn wir uns die LSDV-Spezifikation in Erinnerung rufen. Zusätzlich zu den inhaltlich relevanten Prädiktoren enthält das Modell <span class="math inline">\(n - 1\)</span> Prädiktoren für die Einheiten.</li>
@@ -431,20 +431,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -3.070526 -0.180571  0.011669  0.131626  3.049432 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -3.0705 -0.1806  0.0117  0.1316  3.0494 
 ## 
 ## Coefficients:
-##          Estimate Std. Error t-value  Pr(&gt;|t|)    
-## verhint1 0.328779   0.016614  19.789 &lt; 2.2e-16 ***
+##          Estimate Std. Error t-value Pr(&gt;|t|)    
+## verhint1   0.3288     0.0166    19.8   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    669.68
-## Residual Sum of Squares: 545.72
-## R-Squared:      0.1851
-## Adj. R-Squared: -0.088576
-## F-statistic: 391.609 on 1 and 1724 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    670
+## Residual Sum of Squares: 546
+## R-Squared:      0.185
+## Adj. R-Squared: -0.0886
+## F-statistic: 391.609 on 1 and 1724 DF, p-value: &lt;2e-16</code></pre>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="fixed-effects-modelle.html#cb20-1"></a>mdl_pfe_pdv =<span class="st"> </span>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, </span>
 <span id="cb20-2"><a href="fixed-effects-modelle.html#cb20-2"></a>    <span class="dt">model =</span> <span class="st">&quot;within&quot;</span>)</span>
 <span id="cb20-3"><a href="fixed-effects-modelle.html#cb20-3"></a>mdl_pfe_pdv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
@@ -457,23 +457,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -3.070526 -0.180571  0.011669  0.131626  3.049432 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -3.0705 -0.1806  0.0117  0.1316  3.0494 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t-value  Pr(&gt;|t|)    
-## verhint1      0.328779   0.016614 19.7891 &lt; 2.2e-16 ***
-## factor(wave)2 0.019997   0.033589  0.5954 0.5516856    
-## factor(wave)3 0.139955   0.033691  4.1540 3.426e-05 ***
-## factor(wave)4 0.117763   0.034484  3.4150 0.0006526 ***
+##               Estimate Std. Error t-value Pr(&gt;|t|)    
+## verhint1        0.3288     0.0166   19.79  &lt; 2e-16 ***
+## factor(wave)2   0.0200     0.0336    0.60  0.55169    
+## factor(wave)3   0.1400     0.0337    4.15 0.000034 ***
+## factor(wave)4   0.1178     0.0345    3.41  0.00065 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    702.5
-## Residual Sum of Squares: 545.72
-## R-Squared:      0.22318
-## Adj. R-Squared: -0.037717
-## F-statistic: 123.824 on 4 and 1724 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    702
+## Residual Sum of Squares: 546
+## R-Squared:      0.223
+## Adj. R-Squared: -0.0377
+## F-statistic: 123.824 on 4 and 1724 DF, p-value: &lt;2e-16</code></pre>
 </div>
 <div id="robuste-standardfehler" class="section level3 unnumbered">
 <h3>Robuste Standardfehler</h3>
@@ -489,10 +489,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## t test of coefficients:
 ## 
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## verhint1         0.329      0.017  19.789   &lt;2e-16 ***
-## factor(wave)2    0.020      0.034   0.595    0.552    
-## factor(wave)3    0.140      0.034   4.154   &lt;2e-16 ***
-## factor(wave)4    0.118      0.034   3.415    0.001 ***
+## verhint1         0.329      0.017   19.79   &lt;2e-16 ***
+## factor(wave)2    0.020      0.034    0.60    0.552    
+## factor(wave)3    0.140      0.034    4.15   &lt;2e-16 ***
+## factor(wave)4    0.118      0.034    3.42    0.001 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="fixed-effects-modelle.html#cb24-1"></a>mdl_pfe_pdv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coefci</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</span></code></pre></div>
@@ -507,10 +507,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## t test of coefficients:
 ## 
 ##               Estimate Std. Error t value Pr(&gt;|t|)    
-## verhint1         0.329      0.028  11.868   &lt;2e-16 ***
-## factor(wave)2    0.020      0.029   0.688    0.491    
-## factor(wave)3    0.140      0.036   3.849   &lt;2e-16 ***
-## factor(wave)4    0.118      0.032   3.701   &lt;2e-16 ***
+## verhint1         0.329      0.028   11.87   &lt;2e-16 ***
+## factor(wave)2    0.020      0.029    0.69     0.49    
+## factor(wave)3    0.140      0.036    3.85   &lt;2e-16 ***
+## factor(wave)4    0.118      0.032    3.70   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="fixed-effects-modelle.html#cb28-1"></a>mdl_pfe_pdv <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coefci</span>(<span class="dt">vcov. =</span> vcovHC) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">round</span>(<span class="dv">3</span>)</span></code></pre></div>
@@ -558,23 +558,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -3.070526 -0.180571  0.011669  0.131626  3.049432 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -3.0705 -0.1806  0.0117  0.1316  3.0494 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t-value  Pr(&gt;|t|)    
-## verhint1      0.328779   0.016614 19.7891 &lt; 2.2e-16 ***
-## factor(wave)2 0.019997   0.033589  0.5954 0.5516856    
-## factor(wave)3 0.139955   0.033691  4.1540 3.426e-05 ***
-## factor(wave)4 0.117763   0.034484  3.4150 0.0006526 ***
+##               Estimate Std. Error t-value Pr(&gt;|t|)    
+## verhint1        0.3288     0.0166   19.79  &lt; 2e-16 ***
+## factor(wave)2   0.0200     0.0336    0.60  0.55169    
+## factor(wave)3   0.1400     0.0337    4.15 0.000034 ***
+## factor(wave)4   0.1178     0.0345    3.41  0.00065 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    702.5
-## Residual Sum of Squares: 545.72
-## R-Squared:      0.22318
-## Adj. R-Squared: -0.037717
-## F-statistic: 123.824 on 4 and 1724 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    702
+## Residual Sum of Squares: 546
+## R-Squared:      0.223
+## Adj. R-Squared: -0.0377
+## F-statistic: 123.824 on 4 and 1724 DF, p-value: &lt;2e-16</code></pre>
 <ul>
 <li>Geschlecht wird nicht in das Modell aufgenommen. Vorsicht: Es taucht einfach nicht im Ergebnis auf, obwohl es in der Formel steht (siehe <code>Call</code> in der Summary)</li>
 </ul>

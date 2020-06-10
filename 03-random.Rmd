@@ -16,6 +16,9 @@ knitr::read_chunk("R/lmervgl.R")
 knitr::read_chunk("R/lmer_periodfe.R")
 knitr::read_chunk("R/lmer_person.R")
 knitr::read_chunk("R/lmer_2ndtv.R")
+knitr::read_chunk("R/lmer_random_slope.R")
+knitr::read_chunk("R/lmer_random_slope2.R")
+knitr::read_chunk("R/lmer_crosslevel_ia.R")
 ```
 
 * In diesem Abschnitt beschäftigen wir uns mit *random effects* Modellen. Zuerst führen wir die Modellklasse ein. Dann betrachten wir kurz, wie die Modelle in der Tradition der Ökonometrie mit `plm` spezifiziert werden können, bevor wir zur allgemeineren Umsetzung mit dem Paket für Mehrebenen- bzw. *mixed effects* Modelle `lme4` kommen.
@@ -83,7 +86,7 @@ knitr::read_chunk("R/lmer_2ndtv.R")
 
 ## Kurze Einführung zu mixed effects Modellen
 
-* Auch bekannt als *random effects*, *multilevel*/*Mehrebenen-* oder *hierarchical*/*hierarchische* Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser [@gelmanDataAnalysisUsing2006].
+* Auch bekannt als *random effects*, *multilevel*/*Mehrebenen-* oder *hierarchical*/*hierarchische* Modelle; das Begriffswirrwarr ist ein großes Problem [@gelmanDataAnalysisUsing2006], das Denglisch macht es nicht besser.
   * siehe auch: https://twitter.com/chelseaparlett/status/1262390299785072647
 * Wer mit diesen Modellen bereits vertraut ist, kann diesen Absatz überspringen.
 
@@ -278,3 +281,72 @@ knitr::read_chunk("R/lmer_2ndtv.R")
 
 ## Variierende Koeffizienten (random slopes) und Ebenen-überschreitende Interaktionen (cross-level interactions) 
 
+* Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren. Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen.
+* Damit lockern wir die Annahme eines homogenen Treatment-Effekts: Wir gehen nicht mehr davon aus, dass der Effekt eines Prädiktors für alle Personen gleich ist, sondern lassen eine Streuung um den durchschnittlichen Treatment-Effekt zu.
+* Die Standardabweichung (oder die Varianz) des *random slope* (oder *varying coefficient*) ist ein Indikator dafür, wie stark ein Effekt zwischen den Personen variiert.
+* Wir können testen, ob sich diese Varianz der Koeffizienten von 0 unterscheidet. Dazu werden zwei Tests empfohlen:
+  * Vergleich der Modelle mit und ohne *random slopes* mit einem Likelihood-Ratio-Test (Wald-Test)
+  * Prüfen, ob das Konfidenzintervalls um die Varianzkomponente die 0 enthält.
+  * Es ist in der Literatur zu *mixed effects* Modellen umstritten, ob das Testen einer Varianzkomponente sinnvoll ist.
+    * @barrRandomEffectsStructure2013 fordern, dass **alle** Koeffizienten, die dem Design einer Studie nach variieren müssen (im Panel-Design eigentlich alle Effekte von über die Zeit variierenden Prädiktoren), als *random slopes* geschätzt werden sollen.
+    * @matuschekBalancingTypeError2017 sprechen sich dafür aus, sparsame Modelle zu spezifizieren, die den Daten entsprechen. Wenn die Daten keine Evidenz für bedeutsame Effekt-Heterogenität zeigen, kann das sparsamere Modell ohne *random slope* bevorzugt werden. Dies ist in der (Restricted) Maximum-Likelihood-Schätzung häufig auch pragmatisch erforderlich, um die Modelle schätzbar zu machen.
+
+* In unserem Beispiel wollen wir den Effekt der Intention, ohne triftigen Grund raus zu gehen, zwischen den Personen variieren lassen.
+  * Dazu ergänzen wir den Prädiktor in der Klammer, in der die *random effects* spezifiziert werden: `+ (verhint1 | IDsosci)`.
+
+```{r lmer-random-slope, eval=TRUE, tidy=TRUE, message=TRUE, warning=TRUE}
+
+```
+
+  * Wenn wir das Modell zu schätzen, erhalten wir eine Warnung, dass die Lösung ein *singulärer Fit* ist. Ein Auszug aus `?lme4::isSingular`:
+
+> While singular models are statistically well defined (it is theoretically sensible for the true maximum likelihood estimate to correspond to a singular fit), there are real concerns that (1) singular fits correspond to overfitted models that may have poor power; (2) chances of numerical problems and mis-convergence are higher for singular models (e.g. it may be computationally difficult to compute profile confidence intervals for such models); (3) standard inferential procedures such as Wald statistics and likelihood ratio tests may be inappropriate.
+  
+* Ein singulärer Fit ist ein Hinweis darauf, dass die Daten nicht ausreichen, um alle Varianzkomponenten mit (Restricted) Maximum-Likelihood zu schätzen. Dies ist in typischen Befragungspanels mit relativ wenigen Messzeitpunkten häufig der Fall. Es gibt für jeden Befragten nur vier Beobachtungen, aus denen wir in diesem Modell drei Varianz-Kovarianz-Koeffizienten schätzen.
+* In diesem Fall finden wir eine Korrelation von $-1$ zwischen den Personen-spezifischen Konstanten und den Personen-spezifischen Effekten der Verhaltensintention. Das heißt, dass aus der Personen-spezifischen Konstante perfekt vorhergesagt werden kann, wo der Personen-spezifische Effekt liegt. Je höher die durchschnittliche Häufigkeit des Rausgehens ohne Grund ist, desto negativer ist der Effekt der Verhaltensintention. Etwas abstrakter ausgedrückt: Wir können hier nicht analytisch zwischen durchschnittlichem Niveau und Effekt für eine Person unterscheiden.
+* In der Praxis würden wir hier meist mit dem *random intercept* Modell weiter arbeiten. Wenn wir nur an den *fixed effects* interessiert sind, können wir auch das Modell mit *random slope* verwenden, solange wir die im Zitat oben genannten Einschränkungen beachten.
+
+### Ein weiteres Beispiel {-}
+* Um das weitere Vorgehen mit dem *random slope* Modell zu erläutern, wechseln wir die Variablen. Ein Modell, in dem die Intention, sich mit Personen außerhalb des eigenen Haushalts zu treffen (`verhint2`), durch die Einstellung zu diesem Verhalten (`ein2`) erklärt wird, lässt sich mit den vorliegenden Daten schätzen.
+* Im folgenden Code-Snippet schätzen wir zuerst als Referenz das Modell mit *random intercept* (`m_ri`). Dann lassen wir den Effekt der Einstellung zwischen den Personen variieren (`m_rs`).
+
+```{r lmer-random-slope2, eval=TRUE, tidy=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+* Mit jedem Punkt auf der Einstellungsskala steigt die Intention, sich mit anderen Personen außerhalb des Haushalts zu treffen, um ca. 0.4 Punkte. 
+* Die Personen-spezifischen Effekte streuen mit einer Standardabweichung von ca. 0.3 Punkten um diesen durchschnittlichen Effekt durchaus wahrnehmbar. Die typischen Effekte (+/- 1 SD) liegen zwischen sehr geringen Effekten und deutlichen Effekten. Ein negativer Effekt der Einstellung auf die Intention ist selten.
+
+* Das Konfidenzintervall für die Standardabweichung des *random slope* (`.sig03`) liegt deutlich über 0. Wir können davon ausgehen, dass es Heterogenität im Treatment-Effekt gibt. Manche Personen passen ihre Verhaltensintention ihren Einstellungen stärker an, bei anderen entwickeln sich Einstellung und Verhaltensintention weniger systematisch.
+* Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass das Modell mit *random slope* wesentlich besser zu den Daten passt als das Modell nur mit *random intercept*.
+* Die Abbildung vermittelt einen Eindruck von der Treatment-Effekt-Heterogenität. Dargestellt ist die die Abweichung vom durchschnittlichen Effekt (0.4). Neben der Verteilung sollten auch die weiten Intervalle beachtet werden. Auf Basis von nur vier Beobachtungen pro Person lassen sich die individuellen Abweichungen vom durchschnittlichen Effekt nur recht unpräzise quantifizieren.
+
+### Ebenen-überschreitende Interaktionen (cross-level interactions) {-}
+
+* *Random slopes* zeigen nur eine allgemeine Heterogenität zwischen den Personen. Wir wissen nun, dass der Effekt der Einstellung auf das Verhalten bei verschiedenen Personen unterschiedlich ausfällt. Wir wissen aber nicht, an welchen Eigenschaften der Personen dies liegen könnte.
+* Wenn wir theoretisch von Effekt-Heterogenität ausgehen oder empirisch durch ein *random slope* Modell Evidenz dafür gefunden haben, können wir in einem weiteren Schritt versuchen, diese Heterogenität zu erklären.
+* Dazu prüfen wir, ob eine Interaktion zwischen einem Personen-Merkmal und dem Prädiktor die allgemeine Heterogenität des Treatment-Effekts reduziert. Da das Personen-Merkmal auf Level 2 und der Prädiktor als über die Zeit variierende Variable auf Level 1 angesiedelt ist, spricht man hier auch von einer *cross-level interaction*.
+
+* Im Beispiel wollen wir betrachten, ob die Berücksichtigung des Geschlechts einen Teil der Treatment-Effekt-Heterogenität erklären kann.
+  * Dazu spezifizieren wir zwei weitere Modelle:
+    * `m_rs_sex1` enthält den einfachen Haupteffekt des Geschlechts.
+    * `m_rs_sex2` enthält zudem die Interaktion zwischen der Einstellung und dem Geschlecht.
+
+```{r lmer-crosslevel-ia, eval=TRUE, tidy=TRUE, message=FALSE, warning=FALSE}
+
+```
+
+* Das Geschlecht macht nur einen unwesentlichen Unterschied in der Intention, sich mit Personen außerhalb des Haushalts zu treffen, aus (`m_rs_sex1`).
+* Der Effekt der Einstellung auf die Intention unterscheidet sich kaum für Männer und Frauen (`m_rs_sex2`). Wichtig: In diesem Modell mit Interaktionseffekt haben die Koeffizienten der Prädiktoren eine andere Bedeutung als im Modell ohne Interaktionseffekt. Sie quantifizieren nicht mehr "Haupteffekte", sondern "einfache" Effekte (*simple effects*). Der Koeffizient für `ein2` quantifiziert den Effekt, wenn `C_sex` gleich 0 ist --- also den Effekt für Männer. Der Koeffizient des Interaktionsterms `ein2:C_sex` quantifiziert den Unterschied im Effekt zwischen Männern und Frauen.
+* Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass weder die Aufnahme des Geschlechts noch die Interaktion der Einstellungen mit dem Geschlecht zur Verbesserung des Modells beitragen.
+* Durch den Vergleich der Varianz der *random slopes* zwischen `m_rs_sex1` und `m_rs_sex2` können wir quantifizieren, welchen Anteil der Effekt-Heterogenität durch die Interaktion erklärt werden kann. In diesem Beispiel ist die Erklärungskraft der Interaktion zu vernachlässigen.
+
+## Übungsaufgaben 5
+
+1) Schätze den Effekt des gesamten Medienkonsums (Summenindex aus `med1` bis `med5` auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`), mit einem *random effects* Panelmodell. Um Probleme beim Schätzen zu vermeiden, muss der Medienkonsum-Index z-transformiert werden. Berücksichtige  auch die Periodeneffekte der Panelwellen.
+    * Schätze zuerst ein Modell mit *random intercept*.
+    * Schätze dann ein Modell mit einem *random slope* für den Medienkonsum.
+    * Nimm zusätzlich das Geschlecht in das Modell auf (`C_sex`).
+    * Prüfe, ob sich der Effekt der Intention zwischen Männer und Frauen unterscheidet.
+
+2) Spezifiziere, schätze und interpretiere ein eigenes *random effects* Panelmodell mit *random slope* und *cross-level interaction* mit Daten aus dem Beispieldatensatz. Beachte dabei, dass wir hier an die Grenzen der Informationshaltigkeit der Daten für eine ML-Schätzung stoßen. Es ist recht wahrscheinlich, dass singuläre Fits oder nicht konvergierte Modelle vorkommen werden.

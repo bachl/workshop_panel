@@ -1,4 +1,4 @@
-# Übung 4: Effekt der Information via ÖR TV auf Verhaltensintention "zu wenig Abstand halten" als RE-Modell
+# Übung 4
 
 # Null-Modell
 m0_ue = lmer(verhint3 ~ 1 + factor(wave) + (1 | IDsosci), data = d)

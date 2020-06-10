@@ -246,7 +246,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##  Hausman Test
 ## 
 ## data:  verh1 ~ verhint1
-## chisq = 300.58, df = 1, p-value &lt; 2.2e-16
+## chisq = 301, df = 1, p-value &lt;2e-16
 ## alternative hypothesis: one model is inconsistent</code></pre>
 <ul>
 <li>In diesem Beispiel spricht der Hausman-Test dagegen, ein <em>random effects</em> Modell zu schätzen.</li>
@@ -269,27 +269,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Effects:
-##                   var std.dev share
-## idiosyncratic 0.32064 0.56625 0.812
-## individual    0.07443 0.27283 0.188
-## theta: 0.2799
+##                  var std.dev share
+## idiosyncratic 0.3206  0.5663  0.81
+## individual    0.0744  0.2728  0.19
+## theta: 0.28
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -2.444787 -0.105500 -0.072748  0.038935  3.647334 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -2.4448 -0.1055 -0.0727  0.0389  3.6473 
 ## 
 ## Coefficients:
-##             Estimate Std. Error z-value  Pr(&gt;|z|)    
-## (Intercept)  0.56905    0.02764  20.587 &lt; 2.2e-16 ***
-## verhint1     0.53198    0.01195  44.517 &lt; 2.2e-16 ***
+##             Estimate Std. Error z-value Pr(&gt;|z|)    
+## (Intercept)   0.5690     0.0276    20.6   &lt;2e-16 ***
+## verhint1      0.5320     0.0120    44.5   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    1531.9
-## Residual Sum of Squares: 823.22
-## R-Squared:      0.46262
-## Adj. R-Squared: 0.46239
-## Chisq: 1981.77 on 1 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    1530
+## Residual Sum of Squares: 823
+## R-Squared:      0.463
+## Adj. R-Squared: 0.462
+## Chisq: 1981.77 on 1 DF, p-value: &lt;2e-16</code></pre>
 <div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="random-effects-modelle.html#cb41-1"></a><span class="co"># Mit zusätzlichem Faktor Welle</span></span>
 <span id="cb41-2"><a href="random-effects-modelle.html#cb41-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </span>
 <span id="cb41-3"><a href="random-effects-modelle.html#cb41-3"></a>    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
@@ -303,28 +303,28 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Effects:
-##                    var  std.dev share
-## idiosyncratic 0.316542 0.562621 0.802
-## individual    0.075459 0.274699 0.191
-## time          0.002634 0.051326 0.007
-## theta: 0.2845 (id) 0.5845 (time) 0.2541 (total)
+##                   var std.dev share
+## idiosyncratic 0.31654 0.56262  0.80
+## individual    0.07546 0.27470  0.19
+## time          0.00263 0.05133  0.01
+## theta: 0.285 (id) 0.585 (time) 0.254 (total)
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -2.479856 -0.114351 -0.069742  0.041790  3.672248 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -2.4799 -0.1144 -0.0697  0.0418  3.6722 
 ## 
 ## Coefficients:
-##             Estimate Std. Error z-value  Pr(&gt;|z|)    
-## (Intercept) 0.572357   0.038978  14.684 &lt; 2.2e-16 ***
-## verhint1    0.530146   0.012141  43.666 &lt; 2.2e-16 ***
+##             Estimate Std. Error z-value Pr(&gt;|z|)    
+## (Intercept)   0.5724     0.0390    14.7   &lt;2e-16 ***
+## verhint1      0.5301     0.0121    43.7   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    1494.2
-## Residual Sum of Squares: 817.26
-## R-Squared:      0.45304
-## Adj. R-Squared: 0.4528
-## Chisq: 1906.68 on 1 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    1490
+## Residual Sum of Squares: 817
+## R-Squared:      0.453
+## Adj. R-Squared: 0.453
+## Chisq: 1906.68 on 1 DF, p-value: &lt;2e-16</code></pre>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="random-effects-modelle.html#cb43-1"></a><span class="co"># Mit FE für Welle</span></span>
 <span id="cb43-2"><a href="random-effects-modelle.html#cb43-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb43-3"><a href="random-effects-modelle.html#cb43-3"></a><span class="st">    </span><span class="kw">summary</span>()</span></code></pre></div>
@@ -338,30 +338,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Effects:
-##                   var std.dev share
-## idiosyncratic 0.31654 0.56262 0.808
-## individual    0.07546 0.27470 0.192
-## theta: 0.2845
+##                  var std.dev share
+## idiosyncratic 0.3165  0.5626  0.81
+## individual    0.0755  0.2747  0.19
+## theta: 0.285
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -2.504920 -0.134512 -0.067223  0.050991  3.693574 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -2.5049 -0.1345 -0.0672  0.0510  3.6936 
 ## 
 ## Coefficients:
-##                 Estimate Std. Error z-value Pr(&gt;|z|)    
-## (Intercept)    0.5664150  0.0330635 17.1311  &lt; 2e-16 ***
-## verhint1       0.5300058  0.0121863 43.4918  &lt; 2e-16 ***
-## factor(wave)2 -0.0453317  0.0353413 -1.2827  0.19960    
-## factor(wave)3  0.0672896  0.0353937  1.9012  0.05728 .  
-## factor(wave)4  0.0028266  0.0358023  0.0789  0.93707    
+##               Estimate Std. Error z-value Pr(&gt;|z|)    
+## (Intercept)    0.56642    0.03306   17.13   &lt;2e-16 ***
+## verhint1       0.53001    0.01219   43.49   &lt;2e-16 ***
+## factor(wave)2 -0.04533    0.03534   -1.28    0.200    
+## factor(wave)3  0.06729    0.03539    1.90    0.057 .  
+## factor(wave)4  0.00283    0.03580    0.08    0.937    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    1521.3
-## Residual Sum of Squares: 816.62
-## R-Squared:      0.46322
-## Adj. R-Squared: 0.46229
-## Chisq: 1983.94 on 4 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    1520
+## Residual Sum of Squares: 817
+## R-Squared:      0.463
+## Adj. R-Squared: 0.462
+## Chisq: 1983.94 on 4 DF, p-value: &lt;2e-16</code></pre>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="random-effects-modelle.html#cb45-1"></a><span class="co"># Mit Prädiktor auf Personenebene (funktioniert nicht in FE, siehe oben)</span></span>
 <span id="cb45-2"><a href="random-effects-modelle.html#cb45-2"></a>d <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span>C_sex, <span class="dt">data =</span> ., <span class="dt">index =</span> <span class="kw">c</span>(<span class="st">&quot;IDsosci&quot;</span>, <span class="st">&quot;wave&quot;</span>), <span class="dt">model =</span> <span class="st">&quot;random&quot;</span>, </span>
 <span id="cb45-3"><a href="random-effects-modelle.html#cb45-3"></a>    <span class="dt">effect =</span> <span class="st">&quot;twoways&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>()</span></code></pre></div>
@@ -375,34 +375,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
 ## Effects:
-##                    var  std.dev share
-## idiosyncratic 0.316542 0.562621 0.803
-## individual    0.074785 0.273468 0.190
-## time          0.002634 0.051326 0.007
-## theta: 0.283 (id) 0.5845 (time) 0.2527 (total)
+##                   var std.dev share
+## idiosyncratic 0.31654 0.56262  0.80
+## individual    0.07478 0.27347  0.19
+## time          0.00263 0.05133  0.01
+## theta: 0.283 (id) 0.585 (time) 0.253 (total)
 ## 
 ## Residuals:
-##      Min.   1st Qu.    Median   3rd Qu.      Max. 
-## -2.443232 -0.153532 -0.048115  0.047936  3.701927 
+##    Min. 1st Qu.  Median 3rd Qu.    Max. 
+## -2.4432 -0.1535 -0.0481  0.0479  3.7019 
 ## 
 ## Coefficients:
-##              Estimate Std. Error z-value  Pr(&gt;|z|)    
-## (Intercept)  0.642039   0.045454 14.1249 &lt; 2.2e-16 ***
-## verhint1     0.527641   0.012153 43.4168 &lt; 2.2e-16 ***
-## C_sex       -0.106628   0.035587 -2.9963  0.002733 ** 
+##             Estimate Std. Error z-value Pr(&gt;|z|)    
+## (Intercept)   0.6420     0.0455    14.1   &lt;2e-16 ***
+## verhint1      0.5276     0.0122    43.4   &lt;2e-16 ***
+## C_sex        -0.1066     0.0356    -3.0   0.0027 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Total Sum of Squares:    1497.8
-## Residual Sum of Squares: 815.06
-## R-Squared:      0.45581
-## Adj. R-Squared: 0.45534
-## Chisq: 1927.32 on 2 DF, p-value: &lt; 2.22e-16</code></pre>
+## Total Sum of Squares:    1500
+## Residual Sum of Squares: 815
+## R-Squared:      0.456
+## Adj. R-Squared: 0.455
+## Chisq: 1927.32 on 2 DF, p-value: &lt;2e-16</code></pre>
 </div>
 <div id="kurze-einführung-zu-mixed-effects-modellen" class="section level2">
 <h2><span class="header-section-number">4.3</span> Kurze Einführung zu mixed effects Modellen</h2>
 <ul>
-<li><p>Auch bekannt als <em>random effects</em>, <em>multilevel</em>/<em>Mehrebenen-</em> oder <em>hierarchical</em>/<em>hierarchische</em> Modelle; das Begriffswirrwarr ist ein großes Problem, das Denglisch macht es nicht besser <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006" role="doc-biblioref">2006</a>)</span>.</p>
+<li><p>Auch bekannt als <em>random effects</em>, <em>multilevel</em>/<em>Mehrebenen-</em> oder <em>hierarchical</em>/<em>hierarchische</em> Modelle; das Begriffswirrwarr ist ein großes Problem <span class="citation">(Gelman and Hill <a href="#ref-gelmanDataAnalysisUsing2006" role="doc-biblioref">2006</a>)</span>, das Denglisch macht es nicht besser.</p>
 <ul>
 <li>siehe auch: <a href="https://twitter.com/chelseaparlett/status/1262390299785072647" class="uri">https://twitter.com/chelseaparlett/status/1262390299785072647</a></li>
 </ul></li>
@@ -458,26 +458,26 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Formula: verh1 ~ 1 + (1 | IDsosci)
 ##    Data: d
 ## 
-## REML criterion at convergence: 5576.4
+## REML criterion at convergence: 5576
 ## 
 ## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -4.1387 -0.2268 -0.1212 -0.1212  4.8131 
+##    Min     1Q Median     3Q    Max 
+## -4.139 -0.227 -0.121 -0.121  4.813 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  IDsosci  (Intercept) 0.5938   0.7706  
-##  Residual             0.4065   0.6376  
+##  IDsosci  (Intercept) 0.594    0.771   
+##  Residual             0.407    0.638   
 ## Number of obs: 2304, groups:  IDsosci, 576
 ## 
 ## Fixed effects:
-##              Estimate Std. Error        df t value Pr(&gt;|t|)    
-## (Intercept)   1.52865    0.03475 574.99999   43.99   &lt;2e-16 ***
+##             Estimate Std. Error       df t value Pr(&gt;|t|)    
+## (Intercept)   1.5286     0.0347 575.0000      44   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="random-effects-modelle.html#cb49-1"></a><span class="co"># ICC &#39;von Hand&#39;</span></span>
 <span id="cb49-2"><a href="random-effects-modelle.html#cb49-2"></a><span class="kw">round</span>(<span class="fl">0.5938</span><span class="op">/</span>(<span class="fl">0.5938</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.4065</span>), <span class="dv">3</span>)</span></code></pre></div>
-<pre><code>## [1] 0.594</code></pre>
+<pre><code>## [1] 0.59</code></pre>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="random-effects-modelle.html#cb51-1"></a><span class="co"># Mit performance::icc()</span></span>
 <span id="cb51-2"><a href="random-effects-modelle.html#cb51-2"></a><span class="kw">icc</span>(m0)</span></code></pre></div>
 <pre><code>## # Intraclass Correlation Coefficient
@@ -566,7 +566,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3>Wiederholung der wichtigsten Begriffe</h3>
 <ul>
 <li>Ganz allgemein gesprochen ist ein <em>mixed effects</em> Modell ein Modell, das <em>fixed</em> und <em>random</em> Koeffizienten enthält.</li>
-<li>gelmanDataAnalysisUsing2006 verwenden die (imo) besser verständlichen Begriffe <em>varying intercepts</em> (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und <em>varying slopes</em> (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).</li>
+<li><span class="citation">Gelman and Hill (<a href="#ref-gelmanDataAnalysisUsing2006" role="doc-biblioref">2006</a>)</span> verwenden die (imo) besser verständlichen Begriffe <em>varying intercepts</em> (für zwischen Einheiten auf höherer Ebene variierende Regressionskonstanten) und <em>varying slopes</em> (für zwischen Einheiten auf höherer Ebene variierende Regressionskoeffizienten).</li>
 <li>Im <em>random effects</em> Panelmodell sind die Einheiten auf höherer Ebene die Personen. Die Konstanten bzw. Koeffizienten variieren zwischen Personen.</li>
 <li>In der Sprache von <em>mixed effects</em> Modellen wird das einfachste Modell als <em>fixed slope, random (or varying) intercept</em> Modell bezeichnet.
 <ul>
@@ -590,22 +590,22 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## Formula: verh1 ~ verhint1 + (1 | IDsosci)
 ##    Data: d
 ## 
-## REML criterion at convergence: 4553.7
+## REML criterion at convergence: 4554
 ## 
 ## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -4.5240 -0.2022 -0.0848  0.1650  5.7931 
+##    Min     1Q Median     3Q    Max 
+## -4.524 -0.202 -0.085  0.165  5.793 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  IDsosci  (Intercept) 0.1114   0.3338  
-##  Residual             0.3412   0.5842  
+##  IDsosci  (Intercept) 0.111    0.334   
+##  Residual             0.341    0.584   
 ## Number of obs: 2304, groups:  IDsosci, 576
 ## 
 ## Fixed effects:
 ##              Estimate Std. Error        df t value Pr(&gt;|t|)    
-## (Intercept) 5.987e-01  2.872e-02 9.754e+02   20.85   &lt;2e-16 ***
-## verhint1    5.155e-01  1.219e-02 1.747e+03   42.30   &lt;2e-16 ***
+## (Intercept)    0.5987     0.0287  975.4311    20.9   &lt;2e-16 ***
+## verhint1       0.5155     0.0122 1747.0982    42.3   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <ul>
@@ -622,16 +622,16 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## Models:
 ## m0: verh1 ~ 1 + (1 | IDsosci)
 ## m1: verh1 ~ verhint1 + (1 | IDsosci)
-##    Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
-## m0  3 5577.5 5594.7 -2785.7   5571.5                             
-## m1  4 4548.5 4571.5 -2270.3   4540.5 1030.9      1  &lt; 2.2e-16 ***
+##    Df  AIC  BIC logLik deviance Chisq Chi Df Pr(&gt;Chisq)    
+## m0  3 5577 5595  -2786     5571                            
+## m1  4 4549 4572  -2270     4541  1031      1     &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="random-effects-modelle.html#cb63-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) - manuell</span></span>
 <span id="cb63-2"><a href="random-effects-modelle.html#cb63-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(m1)<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sigma</span>(m0)<span class="op">^</span><span class="dv">2</span>)  <span class="co"># L1</span></span></code></pre></div>
-<pre><code>## [1] 0.1606004</code></pre>
+<pre><code>## [1] 0.16</code></pre>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="random-effects-modelle.html#cb65-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m1)<span class="op">$</span>IDsosci)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m0)<span class="op">$</span>IDsosci))  <span class="co"># L2</span></span></code></pre></div>
-<pre><code>## [1] 0.8124145</code></pre>
+<pre><code>## [1] 0.81</code></pre>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="random-effects-modelle.html#cb67-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) - mit performance::r2() (Vergleicht immer mit</span></span>
 <span id="cb67-2"><a href="random-effects-modelle.html#cb67-2"></a><span class="co"># Null-Modell)</span></span>
 <span id="cb67-3"><a href="random-effects-modelle.html#cb67-3"></a><span class="kw">r2</span>(m1, <span class="dt">by_group =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
@@ -648,6 +648,7 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 <li>Nach dem <em>Wald-Test</em> wird die <span class="math inline">\(H_0\)</span>, dass beide Modelle gleich gut zu den Daten passen, verworfen.</li>
 <li>Die Aufnahme der Verhaltensintention erklärt über 80% der Varianz zwischen den Personen und 16% der Varianz innerhalb der Personen — TPB ftw! ;)</li>
 </ul></li>
+<li>Es zeigt sich, dass die über die Zeit variierenden Prädiktoren sowohl Varianz innerhalb als auch Varianz zwischen den Personen erklären. Das macht die Interpretation des Koeffizienten schwieriger als die des entsprechenden Koeffizienten im <em>fixed effects</em> Modell, der sich klar nur auf die kausalen Effekte innerhalb von Personen bezieht. Auf diesen Punkt kommen wir in der Überleitung zum <em>within-between</em>-Modell im letzten Abschnitt zurück.</li>
 </ul>
 </div>
 <div id="einfache-erweiterungen-des-random-effects-panel-modells" class="section level3 unnumbered">
@@ -668,25 +669,25 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## Formula: verh1 ~ verhint1 + factor(wave) + (1 | IDsosci)
 ##    Data: d
 ## 
-## REML criterion at convergence: 4557.9
+## REML criterion at convergence: 4558
 ## 
 ## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -4.6468 -0.2201 -0.0657  0.1861  5.8909 
+##    Min     1Q Median     3Q    Max 
+## -4.647 -0.220 -0.066  0.186  5.891 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  IDsosci  (Intercept) 0.1131   0.3364  
-##  Residual             0.3390   0.5822  
+##  IDsosci  (Intercept) 0.113    0.336   
+##  Residual             0.339    0.582   
 ## Number of obs: 2304, groups:  IDsosci, 576
 ## 
 ## Fixed effects:
-##                 Estimate Std. Error         df t value Pr(&gt;|t|)    
-## (Intercept)      0.59208    0.03359 1776.78875  17.624   &lt;2e-16 ***
-## verhint1         0.51277    0.01245 1668.82709  41.201   &lt;2e-16 ***
-## factor(wave)2   -0.03974    0.03454 1599.10544  -1.150   0.2502    
-## factor(wave)3    0.07351    0.03460 1605.18457   2.125   0.0338 *  
-## factor(wave)4    0.01267    0.03504 1651.71074   0.362   0.7177    
+##                Estimate Std. Error        df t value Pr(&gt;|t|)    
+## (Intercept)      0.5921     0.0336 1776.7887   17.62   &lt;2e-16 ***
+## verhint1         0.5128     0.0124 1668.8271   41.20   &lt;2e-16 ***
+## factor(wave)2   -0.0397     0.0345 1599.1054   -1.15    0.250    
+## factor(wave)3    0.0735     0.0346 1605.1846    2.12    0.034 *  
+## factor(wave)4    0.0127     0.0350 1651.7107    0.36    0.718    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="random-effects-modelle.html#cb71-1"></a><span class="co"># Modellvergleich Wald und Info-Kriterien</span></span>
@@ -696,10 +697,10 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## m0: verh1 ~ 1 + (1 | IDsosci)
 ## m1: verh1 ~ verhint1 + (1 | IDsosci)
 ## m2: verh1 ~ verhint1 + factor(wave) + (1 | IDsosci)
-##    Df    AIC    BIC  logLik deviance    Chisq Chi Df Pr(&gt;Chisq)    
-## m0  3 5577.5 5594.7 -2785.7   5571.5                               
-## m1  4 4548.5 4571.5 -2270.3   4540.5 1030.937      1    &lt; 2e-16 ***
-## m2  7 4543.4 4583.6 -2264.7   4529.4   11.164      3    0.01087 *  
+##    Df  AIC  BIC logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
+## m0  3 5577 5595  -2786     5571                             
+## m1  4 4549 4572  -2270     4541 1030.9      1     &lt;2e-16 ***
+## m2  7 4543 4584  -2265     4529   11.2      3      0.011 *  
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="random-effects-modelle.html#cb73-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) gegenüber M0</span></span>
@@ -712,9 +713,9 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## IDsosci | 0.809</code></pre>
 <div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="random-effects-modelle.html#cb75-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) gegenüber M1</span></span>
 <span id="cb75-2"><a href="random-effects-modelle.html#cb75-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(m2)<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sigma</span>(m1)<span class="op">^</span><span class="dv">2</span>)  <span class="co"># L1</span></span></code></pre></div>
-<pre><code>## [1] 0.006686114</code></pre>
+<pre><code>## [1] 0.0067</code></pre>
 <div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="random-effects-modelle.html#cb77-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m2)<span class="op">$</span>IDsosci)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m1)<span class="op">$</span>IDsosci))  <span class="co"># L2</span></span></code></pre></div>
-<pre><code>## [1] -0.01567278</code></pre>
+<pre><code>## [1] -0.016</code></pre>
 <ul>
 <li>Der Effekt der Verhaltensintention bleibt auch bei Berücksichtigung von Periodeneffekten praktisch unverändert.</li>
 <li>Die Periodeneffekte sind substantiell relativ unbedeutend.</li>
@@ -735,26 +736,26 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## Formula: verh1 ~ verhint1 + C_sex + factor(wave) + (1 | IDsosci)
 ##    Data: d
 ## 
-## REML criterion at convergence: 4554.1
+## REML criterion at convergence: 4554
 ## 
 ## Scaled residuals: 
-##     Min      1Q  Median      3Q     Max 
-## -4.6094 -0.2443 -0.0585  0.2150  5.9304 
+##    Min     1Q Median     3Q    Max 
+## -4.609 -0.244 -0.058  0.215  5.930 
 ## 
 ## Random effects:
 ##  Groups   Name        Variance Std.Dev.
-##  IDsosci  (Intercept) 0.1116   0.3341  
-##  Residual             0.3384   0.5818  
+##  IDsosci  (Intercept) 0.112    0.334   
+##  Residual             0.338    0.582   
 ## Number of obs: 2304, groups:  IDsosci, 576
 ## 
 ## Fixed effects:
-##                 Estimate Std. Error         df t value Pr(&gt;|t|)    
-## (Intercept)      0.66287    0.04160 1145.43136  15.935  &lt; 2e-16 ***
-## verhint1         0.51064    0.01245 1675.19655  41.006  &lt; 2e-16 ***
-## C_sex           -0.11063    0.03797  450.43520  -2.913  0.00376 ** 
-## factor(wave)2   -0.03904    0.03452 1602.57999  -1.131  0.25818    
-## factor(wave)3    0.07428    0.03457 1608.64174   2.149  0.03182 *  
-## factor(wave)4    0.01389    0.03501 1655.02256   0.397  0.69163    
+##                Estimate Std. Error        df t value Pr(&gt;|t|)    
+## (Intercept)      0.6629     0.0416 1145.4314   15.94   &lt;2e-16 ***
+## verhint1         0.5106     0.0125 1675.1966   41.01   &lt;2e-16 ***
+## C_sex           -0.1106     0.0380  450.4352   -2.91   0.0038 ** 
+## factor(wave)2   -0.0390     0.0345 1602.5800   -1.13   0.2582    
+## factor(wave)3    0.0743     0.0346 1608.6417    2.15   0.0318 *  
+## factor(wave)4    0.0139     0.0350 1655.0226    0.40   0.6916    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="random-effects-modelle.html#cb81-1"></a><span class="co"># Modellvergleich Wald und Info-Kriterien</span></span>
@@ -765,11 +766,11 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## m1: verh1 ~ verhint1 + (1 | IDsosci)
 ## m2: verh1 ~ verhint1 + factor(wave) + (1 | IDsosci)
 ## m3: verh1 ~ verhint1 + C_sex + factor(wave) + (1 | IDsosci)
-##    Df    AIC    BIC  logLik deviance     Chisq Chi Df Pr(&gt;Chisq)    
-## m0  3 5577.5 5594.7 -2785.7   5571.5                                
-## m1  4 4548.5 4571.5 -2270.3   4540.5 1030.9373      1  &lt; 2.2e-16 ***
-## m2  7 4543.4 4583.6 -2264.7   4529.4   11.1638      3   0.010872 *  
-## m3  8 4536.9 4582.8 -2260.4   4520.9    8.4888      1   0.003573 ** 
+##    Df  AIC  BIC logLik deviance   Chisq Chi Df Pr(&gt;Chisq)    
+## m0  3 5577 5595  -2786     5571                              
+## m1  4 4549 4572  -2270     4541 1030.94      1     &lt;2e-16 ***
+## m2  7 4543 4584  -2265     4529   11.16      3     0.0109 *  
+## m3  8 4537 4583  -2260     4521    8.49      1     0.0036 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="random-effects-modelle.html#cb83-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) gegenüber M0</span></span>
@@ -782,9 +783,9 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## IDsosci | 0.812</code></pre>
 <div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="random-effects-modelle.html#cb85-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) gegenüber M2</span></span>
 <span id="cb85-2"><a href="random-effects-modelle.html#cb85-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(m3)<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sigma</span>(m2)<span class="op">^</span><span class="dv">2</span>)  <span class="co"># L1</span></span></code></pre></div>
-<pre><code>## [1] 0.001532503</code></pre>
+<pre><code>## [1] 0.0015</code></pre>
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="random-effects-modelle.html#cb87-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m3)<span class="op">$</span>IDsosci)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m2)<span class="op">$</span>IDsosci))  <span class="co"># L2</span></span></code></pre></div>
-<pre><code>## [1] 0.01347101</code></pre>
+<pre><code>## [1] 0.013</code></pre>
 <ul>
 <li>Im Gegensatz zum <em>fixed effects</em> Modell können wir nun auch Personenmerkmale als Prädiktoren berücksichtigen. Frauen gehen im Durchschnitt etwas seltener ohne triftigen Grund aus dem Haus als Männer. Hier wird ein wichtiger Vorteil des <em>random effects</em> Modells gegenüber dem <em>fixed effects</em> Modell deutlich. Es könnte aus verschiedensten Gründen relevant sein, zu wissen, dass eher Männer als Frauen zu diesem riskanten Verhalten neigen. Beispielsweise könnte eine Fokussierung einer Kampagne auf Männer sinnvoll sein.</li>
 <li>Wald-Test und Informationskriterien sprechen für die Berücksichtigung des Geschlechts.</li>
@@ -852,10 +853,10 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 ## m1_int1:     IDsosci)
 ## m2_int1: verhint1 ~ ein1 + desnormp1 + injnormp1 + C_sex + factor(wave) + 
 ## m2_int1:     (1 | IDsosci)
-##         Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)    
-## m0_int1  6 6671.7 6706.1 -3329.8   6659.7                              
-## m1_int1  9 5884.8 5936.5 -2933.4   5866.8 792.866      3  &lt; 2.2e-16 ***
-## m2_int1 10 5876.3 5933.8 -2928.2   5856.3  10.484      1   0.001204 ** 
+##         Df  AIC  BIC logLik deviance Chisq Chi Df Pr(&gt;Chisq)    
+## m0_int1  6 6672 6706  -3330     6660                            
+## m1_int1  9 5885 5936  -2933     5867 792.9      3     &lt;2e-16 ***
+## m2_int1 10 5876 5934  -2928     5856  10.5      1     0.0012 ** 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="random-effects-modelle.html#cb99-1"></a><span class="co"># Varianzreduktion Vorsicht: Das ergibt hier keinen Sinn, da Vergleich mit M00</span></span>
@@ -870,17 +871,17 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 <div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="random-effects-modelle.html#cb101-1"></a><span class="co"># Wir sehen stattdessen das Modell mit Perioden-FE als Null-Referenz Reduktion</span></span>
 <span id="cb101-2"><a href="random-effects-modelle.html#cb101-2"></a><span class="co"># der Varianz (Delta R^2) in M1_int gegenüber M0_int</span></span>
 <span id="cb101-3"><a href="random-effects-modelle.html#cb101-3"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(m1_int1)<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sigma</span>(m0_int1)<span class="op">^</span><span class="dv">2</span>)  <span class="co"># L1</span></span></code></pre></div>
-<pre><code>## [1] 0.08581985</code></pre>
+<pre><code>## [1] 0.086</code></pre>
 <div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="random-effects-modelle.html#cb103-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m1_int1)<span class="op">$</span>IDsosci)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m0_int1)<span class="op">$</span>IDsosci))  <span class="co"># L2</span></span></code></pre></div>
-<pre><code>## [1] 0.7763478</code></pre>
+<pre><code>## [1] 0.78</code></pre>
 <div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="random-effects-modelle.html#cb105-1"></a><span class="co"># Reduktion der Varianz (Delta R^2) in M2_int gegenüber M1_int</span></span>
 <span id="cb105-2"><a href="random-effects-modelle.html#cb105-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(m2_int1)<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sigma</span>(m1_int1)<span class="op">^</span><span class="dv">2</span>)  <span class="co"># L1</span></span></code></pre></div>
-<pre><code>## [1] 0.0002454245</code></pre>
+<pre><code>## [1] 0.00025</code></pre>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="random-effects-modelle.html#cb107-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m2_int1)<span class="op">$</span>IDsosci)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m1_int1)<span class="op">$</span>IDsosci))  <span class="co"># L2</span></span></code></pre></div>
-<pre><code>## [1] 0.02729841</code></pre>
+<pre><code>## [1] 0.027</code></pre>
 <ul>
 <li><p>Als Null-Modell spezifizieren wir ein Modell mit <em>random effects</em> für Personen und <em>fixed effects</em> für Panelwellen. Meiner Meinung nach ist dies ein angemessenes Null-Modell, da nur die Eigenschaften des Designs abgebildet werden. Für die Panelwellen eigenen sich <em>fixed effects</em>, da es nur vier Messzeitpunkte gibt.</p></li>
-<li><p>Für das Null-Modell können wir die ICC ausweisen. Da im Modell auch <em>fixed effects</em> sind, interpretieren wir den <em>conditional ICC</em>. Mehr als die Hälfte der Varianz in der Intention, ohne triftigen Grund die Wohnung zu verlassen, liegt zwischen den Personen.</p></li>
+<li><p>Für das Null-Modell können wir die ICC ausweisen. Da im Modell auch <em>fixed effects</em> sind, interpretieren wir die <em>conditional ICC</em>. Mehr als die Hälfte der Varianz in der Intention, ohne triftigen Grund die Wohnung zu verlassen, liegt zwischen den Personen.</p></li>
 <li><p>Die Einstellung hat einen deutlichen Effekt auf die Verhaltensintention. Die Wahrnehmungen deskriptiver und injunktiver Normen haben vergleichsweise geringe, statistisch signifikante Effekte.</p></li>
 <li><p>Die Informationskriterien und der Wald-Test zeigen klar, dass sich das Modell durch die Aufnahme der drei Prädiktoren verbessert.</p></li>
 <li><p>Die drei Prädiktoren erklären 9% der Varianz innerhalb der Personen und 78% der Varianz zwischen den Personen. Da wir ein angepasstes Null-Modell mit <em>fixed effects</em> für die Wellen als Referenz wählen, müssen wir die Varianzreduktion selbst berechnen. <code>performance::r2()</code> bezieht sich immer auf das “leere” Null-Modell. Es bezieht in diesem Fall die Erklärungskraft der <em>fixed effects</em> für die Wellen mit ein.</p></li>
@@ -903,16 +904,266 @@ Die übrigen Regressionskoeffizienten sind für alle Personen gleich (<em>fixed<
 </div>
 <div id="variierende-koeffizienten-random-slopes-und-ebenen-überschreitende-interaktionen-cross-level-interactions" class="section level2">
 <h2><span class="header-section-number">4.7</span> Variierende Koeffizienten (random slopes) und Ebenen-überschreitende Interaktionen (cross-level interactions)</h2>
+<ul>
+<li>Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren. Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen.</li>
+<li>Damit lockern wir die Annahme eines homogenen Treatment-Effekts: Wir gehen nicht mehr davon aus, dass der Effekt eines Prädiktors für alle Personen gleich ist, sondern lassen eine Streuung um den durchschnittlichen Treatment-Effekt zu.</li>
+<li>Die Standardabweichung (oder die Varianz) des <em>random slope</em> (oder <em>varying coefficient</em>) ist ein Indikator dafür, wie stark ein Effekt zwischen den Personen variiert.</li>
+<li>Wir können testen, ob sich diese Varianz der Koeffizienten von 0 unterscheidet. Dazu werden zwei Tests empfohlen:
+<ul>
+<li>Vergleich der Modelle mit und ohne <em>random slopes</em> mit einem Likelihood-Ratio-Test (Wald-Test)</li>
+<li>Prüfen, ob das Konfidenzintervalls um die Varianzkomponente die 0 enthält.</li>
+<li>Es ist in der Literatur zu <em>mixed effects</em> Modellen umstritten, ob das Testen einer Varianzkomponente sinnvoll ist.
+<ul>
+<li><span class="citation">Barr et al. (<a href="#ref-barrRandomEffectsStructure2013" role="doc-biblioref">2013</a>)</span> fordern, dass <strong>alle</strong> Koeffizienten, die dem Design einer Studie nach variieren müssen (im Panel-Design eigentlich alle Effekte von über die Zeit variierenden Prädiktoren), als <em>random slopes</em> geschätzt werden sollen.</li>
+<li><span class="citation">Matuschek et al. (<a href="#ref-matuschekBalancingTypeError2017" role="doc-biblioref">2017</a>)</span> sprechen sich dafür aus, sparsame Modelle zu spezifizieren, die den Daten entsprechen. Wenn die Daten keine Evidenz für bedeutsame Effekt-Heterogenität zeigen, kann das sparsamere Modell ohne <em>random slope</em> bevorzugt werden. Dies ist in der (Restricted) Maximum-Likelihood-Schätzung häufig auch pragmatisch erforderlich, um die Modelle schätzbar zu machen.</li>
+</ul></li>
+</ul></li>
+<li>In unserem Beispiel wollen wir den Effekt der Intention, ohne triftigen Grund raus zu gehen, zwischen den Personen variieren lassen.
+<ul>
+<li>Dazu ergänzen wir den Prädiktor in der Klammer, in der die <em>random effects</em> spezifiziert werden: <code>+ (verhint1 | IDsosci)</code>.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="random-effects-modelle.html#cb109-1"></a><span class="co"># Modellspezifikation</span></span>
+<span id="cb109-2"><a href="random-effects-modelle.html#cb109-2"></a>m4 =<span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(verhint1 <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span></code></pre></div>
+<pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="random-effects-modelle.html#cb111-1"></a>m4 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">correlation =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1 + factor(wave) + (verhint1 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 3859
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -6.089 -0.268 -0.102 -0.054  8.014 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr 
+##  IDsosci  (Intercept) 0.0891   0.299         
+##           verhint1    0.0971   0.312    -1.00
+##  Residual             0.2446   0.495         
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                Estimate Std. Error        df t value Pr(&gt;|t|)    
+## (Intercept)      0.5798     0.0314 1087.2900   18.44   &lt;2e-16 ***
+## verhint1         0.4706     0.0215  347.4913   21.94   &lt;2e-16 ***
+## factor(wave)2   -0.0167     0.0299 2002.4198   -0.56   0.5759    
+## factor(wave)3    0.0825     0.0299 2008.1778    2.76   0.0059 ** 
+## factor(wave)4    0.0633     0.0305 2035.1883    2.07   0.0382 *  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## convergence code: 0
+## boundary (singular) fit: see ?isSingular</code></pre>
+<ul>
+<li>Wenn wir das Modell zu schätzen, erhalten wir eine Warnung, dass die Lösung ein <em>singulärer Fit</em> ist. Ein Auszug aus <code>?lme4::isSingular</code>:</li>
+</ul>
+<blockquote>
+<p>While singular models are statistically well defined (it is theoretically sensible for the true maximum likelihood estimate to correspond to a singular fit), there are real concerns that (1) singular fits correspond to overfitted models that may have poor power; (2) chances of numerical problems and mis-convergence are higher for singular models (e.g. it may be computationally difficult to compute profile confidence intervals for such models); (3) standard inferential procedures such as Wald statistics and likelihood ratio tests may be inappropriate.</p>
+</blockquote>
+<ul>
+<li>Ein singulärer Fit ist ein Hinweis darauf, dass die Daten nicht ausreichen, um alle Varianzkomponenten mit (Restricted) Maximum-Likelihood zu schätzen. Dies ist in typischen Befragungspanels mit relativ wenigen Messzeitpunkten häufig der Fall. Es gibt für jeden Befragten nur vier Beobachtungen, aus denen wir in diesem Modell drei Varianz-Kovarianz-Koeffizienten schätzen.</li>
+<li>In diesem Fall finden wir eine Korrelation von <span class="math inline">\(-1\)</span> zwischen den Personen-spezifischen Konstanten und den Personen-spezifischen Effekten der Verhaltensintention. Das heißt, dass aus der Personen-spezifischen Konstante perfekt vorhergesagt werden kann, wo der Personen-spezifische Effekt liegt. Je höher die durchschnittliche Häufigkeit des Rausgehens ohne Grund ist, desto negativer ist der Effekt der Verhaltensintention. Etwas abstrakter ausgedrückt: Wir können hier nicht analytisch zwischen durchschnittlichem Niveau und Effekt für eine Person unterscheiden.</li>
+<li>In der Praxis würden wir hier meist mit dem <em>random intercept</em> Modell weiter arbeiten. Wenn wir nur an den <em>fixed effects</em> interessiert sind, können wir auch das Modell mit <em>random slope</em> verwenden, solange wir die im Zitat oben genannten Einschränkungen beachten.</li>
+</ul>
+<div id="ein-weiteres-beispiel" class="section level3 unnumbered">
+<h3>Ein weiteres Beispiel</h3>
+<ul>
+<li>Um das weitere Vorgehen mit dem <em>random slope</em> Modell zu erläutern, wechseln wir die Variablen. Ein Modell, in dem die Intention, sich mit Personen außerhalb des eigenen Haushalts zu treffen (<code>verhint2</code>), durch die Einstellung zu diesem Verhalten (<code>ein2</code>) erklärt wird, lässt sich mit den vorliegenden Daten schätzen.</li>
+<li>Im folgenden Code-Snippet schätzen wir zuerst als Referenz das Modell mit <em>random intercept</em> (<code>m_ri</code>). Dann lassen wir den Effekt der Einstellung zwischen den Personen variieren (<code>m_rs</code>).</li>
+</ul>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="random-effects-modelle.html#cb113-1"></a><span class="co"># Modell mit Random Intercept als Referenz</span></span>
+<span id="cb113-2"><a href="random-effects-modelle.html#cb113-2"></a>m_ri =<span class="st"> </span><span class="kw">lmer</span>(verhint2 <span class="op">~</span><span class="st"> </span>ein2 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb113-3"><a href="random-effects-modelle.html#cb113-3"></a></span>
+<span id="cb113-4"><a href="random-effects-modelle.html#cb113-4"></a><span class="co"># Modell mit Random Slope</span></span>
+<span id="cb113-5"><a href="random-effects-modelle.html#cb113-5"></a>m_rs =<span class="st"> </span><span class="kw">lmer</span>(verhint2 <span class="op">~</span><span class="st"> </span>ein2 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(ein2 <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb113-6"><a href="random-effects-modelle.html#cb113-6"></a>m_rs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">correlation =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: verhint2 ~ ein2 + factor(wave) + (ein2 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 6217
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -3.184 -0.421 -0.202  0.247  4.353 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr 
+##  IDsosci  (Intercept) 0.230    0.480         
+##           ein2        0.111    0.334    -0.62
+##  Residual             0.639    0.799         
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                Estimate Std. Error        df t value     Pr(&gt;|t|)    
+## (Intercept)      0.8226     0.0517  794.3368   15.91      &lt; 2e-16 ***
+## ein2             0.4033     0.0269  371.7795   14.97      &lt; 2e-16 ***
+## factor(wave)2    0.1130     0.0483 1573.1786    2.34        0.019 *  
+## factor(wave)3    0.1970     0.0483 1587.1670    4.07 0.0000485440 ***
+## factor(wave)4    0.2880     0.0490 1646.3075    5.87 0.0000000052 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="random-effects-modelle.html#cb115-1"></a><span class="co"># profile confidence intervals</span></span>
+<span id="cb115-2"><a href="random-effects-modelle.html#cb115-2"></a><span class="kw">confint</span>(m_rs)</span></code></pre></div>
+<pre><code>##                2.5 % 97.5 %
+## .sig01         0.317   0.61
+## .sig02        -0.749  -0.39
+## .sig03         0.280   0.39
+## .sigma         0.770   0.83
+## (Intercept)    0.718   0.93
+## ein2           0.348   0.46
+## factor(wave)2  0.018   0.21
+## factor(wave)3  0.102   0.29
+## factor(wave)4  0.191   0.38</code></pre>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="random-effects-modelle.html#cb117-1"></a><span class="co"># Wald-Test</span></span>
+<span id="cb117-2"><a href="random-effects-modelle.html#cb117-2"></a><span class="kw">anova</span>(m_ri, m_rs)</span></code></pre></div>
+<pre><code>## Data: d
+## Models:
+## m_ri: verhint2 ~ ein2 + factor(wave) + (1 | IDsosci)
+## m_rs: verhint2 ~ ein2 + factor(wave) + (ein2 | IDsosci)
+##      Df  AIC  BIC logLik deviance Chisq Chi Df Pr(&gt;Chisq)    
+## m_ri  7 6403 6444  -3195     6389                            
+## m_rs  9 6211 6262  -3096     6193   197      2     &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="random-effects-modelle.html#cb119-1"></a><span class="co"># RE mit 95%-CIs (aus Darstellungsgründen nur jede fünfte Person)</span></span>
+<span id="cb119-2"><a href="random-effects-modelle.html#cb119-2"></a>m_rs <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ranef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">augment</span>(<span class="dt">ci.level =</span> <span class="fl">0.95</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(variable <span class="op">==</span><span class="st"> </span></span>
+<span id="cb119-3"><a href="random-effects-modelle.html#cb119-3"></a><span class="st">    &quot;ein2&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">slice</span>(<span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(.), <span class="dt">by =</span> <span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">level =</span> <span class="kw">reorder</span>(level, </span>
+<span id="cb119-4"><a href="random-effects-modelle.html#cb119-4"></a>    estimate)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(estimate, level, <span class="dt">xmin =</span> lb, <span class="dt">xmax =</span> ub)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_pointrangeh</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb119-5"><a href="random-effects-modelle.html#cb119-5"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;IDsosci&quot;</span>)</span></code></pre></div>
+<p><img src="workshop_panel_files/figure-html/lmer-random-slope2-1.png" width="672" /></p>
+<ul>
+<li><p>Mit jedem Punkt auf der Einstellungsskala steigt die Intention, sich mit anderen Personen außerhalb des Haushalts zu treffen, um ca. 0.4 Punkte.</p></li>
+<li><p>Die Personen-spezifischen Effekte streuen mit einer Standardabweichung von ca. 0.3 Punkten um diesen durchschnittlichen Effekt durchaus wahrnehmbar. Die typischen Effekte (+/- 1 SD) liegen zwischen sehr geringen Effekten und deutlichen Effekten. Ein negativer Effekt der Einstellung auf die Intention ist selten.</p></li>
+<li><p>Das Konfidenzintervall für die Standardabweichung des <em>random slope</em> (<code>.sig03</code>) liegt deutlich über 0. Wir können davon ausgehen, dass es Heterogenität im Treatment-Effekt gibt. Manche Personen passen ihre Verhaltensintention ihren Einstellungen stärker an, bei anderen entwickeln sich Einstellung und Verhaltensintention weniger systematisch.</p></li>
+<li><p>Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass das Modell mit <em>random slope</em> wesentlich besser zu den Daten passt als das Modell nur mit <em>random intercept</em>.</p></li>
+<li><p>Die Abbildung vermittelt einen Eindruck von der Treatment-Effekt-Heterogenität. Dargestellt ist die die Abweichung vom durchschnittlichen Effekt (0.4). Neben der Verteilung sollten auch die weiten Intervalle beachtet werden. Auf Basis von nur vier Beobachtungen pro Person lassen sich die individuellen Abweichungen vom durchschnittlichen Effekt nur recht unpräzise quantifizieren.</p></li>
+</ul>
+</div>
+<div id="ebenen-überschreitende-interaktionen-cross-level-interactions" class="section level3 unnumbered">
+<h3>Ebenen-überschreitende Interaktionen (cross-level interactions)</h3>
+<ul>
+<li><p><em>Random slopes</em> zeigen nur eine allgemeine Heterogenität zwischen den Personen. Wir wissen nun, dass der Effekt der Einstellung auf das Verhalten bei verschiedenen Personen unterschiedlich ausfällt. Wir wissen aber nicht, an welchen Eigenschaften der Personen dies liegen könnte.</p></li>
+<li><p>Wenn wir theoretisch von Effekt-Heterogenität ausgehen oder empirisch durch ein <em>random slope</em> Modell Evidenz dafür gefunden haben, können wir in einem weiteren Schritt versuchen, diese Heterogenität zu erklären.</p></li>
+<li><p>Dazu prüfen wir, ob eine Interaktion zwischen einem Personen-Merkmal und dem Prädiktor die allgemeine Heterogenität des Treatment-Effekts reduziert. Da das Personen-Merkmal auf Level 2 und der Prädiktor als über die Zeit variierende Variable auf Level 1 angesiedelt ist, spricht man hier auch von einer <em>cross-level interaction</em>.</p></li>
+<li><p>Im Beispiel wollen wir betrachten, ob die Berücksichtigung des Geschlechts einen Teil der Treatment-Effekt-Heterogenität erklären kann.</p>
+<ul>
+<li>Dazu spezifizieren wir zwei weitere Modelle:
+<ul>
+<li><code>m_rs_sex1</code> enthält den einfachen Haupteffekt des Geschlechts.</li>
+<li><code>m_rs_sex2</code> enthält zudem die Interaktion zwischen der Einstellung und dem Geschlecht.</li>
+</ul></li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="random-effects-modelle.html#cb120-1"></a><span class="co"># Modell mit Random Slope als Referenz</span></span>
+<span id="cb120-2"><a href="random-effects-modelle.html#cb120-2"></a>m_rs =<span class="st"> </span><span class="kw">lmer</span>(verhint2 <span class="op">~</span><span class="st"> </span>ein2 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(ein2 <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb120-3"><a href="random-effects-modelle.html#cb120-3"></a></span>
+<span id="cb120-4"><a href="random-effects-modelle.html#cb120-4"></a><span class="co"># Modell mit HE Geschlecht</span></span>
+<span id="cb120-5"><a href="random-effects-modelle.html#cb120-5"></a>m_rs_sex1 =<span class="st"> </span><span class="kw">lmer</span>(verhint2 <span class="op">~</span><span class="st"> </span>ein2 <span class="op">+</span><span class="st"> </span>C_sex <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(ein2 <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb120-6"><a href="random-effects-modelle.html#cb120-6"></a>m_rs_sex1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">correlation =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: verhint2 ~ ein2 + C_sex + factor(wave) + (ein2 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 6221
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -3.184 -0.424 -0.205  0.247  4.349 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr 
+##  IDsosci  (Intercept) 0.231    0.481         
+##           ein2        0.112    0.334    -0.62
+##  Residual             0.639    0.799         
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                 Estimate Std. Error         df t value     Pr(&gt;|t|)    
+## (Intercept)      0.82744    0.06062  758.00715   13.65      &lt; 2e-16 ***
+## ein2             0.40322    0.02696  371.85383   14.96      &lt; 2e-16 ***
+## C_sex           -0.00757    0.05279  386.27700   -0.14        0.886    
+## factor(wave)2    0.11304    0.04829 1573.33025    2.34        0.019 *  
+## factor(wave)3    0.19704    0.04834 1587.36240    4.08 0.0000480989 ***
+## factor(wave)4    0.28810    0.04904 1646.41878    5.87 0.0000000051 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="random-effects-modelle.html#cb122-1"></a><span class="co"># Modell mit IA Geschlecht*Einstellung</span></span>
+<span id="cb122-2"><a href="random-effects-modelle.html#cb122-2"></a>m_rs_sex2 =<span class="st"> </span><span class="kw">lmer</span>(verhint2 <span class="op">~</span><span class="st"> </span>ein2 <span class="op">*</span><span class="st"> </span>C_sex <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(ein2 <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb122-3"><a href="random-effects-modelle.html#cb122-3"></a>m_rs_sex2 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">correlation =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
+## lmerModLmerTest]
+## Formula: verhint2 ~ ein2 * C_sex + factor(wave) + (ein2 | IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 6224
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -3.190 -0.432 -0.213  0.244  4.340 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr 
+##  IDsosci  (Intercept) 0.230    0.480         
+##           ein2        0.111    0.333    -0.62
+##  Residual             0.639    0.799         
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                Estimate Std. Error        df t value Pr(&gt;|t|)    
+## (Intercept)      0.8733     0.0770  584.4186   11.34  &lt; 2e-16 ***
+## ein2             0.3702     0.0435  375.7244    8.51  4.1e-16 ***
+## C_sex           -0.0811     0.0932  458.4467   -0.87     0.38    
+## factor(wave)2    0.1128     0.0483 1573.3027    2.34     0.02 *  
+## factor(wave)3    0.1973     0.0483 1587.2271    4.08  4.7e-05 ***
+## factor(wave)4    0.2877     0.0490 1646.3174    5.87  5.3e-09 ***
+## ein2:C_sex       0.0527     0.0551  367.9806    0.96     0.34    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## convergence code: 0
+## Model failed to converge with max|grad| = 0.00291019 (tol = 0.002, component 1)</code></pre>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="random-effects-modelle.html#cb124-1"></a><span class="co"># Wald-Test</span></span>
+<span id="cb124-2"><a href="random-effects-modelle.html#cb124-2"></a><span class="kw">anova</span>(m_rs, m_rs_sex1, m_rs_sex2)</span></code></pre></div>
+<pre><code>## Data: d
+## Models:
+## m_rs: verhint2 ~ ein2 + factor(wave) + (ein2 | IDsosci)
+## m_rs_sex1: verhint2 ~ ein2 + C_sex + factor(wave) + (ein2 | IDsosci)
+## m_rs_sex2: verhint2 ~ ein2 * C_sex + factor(wave) + (ein2 | IDsosci)
+##           Df  AIC  BIC logLik deviance Chisq Chi Df Pr(&gt;Chisq)
+## m_rs       9 6211 6262  -3096     6193                        
+## m_rs_sex1 10 6213 6270  -3096     6193  0.02      1       0.89
+## m_rs_sex2 11 6214 6277  -3096     6192  0.92      1       0.34</code></pre>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="random-effects-modelle.html#cb126-1"></a><span class="co"># Reduktion der Varianz in random slope durch Interaktion</span></span>
+<span id="cb126-2"><a href="random-effects-modelle.html#cb126-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m_rs_sex2)<span class="op">$</span>IDsosci[<span class="st">&quot;ein2&quot;</span>, <span class="st">&quot;ein2&quot;</span>]<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(m_rs_sex1)<span class="op">$</span>IDsosci[<span class="st">&quot;ein2&quot;</span>, </span>
+<span id="cb126-3"><a href="random-effects-modelle.html#cb126-3"></a>    <span class="st">&quot;ein2&quot;</span>])))</span></code></pre></div>
+<pre><code>## [1] 0.0047</code></pre>
+<ul>
+<li>Das Geschlecht macht nur einen unwesentlichen Unterschied in der Intention, sich mit Personen außerhalb des Haushalts zu treffen, aus (<code>m_rs_sex1</code>).</li>
+<li>Der Effekt der Einstellung auf die Intention unterscheidet sich kaum für Männer und Frauen (<code>m_rs_sex2</code>). Wichtig: In diesem Modell mit Interaktionseffekt haben die Koeffizienten der Prädiktoren eine andere Bedeutung als im Modell ohne Interaktionseffekt. Sie quantifizieren nicht mehr “Haupteffekte”, sondern “einfache” Effekte (<em>simple effects</em>). Der Koeffizient für <code>ein2</code> quantifiziert den Effekt, wenn <code>C_sex</code> gleich 0 ist — also den Effekt für Männer. Der Koeffizient des Interaktionsterms <code>ein2:C_sex</code> quantifiziert den Unterschied im Effekt zwischen Männern und Frauen.</li>
+<li>Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass weder die Aufnahme des Geschlechts noch die Interaktion der Einstellungen mit dem Geschlecht zur Verbesserung des Modells beitragen.</li>
+<li>Durch den Vergleich der Varianz der <em>random slopes</em> zwischen <code>m_rs_sex1</code> und <code>m_rs_sex2</code> können wir quantifizieren, welchen Anteil der Effekt-Heterogenität durch die Interaktion erklärt werden kann. In diesem Beispiel ist die Erklärungskraft der Interaktion zu vernachlässigen.</li>
+</ul>
 
+</div>
 </div>
 </div>
 <h3>Literatur</h3>
 <div id="refs" class="references">
+<div id="ref-barrRandomEffectsStructure2013">
+<p>Barr, Dale J., Roger Levy, Christoph Scheepers, and Harry J. Tily. 2013. “Random Effects Structure for Confirmatory Hypothesis Testing: Keep It Maximal.” <em>Journal of Memory and Language</em> 68 (3): 255–78. <a href="https://doi.org/http://dx.doi.org/10.1016/j.jml.2012.11.001">https://doi.org/http://dx.doi.org/10.1016/j.jml.2012.11.001</a>.</p>
+</div>
 <div id="ref-plm2008">
 <p>Croissant, Yves, and Giovanni Millo. 2008. “Panel Data Econometrics in R: The plm Package.” <em>Journal of Statistical Software</em> 27 (2): 1–43. <a href="https://doi.org/10.18637/jss.v027.i02">https://doi.org/10.18637/jss.v027.i02</a>.</p>
 </div>
 <div id="ref-gelmanDataAnalysisUsing2006">
 <p>Gelman, A., and J. Hill. 2006. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. New York: Cambridge University Press.</p>
+</div>
+<div id="ref-matuschekBalancingTypeError2017">
+<p>Matuschek, Hannes, Reinhold Kliegl, Shravan Vasishth, Harald Baayen, and Douglas Bates. 2017. “Balancing Type I Error and Power in Linear Mixed Models.” <em>Journal of Memory and Language</em> 94 (June): 305–15. <a href="https://doi.org/10.1016/j.jml.2017.01.001">https://doi.org/10.1016/j.jml.2017.01.001</a>.</p>
 </div>
 <div id="ref-vaiseyWhatYouCan2017">
 <p>Vaisey, Stephen, and Andrew Miles. 2017. “What You Can—and Can’t—Do with Three-Wave Panel Data.” <em>Sociological Methods &amp; Research</em> 46 (1): 44–67. <a href="https://doi.org/10.1177/0049124114547769">https://doi.org/10.1177/0049124114547769</a>.</p>

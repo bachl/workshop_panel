@@ -17,6 +17,8 @@ d_constants = d_wide %>%
   mutate(C_alter = mean(c(w1_alter, w2_alter, w3_alter, w4_alter), na.rm = TRUE),
          C_sex = round(mean(c(w1_gesch_d, w2_gesch_d, w3_gesch_d, w4_gesch_d), na.rm = TRUE))) %>% 
   ungroup() %>% 
+  # Missings in Alter durch Median ersetzen (macht Dinge einfacher, in der Praxis nicht empfohlen)
+  mutate(C_alter = if_else(is.na(C_alter), median(C_alter, na.rm = TRUE), C_alter)) %>% 
   rename(C_kollek = w1_kollek4,
          C_edu = w1_bildung) %>% 
   select(IDsosci, starts_with("C_"))
@@ -45,6 +47,7 @@ saveRDS(d, "R/data/data.rds")
 d_wide %>% 
   select(starts_with("w4"),
          sex = w4_gesch_d,
+         kollek = w1_kollek4,
          -w4_gesch,
          -contains("_ID"),
          -w1, -w2, -w3, -w4, -w4_coronapeers,
