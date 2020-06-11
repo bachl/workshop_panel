@@ -1,6 +1,7 @@
 # Hybride *within-between* Modelle
 
 ```{r, include=FALSE}
+options(scipen = 10, digits = 2)
 source("R/packages.R")
 d = read_rds("R/data/data.rds")
 source("R/icc.R")
@@ -9,6 +10,7 @@ source("R/lmervgl.R")
 ```
 
 ```{r, echo=FALSE, cache=FALSE}
+knitr::read_chunk("R/wb_trans.R")
 knitr::read_chunk("R/wb1.R")
 ```
 
@@ -31,11 +33,25 @@ m1 %>% summary(correlation=FALSE)
 r2(m1, by_group = TRUE)
 ```
 
-* Die Verhaltensintention erklärt sowohl 81% der Varianz zwischen den Personen als auch 16% der Varianz innerhalb der Personen. Trotzdem erhalten wir nur einen Koeffizienten, in dem der *within-person* Effekt und der *between-person* Unterschied untrennbar vermischt sind.
+* Die Verhaltensintention erklärt sowohl 81% der Varianz zwischen den Personen als auch 16% der Varianz innerhalb der Personen. Wir erhalten aber nur einen Koeffizienten, in dem der *within-person* Effekt und der *between-person* Unterschied untrennbar vermischt sind.
 
 ## Spezifikation des *within-between* Modells
 
+* Wir untersuchen wieder den Effekt der Intention, die Wohnung ohne triftigen Grund zu verlassen, auf den Bericht, dies getan zu haben.
 
+```{r wb-trans, eval=TRUE, tidy=TRUE, message=FALSE}
+
+```
+
+* Zuerst transformieren wir den Prädiktor `verhint1` in einen *within*-Prädiktor `verhint1_w` und einen *between*-Prädiktor `verhint1_b`.
+  * Am Beispiel von zwei Personen können wir sehen, dass `verhint1_b` der Mittelwert der Person über die vier Wellen ist und `verhint1_w` der Messwert in einer Welle bereinigt um den Mittelwert. Es wird auch direkt deutlich, dass `verhint1_b` nun per Transformationslogik eine über die Zeit konstante Personeneigenschaft ist. 
+  
+* Die Spezifikation des Modells mit `lme4::lmer()` folgt derselben Logik wie das *random effects* Panelmodell in Abschnitt 4.
+  * Als Referenz ziehen wir das entsprechende Null-Modell inklusive der *fixed effects* für die Panelwellen heran.
+  * Wir beginnen wieder mit einem *random intercept* Modell, `(1 | IDsosci)`.
+  * `verhint1_w` und `verhint1_b` werden als Prädiktoren in das Modell aufgenommen.
+  
 ```{r wb1, eval=TRUE, tidy=TRUE, message=FALSE}
 
 ```
+

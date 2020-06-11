@@ -161,6 +161,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="hybride-within-between-modelle.html"><a href="hybride-within-between-modelle.html"><i class="fa fa-check"></i><b>5</b> Hybride <em>within-between</em> Modelle</a><ul>
 <li class="chapter" data-level="5.1" data-path="hybride-within-between-modelle.html"><a href="hybride-within-between-modelle.html#das-beste-aus-beiden-welten"><i class="fa fa-check"></i><b>5.1</b> Das Beste aus beiden Welten?</a></li>
+<li class="chapter" data-level="5.2" data-path="hybride-within-between-modelle.html"><a href="hybride-within-between-modelle.html#spezifikation-des-within-between-modells"><i class="fa fa-check"></i><b>5.2</b> Spezifikation des <em>within-between</em> Modells</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
 </ul>
@@ -197,7 +198,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Der Koeffizient des <em>within-person</em> Prädiktors entspricht dem <em>fixed effects</em> Schätzer (siehe Abschnitt 3.1, Within Transformation). Der Koeffizient des <em>between-person</em> Prädiktors quantifiziert die Unterschiede der Personen in <span class="math inline">\(y\)</span>, die durch über die Zeit stabile Unterschiede in <span class="math inline">\(x\)</span> erklärt werden.</p></li>
 <li><p>Ein Blick auf die Varianzaufklärung im ersten Beispiel zum <em>random effects</em> Panelmodell in Abschnitt 4.5 zeigt, warum die Trennung dieser beiden Effekte sinnvoll ist. Das Ergebnis ist hier noch einmal reproduziert.</p></li>
 </ul>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="hybride-within-between-modelle.html#cb126-1"></a>m1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">correlation =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="hybride-within-between-modelle.html#cb1-1"></a>m1 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">correlation =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
 ## lmerModLmerTest]
 ## Formula: verh1 ~ verhint1 + (1 | IDsosci)
@@ -221,7 +222,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## verhint1       0.5155     0.0122 1747.0982    42.3   &lt;2e-16 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="hybride-within-between-modelle.html#cb128-1"></a><span class="kw">r2</span>(m1, <span class="dt">by_group =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="hybride-within-between-modelle.html#cb3-1"></a><span class="kw">r2</span>(m1, <span class="dt">by_group =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <pre><code>## # Explained Variance by Level
 ## 
 ## Level   |    R2
@@ -229,20 +230,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## Level 1 | 0.161
 ## IDsosci | 0.812</code></pre>
 <ul>
-<li>Die Verhaltensintention erklärt sowohl 81% der Varianz zwischen den Personen als auch 16% der Varianz innerhalb der Personen. Trotzdem erhalten wir nur einen Koeffizienten, in dem der <em>within-person</em> Effekt und der <em>between-person</em> Unterschied untrennbar vermischt sind.</li>
+<li>Die Verhaltensintention erklärt sowohl 81% der Varianz zwischen den Personen als auch 16% der Varianz innerhalb der Personen. Wir erhalten aber nur einen Koeffizienten, in dem der <em>within-person</em> Effekt und der <em>between-person</em> Unterschied untrennbar vermischt sind.</li>
 </ul>
-<div id="spezifikation-des-within-between-modells" class="section level3 unnumbered">
-<h3>Spezifikation des <em>within-between</em> Modells</h3>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="hybride-within-between-modelle.html#cb130-1"></a><span class="co"># Transformation: Trennen von within- und between-Präditor</span></span>
-<span id="cb130-2"><a href="hybride-within-between-modelle.html#cb130-2"></a>d =<span class="st"> </span>d <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb130-3"><a href="hybride-within-between-modelle.html#cb130-3"></a><span class="st">  </span><span class="kw">group_by</span>(IDsosci) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb130-4"><a href="hybride-within-between-modelle.html#cb130-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">verhint1_w =</span> verhint1 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(verhint1), <span class="co"># within</span></span>
-<span id="cb130-5"><a href="hybride-within-between-modelle.html#cb130-5"></a>         <span class="dt">verhint1_b =</span> <span class="kw">mean</span>(verhint1)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># between</span></span>
-<span id="cb130-6"><a href="hybride-within-between-modelle.html#cb130-6"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
-<span id="cb130-7"><a href="hybride-within-between-modelle.html#cb130-7"></a><span class="co"># Zwei Personen zur Illustration</span></span>
-<span id="cb130-8"><a href="hybride-within-between-modelle.html#cb130-8"></a>d <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb130-9"><a href="hybride-within-between-modelle.html#cb130-9"></a><span class="st">  </span><span class="kw">filter</span>(IDsosci <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;050IPY&quot;</span>, <span class="st">&quot;02E6C8&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb130-10"><a href="hybride-within-between-modelle.html#cb130-10"></a><span class="st">  </span><span class="kw">select</span>(IDsosci, wave, <span class="kw">starts_with</span>(<span class="st">&quot;verhint1&quot;</span>))</span></code></pre></div>
+</div>
+<div id="spezifikation-des-within-between-modells" class="section level2">
+<h2><span class="header-section-number">5.2</span> Spezifikation des <em>within-between</em> Modells</h2>
+<ul>
+<li>Wir untersuchen wieder den Effekt der Intention, die Wohnung ohne triftigen Grund zu verlassen, auf den Bericht, dies getan zu haben.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="hybride-within-between-modelle.html#cb5-1"></a><span class="co"># Transformation: Trennen von within- und between-Prädiktor</span></span>
+<span id="cb5-2"><a href="hybride-within-between-modelle.html#cb5-2"></a>d =<span class="st"> </span>d <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-3"><a href="hybride-within-between-modelle.html#cb5-3"></a><span class="st">  </span><span class="kw">group_by</span>(IDsosci) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="hybride-within-between-modelle.html#cb5-4"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">verhint1_w =</span> verhint1 <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(verhint1), <span class="co"># within</span></span>
+<span id="cb5-5"><a href="hybride-within-between-modelle.html#cb5-5"></a>         <span class="dt">verhint1_b =</span> <span class="kw">mean</span>(verhint1)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># between</span></span>
+<span id="cb5-6"><a href="hybride-within-between-modelle.html#cb5-6"></a><span class="st">  </span><span class="kw">ungroup</span>()</span>
+<span id="cb5-7"><a href="hybride-within-between-modelle.html#cb5-7"></a><span class="co"># Zwei Personen zur Illustration</span></span>
+<span id="cb5-8"><a href="hybride-within-between-modelle.html#cb5-8"></a>d <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-9"><a href="hybride-within-between-modelle.html#cb5-9"></a><span class="st">  </span><span class="kw">filter</span>(IDsosci <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;050IPY&quot;</span>, <span class="st">&quot;02E6C8&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-10"><a href="hybride-within-between-modelle.html#cb5-10"></a><span class="st">  </span><span class="kw">select</span>(IDsosci, wave, <span class="kw">starts_with</span>(<span class="st">&quot;verhint1&quot;</span>))</span></code></pre></div>
 <pre><code>## # A tibble: 8 x 5
 ##   IDsosci  wave verhint1 verhint1_w verhint1_b
 ##   &lt;chr&gt;   &lt;int&gt;    &lt;dbl&gt;      &lt;dbl&gt;      &lt;dbl&gt;
@@ -254,13 +259,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## 6 050IPY      2        3         -1          4
 ## 7 050IPY      3        5          1          4
 ## 8 050IPY      4        5          1          4</code></pre>
-<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="hybride-within-between-modelle.html#cb132-1"></a><span class="co"># Null-Modell als Referenz</span></span>
-<span id="cb132-2"><a href="hybride-within-between-modelle.html#cb132-2"></a>wb_<span class="dv">0</span> =<span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
-<span id="cb132-3"><a href="hybride-within-between-modelle.html#cb132-3"></a></span>
-<span id="cb132-4"><a href="hybride-within-between-modelle.html#cb132-4"></a><span class="co"># Within-between Modell mit random intercept</span></span>
-<span id="cb132-5"><a href="hybride-within-between-modelle.html#cb132-5"></a>wb_ri =<span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1_w <span class="op">+</span><span class="st"> </span>verhint1_b <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
-<span id="cb132-6"><a href="hybride-within-between-modelle.html#cb132-6"></a>wb_ri <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb132-7"><a href="hybride-within-between-modelle.html#cb132-7"></a><span class="st">  </span><span class="kw">summary</span>(<span class="dt">correlation=</span><span class="ot">FALSE</span>)</span></code></pre></div>
+<ul>
+<li>Zuerst transformieren wir den Prädiktor <code>verhint1</code> in einen <em>within</em>-Prädiktor <code>verhint1_w</code> und einen <em>between</em>-Prädiktor <code>verhint1_b</code>.
+<ul>
+<li>Am Beispiel von zwei Personen können wir sehen, dass <code>verhint1_b</code> der Mittelwert der Person über die vier Wellen ist und <code>verhint1_w</code> der Messwert in einer Welle bereinigt um den Mittelwert. Es wird auch direkt deutlich, dass <code>verhint1_b</code> nun per Transformationslogik eine über die Zeit konstante Personeneigenschaft ist.</li>
+</ul></li>
+<li>Die Spezifikation des Modells mit <code>lme4::lmer()</code> folgt derselben Logik wie das <em>random effects</em> Panelmodell in Abschnitt 4.
+<ul>
+<li>Als Referenz ziehen wir das entsprechende Null-Modell inklusive der <em>fixed effects</em> für die Panelwellen heran.</li>
+<li>Wir beginnen wieder mit einem <em>random intercept</em> Modell, <code>(1 | IDsosci)</code>.</li>
+<li><code>verhint1_w</code> und <code>verhint1_b</code> werden als Prädiktoren in das Modell aufgenommen.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="hybride-within-between-modelle.html#cb7-1"></a><span class="co"># Null-Modell als Referenz</span></span>
+<span id="cb7-2"><a href="hybride-within-between-modelle.html#cb7-2"></a>wb_<span class="dv">0</span> =<span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb7-3"><a href="hybride-within-between-modelle.html#cb7-3"></a></span>
+<span id="cb7-4"><a href="hybride-within-between-modelle.html#cb7-4"></a><span class="co"># Within-between Modell mit random intercept</span></span>
+<span id="cb7-5"><a href="hybride-within-between-modelle.html#cb7-5"></a>wb_ri =<span class="st"> </span><span class="kw">lmer</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1_w <span class="op">+</span><span class="st"> </span>verhint1_b <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>IDsosci), <span class="dt">data =</span> d)</span>
+<span id="cb7-6"><a href="hybride-within-between-modelle.html#cb7-6"></a>wb_ri <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>(<span class="dt">correlation =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>## Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
 ## lmerModLmerTest]
 ## Formula: verh1 ~ verhint1_w + verhint1_b + factor(wave) + (1 | IDsosci)
@@ -288,23 +304,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## factor(wave)4    0.1178     0.0345 1724.0000    3.41  0.00065 ***
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="hybride-within-between-modelle.html#cb134-1"></a><span class="co"># Varianzreduktion</span></span>
-<span id="cb134-2"><a href="hybride-within-between-modelle.html#cb134-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(wb_ri)<span class="op">^</span><span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="kw">sigma</span>(wb_<span class="dv">0</span>)<span class="op">^</span><span class="dv">2</span>) <span class="co"># L1</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="hybride-within-between-modelle.html#cb9-1"></a><span class="co"># Varianzreduktion</span></span>
+<span id="cb9-2"><a href="hybride-within-between-modelle.html#cb9-2"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">sigma</span>(wb_ri)<span class="op">^</span><span class="dv">2</span><span class="op">/</span><span class="kw">sigma</span>(wb_<span class="dv">0</span>)<span class="op">^</span><span class="dv">2</span>)  <span class="co"># L1</span></span></code></pre></div>
 <pre><code>## [1] 0.18</code></pre>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="hybride-within-between-modelle.html#cb136-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(wb_ri)<span class="op">$</span>IDsosci) <span class="op">/</span><span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(wb_<span class="dv">0</span>)<span class="op">$</span>IDsosci)) <span class="co"># L2</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="hybride-within-between-modelle.html#cb11-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(wb_ri)<span class="op">$</span>IDsosci)<span class="op">/</span><span class="kw">as.numeric</span>(<span class="kw">VarCorr</span>(wb_<span class="dv">0</span>)<span class="op">$</span>IDsosci))  <span class="co"># L2</span></span></code></pre></div>
 <pre><code>## [1] 0.87</code></pre>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="hybride-within-between-modelle.html#cb138-1"></a><span class="co"># Vergleich mit fixed effects Modell</span></span>
-<span id="cb138-2"><a href="hybride-within-between-modelle.html#cb138-2"></a>fe =<span class="st">  </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> d, <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;within&quot;</span>)</span>
-<span id="cb138-3"><a href="hybride-within-between-modelle.html#cb138-3"></a>fe <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb138-4"><a href="hybride-within-between-modelle.html#cb138-4"></a><span class="st">  </span><span class="kw">summary</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb138-5"><a href="hybride-within-between-modelle.html#cb138-5"></a><span class="st">  </span><span class="kw">coef</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="hybride-within-between-modelle.html#cb13-1"></a><span class="co"># Vergleich mit fixed effects Modell</span></span>
+<span id="cb13-2"><a href="hybride-within-between-modelle.html#cb13-2"></a>fe =<span class="st"> </span><span class="kw">plm</span>(verh1 <span class="op">~</span><span class="st"> </span>verhint1 <span class="op">+</span><span class="st"> </span><span class="kw">factor</span>(wave), <span class="dt">data =</span> d, <span class="dt">index =</span> <span class="st">&quot;IDsosci&quot;</span>, <span class="dt">model =</span> <span class="st">&quot;within&quot;</span>)</span>
+<span id="cb13-3"><a href="hybride-within-between-modelle.html#cb13-3"></a>fe <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summary</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>()</span></code></pre></div>
 <pre><code>##               Estimate Std. Error t-value Pr(&gt;|t|)
 ## verhint1          0.33      0.017    19.8  1.0e-78
 ## factor(wave)2     0.02      0.034     0.6  5.5e-01
 ## factor(wave)3     0.14      0.034     4.2  3.4e-05
 ## factor(wave)4     0.12      0.034     3.4  6.5e-04</code></pre>
 
-</div>
 </div>
 </div>
             </section>
