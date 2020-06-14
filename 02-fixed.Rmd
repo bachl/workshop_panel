@@ -12,16 +12,16 @@ d = read_rds("R/data/data.rds")
 ### Wie können wir den kausalen (within-person) Effekt mit Paneldaten schätzen? {-}
 
 1) Separate OLS Modelle für jede Person schätzen und Koeffizienten mitteln (no pooling).
-1) Alle $X$ und $Y$ Variablen um die Mittelwerte der Person zentrieren (within transformation).
+1) Alle $X$ und $Y$ Variablen um die Mittelwerte der Personen zentrieren (within transformation).
 1) Dummy-Variablen für jede Person in das Regressionsmodell aufnehmen (least squares dummy variables [LSDV] estimation).
 
 
 * Alle drei Varianten entfernen die (beobachteten und nicht beobachten,) über die Zeit konstanten Unterschiede zwischen den Personen.
 * Varianten 2 und 3 entsprechen dem klassischen *fixed effects* Modell. Die Unterschiede zwischen den Personen werden kontrolliert, indem die personenspezifischen Mittelwerte vor der Schätzung entfernt werden (2) oder für jede Person im Modell geschätzt werden (3).
   * $y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})'\beta + (u_{it} - \bar{u_{i}})$ oder $y_{it} = \beta' x_{it}' + \alpha_i + u_{it}$
-* In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme homogener Treatment-Effekte (entspricht der typischen Annahme im randomisierten Between-Subject-Experiment) entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
+* In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme eines homogenen Treatment-Effekts entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
   * Der Schätzer ist aber weniger effizient, da zufällige Unterschiede in den Effekten zwischen den Personen aufgegriffen werden.
-  * Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
+  * Im den Abschnitten zu *random effects* und  *within-between* Modellen kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
 
 ### No pooling {-}
 
@@ -105,9 +105,9 @@ knitr::read_chunk("R/period_fe.R")
 
 ## Übungsaufgaben 1
 
-1) Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (`med2`) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`).
+1) Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben `ein3`, auf die diesbezügliche Verhaltensintention (`verhint3`).
     * Schätze zuerst das *falsche* pooled OLS Modell.
-    * Schätze dann das einfache *fixed effects* Modell mit einer Spezifikation freier Wahl.
+    * Schätze dann das einfache *fixed effects* Modell mit einer Spezifikation deiner Wahl.
     * Vergleiche schließlich die Modelle mit und ohne Periodeneffekt.
 
 2) Spezifiziere, schätze und interpretiere ein eigenes bivariates *fixed effects* Modell mit Daten aus dem Beispieldatensatz.
@@ -176,7 +176,7 @@ knitr::read_chunk("R/lmtest-demo.R")
 
 * Die Aufnahme weiterer Prädiktoren, die über die Zeit variieren, erfolgt prinzipiell wie im bekannten OLS Modell.
 
-* Wichtig ist, dass es bei *fixed effects* Modellen explizit um das Schätzen von kausalen Effekten geht. Entsprechend bedacht sollte die Auswahl von weiteren Prädiktoren sein. Ein "kitchen sink" Ansatz, den man vor allem in OLS mit Querschnittsdaten sieht, ist hier nicht angebracht. Es muss (wie eigentlich immer) darauf geachtet werden, welche Koeffizienten eines Regressionsmodells kausal interpretiert werden dürfen [@keeleCausalInterpretationEstimated2019]. Im *fixed effects* Modell müssen wir uns das ganz explizit vergegenwärtigen und in der Ergebnisdarstellung berücksichtigen, da die Modellklasse kausale Effekte impliziert.
+* Wichtig ist, dass es bei *fixed effects* Modellen explizit um das Schätzen von kausalen Effekten geht. Entsprechend bedacht sollte die Auswahl von weiteren Prädiktoren sein. Ein "kitchen sink" Ansatz, den man vor allem in Regressionsanalysen mit Querschnittsdaten sieht, ist hier nicht angebracht. Es muss (wie eigentlich immer) darauf geachtet werden, welche Koeffizienten eines Regressionsmodells kausal interpretiert werden dürfen [@keeleCausalInterpretationEstimated2019]. Im *fixed effects* Modell müssen wir uns das ganz explizit vergegenwärtigen und in der Ergebnisdarstellung berücksichtigen, da die Modellklasse kausale Effekte impliziert.
 
 * Nach der TPB dürfen wir dieses Modell annehmen, da die drei Prädiktoren auf derselben kausalen Stufe stehen: Verhaltensintention ~ Einstellung + Deskriptive Norm + Injunktive Norm. Hier schätzen wir das Modell für die Verhaltensintention *Rausgehen ohne triftigen Grund*.
 
@@ -202,7 +202,7 @@ d %>% plm(verh1 ~ verhint1 + C_sex + factor(wave), data = ., index = "IDsosci", 
 
 ### Warum wird das Personenmerkmal nicht ins Modell aufgenomen? {-}
 
-* Within-person Transformation entfernt die gesamte between-person Varianz aus den Daten: $\bar{y_{i}} = 0$.
+* *Within-person* Transformation entfernt die gesamte *between-person* Varianz aus den Daten: $\bar{y_{i}} = 0$.
 * Daher können innerhalb der Personen invariante Merkmale keine Unterschiede erklären.
 
 ```{r, echo=FALSE, cache=FALSE}
@@ -244,13 +244,13 @@ knitr::read_chunk("R/plm_mod.R")
 * Das *fixed effects* Modell kann keine Merkmale der Einheiten (Personen) als Prädiktoren berücksichtigen, da die gesamten einheiten(personen)spezifischen Unterschiede bereits durch die *fixed effects* erklärt werden.
 * Wir interessieren uns aber häufig (auch) für die Unterschiede zwischen Einheiten (Personen). Das *fixed effects* Modell macht Antworten auf solche Fragen unmöglich.
 
-* Ein weiterer, damit unverbundener Nachteil des *fixed effects* Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie sind nicht personenspezifisch).
+* Ein weiterer, damit unverbundener Nachteil des *fixed effects* Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie ist nicht personenspezifisch).
 
 ## Übungsaufgaben 2
 
-1) Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (`med2`) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`). Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
+1) Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben (`ein3`), auf die diesbezügliche Verhaltensintention (`verhint3`). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
     * Verwende jetzt `plm` für die Schätzung.
-    * Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (`med1`) in das Modell auf.
-    * Prüfe, ob sich der Effekt der Information aus Zeitungen und Zeitschriften nach Geschlecht (`C_sex`) unterscheidet.
+    * Nimm zusätzlich die wahrgenommene deskriptive Norm (`desnormp3`) in das Modell auf.
+    * Prüfe, ob sich die Effekte nach Geschlecht (`C_sex`) unterscheiden.
 
 2) Spezifiziere, schätze und interpretiere ein eigenes *fixed effects* Modell mit Daten aus dem Beispieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.

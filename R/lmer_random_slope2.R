@@ -8,7 +8,7 @@ m_rs = lmer(verhint2 ~ ein2 + factor(wave) + (ein2 | IDsosci), data = d)
 m_rs %>% 
   summary(correlation = FALSE)
 # profile confidence intervals 
-confint(m_rs)
+confint(m_rs, oldNames = FALSE)
 # Wald-Test
 anova(m_ri, m_rs)
 

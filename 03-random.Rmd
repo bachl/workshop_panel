@@ -65,7 +65,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 * Der Hausman-Test prüft, ob das *random effects* Modell konsistent ist. 
 * Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der $H_0$ im Hausman-Test gegen das Schätzen eines *random effects* Modells.
-* Da das *random effects* Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das *fixed effects* Modell per Definition scheitert, lässt sich die Wahl des *random effects* Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
+* Da das *random effects* Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das *fixed effects* Modell per Definition scheitert, lässt sich die Wahl des *random effects* Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen [@bellFixedRandomEffects2019].
 * Der Hausman-Test kann mit der Funktion `plm::phtest()` durchgeführt werden.
 
 
@@ -100,9 +100,9 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 > Econometrics deal mostly with non-experimental data. Great emphasis is put on specification procedures and misspecification testing. Model specifications tend therefore to be very simple, while great attention is put on the issues of endogeneity of the regressors, dependence structures in the errors and robustness of the estimators under deviations from normality. --- @plm2008
 
-* Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
+* Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker*innen bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
 
-* Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effekte, ... . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
+* Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effekte, ... . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die die Ökonometrie umtreibt.
 
 * Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.
 
@@ -160,7 +160,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Mit `lme4` können prinzipiell beliebig viele und arbiträr angeordnete (sie müssen nicht hierarchisch sein) *random effects* in ein Modell aufgenommen werden.
 * Zu viele Faktoren oder Faktoren mit zu wenigen Ausprägungen können aber zu Problemen bei der (restricted) maximum likelihood Schätzung führen (Bayesianische Schätzverfahren können hier helfen).
 * Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch oberhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.
-* In Panel-Modellen liegt die Idee nahe, *random effects* für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Spezifikation wird auch *kreuzklassifiziert* / *cross-classified* / *crossed* genannt.
+* In Panel-Modellen liegt die Idee nahe, *random effects* für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Struktur wird auch *kreuzklassifiziert* / *cross-classified* / *crossed* genannt.
   * Wir nehmen den Faktor Welle auf, indem wir `+ (1 | wave)` in der Modell-Formel ergänzen.
   * Da wir nur Daten aus vier Wellen haben und die Varianz zwischen den Wellen sehr klein ist, kommt die *restricted maximum likelihood* Schätzung hier an ihre Grenzen. Eine Warnung wird ausgegeben. Wir könnten das Problem durch Herumfrickeln an den Einstellungen des Optimizer beheben, würden aber inhaltlich zu keiner anderen Schlussfolgerungen kommen. Um den Einstieg in die technischen Details zu vermeiden, verwenden wir hier aber das Modell mit der Warnmeldung.
   * Im Weiteren lösen wir das Problem, indem wir *fixed effects* für die Wellen aufnehmen.
@@ -272,24 +272,26 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 ## Übungsaufgaben 4
 
-1) Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (`med2`) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`), mit einem *random effects* Panelmodell. Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 2.
-    * Schätze zuerst ein geeignetes Null-Modell als Referenz. Betrachte die ICC.
-    * Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (`med1`) in das Modell auf.
+1) Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben (`ein3`), auf die diesbezügliche Verhaltensintention (`verhint3`). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 2.
+    * Schätze zuerst ein geeignetes Null-Modell mit *random intercept* als Referenz. Betrachte die ICC.
+    * Schätze dann das *random intercept* Panelmodell.
+    * Nimm zusätzlich die wahrgenommene deskriptive Norm (`desnormp3`) in das Modell auf.
     * Prüfe, ob sich die Intention zwischen Männer und Frauen unterscheidet (`C_sex`).
 
-2) Spezifiziere, schätze und interpretiere ein eigenes *random effects* Panelmodell mit Daten aus dem Beispieldatensatz. Gehe dabei von einem geeigneten Null-Modell aus und erweitere das Modell dann.
+2) Spezifiziere, schätze und interpretiere ein eigenes *random effects* Panelmodell mit *random intercept* mit Daten aus dem Beispieldatensatz. Gehe dabei von einem geeigneten Null-Modell aus und erweitere das Modell dann.
 
 ## Variierende Koeffizienten (random slopes) und Ebenen-überschreitende Interaktionen (cross-level interactions) 
 
-* Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren (*varying intercepts*). Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen (*varying slopes*).
+* Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren (*random intercepts*). Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen (*random slopes*).
 * Damit lockern wir die Annahme eines homogenen Treatment-Effekts: Wir gehen nicht mehr davon aus, dass der Effekt eines Prädiktors für alle Personen gleich ist, sondern lassen eine Streuung um den durchschnittlichen Treatment-Effekt zu.
 * Die Standardabweichung (oder die Varianz) des *random* oder *varying slope* ist ein Indikator dafür, wie stark ein Effekt zwischen den Personen variiert.
 * Wir können testen, ob sich diese Varianz der Koeffizienten von 0 unterscheidet. Dazu werden zwei Tests empfohlen:
   * Vergleich der Modelle mit und ohne *random slopes* mit einem Likelihood-Ratio-Test (Wald-Test)
   * Prüfen, ob das Konfidenzintervalls um die Varianzkomponente die 0 enthält.
   * Es ist in der Literatur zu *mixed effects* Modellen umstritten, ob das Testen einer Varianzkomponente sinnvoll ist.
-    * @barrRandomEffectsStructure2013 fordern, dass **alle** Koeffizienten, die dem Design einer Studie nach variieren müssen (im Panel-Design eigentlich alle Effekte von über die Zeit variierenden Prädiktoren), als *random slopes* geschätzt werden sollen.
-    * @matuschekBalancingTypeError2017 sprechen sich dafür aus, sparsame Modelle zu spezifizieren, die den Daten entsprechen. Wenn die Daten keine Evidenz für bedeutsame Effekt-Heterogenität zeigen, kann das sparsamere Modell ohne *random slope* bevorzugt werden. Dies ist in der (Restricted) Maximum-Likelihood-Schätzung häufig auch pragmatisch erforderlich, um die Modelle schätzbar zu machen.
+    * @barrRandomEffectsStructure2013 fordern, dass _alle_ Koeffizienten, die dem Design einer Studie nach variieren müssen (im Panel-Design eigentlich alle Effekte von über die Zeit variierenden Prädiktoren), als *random slopes* geschätzt werden sollen. Entfernt werden sollen dann nur die Varianzkomponenten, bei denen die Daten eine Varianz von (nahe) 0 nahelegen.
+    * @matuschekBalancingTypeError2017 sprechen sich dafür aus, sparsame Modelle zu spezifizieren. Wenn die Theorie oder das Forschungsinteresse nicht an Effekt-Heterogenität interessiert sind, kann das sparsamere Modell ohne *random slope* bevorzugt werden.
+    * Das Verzichten auf einige *random slope* Terme ist in der (Restricted) Maximum-Likelihood-Schätzung häufig auch pragmatisch erforderlich, um die Modelle schätzbar zu machen.
 
 * In unserem Beispiel wollen wir den Effekt der Intention, ohne triftigen Grund raus zu gehen, zwischen den Personen variieren lassen.
   * Dazu ergänzen wir den Prädiktor in der Klammer, in der die *random effects* spezifiziert werden: `+ (verhint1 | IDsosci)`.
@@ -317,7 +319,7 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 * Mit jedem Punkt auf der Einstellungsskala steigt die Intention, sich mit anderen Personen außerhalb des Haushalts zu treffen, um ca. 0.4 Punkte. 
 * Die Personen-spezifischen Effekte streuen mit einer Standardabweichung von ca. 0.3 Punkten um diesen durchschnittlichen Effekt durchaus wahrnehmbar. Die typischen Effekte (+/- 1 SD) liegen zwischen sehr geringen Effekten und deutlichen Effekten. Ein negativer Effekt der Einstellung auf die Intention ist selten.
 
-* Das Konfidenzintervall für die Standardabweichung des *random slope* (`.sig03`) liegt deutlich über 0. Wir können davon ausgehen, dass es Heterogenität im Treatment-Effekt gibt. Manche Personen passen ihre Verhaltensintention ihren Einstellungen stärker an, bei anderen entwickeln sich Einstellung und Verhaltensintention weniger systematisch.
+* Das Konfidenzintervall für die Standardabweichung des *random slope* liegt deutlich über 0. Wir können davon ausgehen, dass es Heterogenität im Treatment-Effekt gibt. Manche Personen passen ihre Verhaltensintention ihren Einstellungen stärker an, bei anderen entwickeln sich Einstellung und Verhaltensintention weniger systematisch.
 * Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass das Modell mit *random slope* wesentlich besser zu den Daten passt als das Modell nur mit *random intercept*.
 * Die Abbildung vermittelt einen Eindruck von der Treatment-Effekt-Heterogenität. Dargestellt ist die die Abweichung vom durchschnittlichen Effekt (0.4). Neben der Verteilung sollten auch die weiten Intervalle beachtet werden. Auf Basis von nur vier Beobachtungen pro Person lassen sich die individuellen Abweichungen vom durchschnittlichen Effekt nur recht unpräzise quantifizieren.
 
@@ -344,10 +346,10 @@ knitr::read_chunk("R/lmer_crosslevel_ia.R")
 
 ## Übungsaufgaben 5
 
-1) Schätze den Effekt des gesamten Medienkonsums (Summenindex aus `med1` bis `med5` auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (`verhint3`), mit einem *random effects* Panelmodell. Um Probleme beim Schätzen zu vermeiden, muss der Medienkonsum-Index z-transformiert werden. Berücksichtige  auch die Periodeneffekte der Panelwellen.
-    * Schätze zuerst ein Modell mit *random intercept*.
-    * Schätze dann ein Modell mit einem *random slope* für den Medienkonsum.
-    * Nimm zusätzlich das Geschlecht in das Modell auf (`C_sex`).
-    * Prüfe, ob sich der Effekt der Intention zwischen Männer und Frauen unterscheidet.
+1) Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben (`ein3`), auf die diesbezügliche Verhaltensintention (`verhint3`). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 4.
+    * Schätze zuerst ein geeignetes Null-Modell mit *random intercept* als Referenz.
+    * Schätze dann das *random intercept* Panelmodell.
+    * Lasse den Effekt nun um den durchschnittlichen Effekt variieren. Prüfe, ob die Daten für Effekt-Heterogenität sprechen.
+    * Prüfe, ob sich der Effekt zwischen Personen ab 50 Jahren und Jüngeren unterscheidet. Wie stark kann das Berücksichtigen dieser Interaktion die Effekt-Heterogenität verringern?
 
 2) Spezifiziere, schätze und interpretiere ein eigenes *random effects* Panelmodell mit *random slope* und *cross-level interaction* mit Daten aus dem Beispieldatensatz. Beachte dabei, dass wir hier an die Grenzen der Informationshaltigkeit der Daten für eine ML-Schätzung stoßen. Es ist recht wahrscheinlich, dass singuläre Fits oder nicht konvergierte Modelle vorkommen werden.

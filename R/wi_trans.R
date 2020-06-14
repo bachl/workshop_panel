@@ -11,7 +11,6 @@ d_wi %>%
   select(-IDsosci) %>% 
   summary
 
-d_wi %>% 
-  lm(verh1_wi ~ verhint1_wi, data = .) %>%
+lm(verh1_wi ~ verhint1_wi, data = d_wi) %>%
   tidy() %>% 
   mutate_if(is.numeric, round, 2)

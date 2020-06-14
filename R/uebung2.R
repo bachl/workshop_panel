@@ -1,19 +1,19 @@
-# Übung 2: Effekt der Information via ÖR TV auf Verhaltensintention "zu wenig Abstand halten"
+# Übung 2
+# Pakete
+if (!require("pacman")) install.packages("pacman")
+pacman::p_load(tidyverse, ggstance, broom, broom.mixed, haven, plm, lmtest, lme4, lmerTest, performance)
+theme_set(theme_bw()) # ggplot theme
+# Daten
+d = read_rds("R/data/data.rds")
 
 # Modell mit plm
-d %>%
-  plm(verhint3 ~ med2 + factor(wave), data = ., model = "within", index = "IDsosci") %>%
-  tidy() %>% 
-  mutate_if(is.numeric, round, 2)
+plm(verhint3 ~ ein3 + factor(wave), data = d, model = "within", index = "IDsosci") %>%
+  summary()
 
-# + med1
-d %>%
-  plm(verhint3 ~ med2 + med1 + factor(wave), data = ., model = "within", index = "IDsosci") %>%
-  tidy() %>% 
-  mutate_if(is.numeric, round, 2)
+# + desnormp3
+plm(verhint3 ~ ein3 + desnormp3 + factor(wave), data = d, model = "within", index = "IDsosci") %>% 
+  summary()
 
-# + med1*C_sex
-d %>%
-  plm(verhint3 ~ med2 + med1*C_sex + factor(wave), data = ., model = "within", index = "IDsosci")
-  tidy() %>% 
-  mutate_if(is.numeric, round, 2)
+# *C_sex
+plm(verhint3 ~ (ein3 + desnormp3) * C_sex + factor(wave), data = d, model = "within", index = "IDsosci") %>% 
+  summary()

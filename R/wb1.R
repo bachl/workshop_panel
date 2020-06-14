@@ -12,7 +12,6 @@ wb_ri %>%
 1 - (as.numeric(VarCorr(wb_ri)$IDsosci) / as.numeric(VarCorr(wb_0)$IDsosci)) # L2
 
 # Vergleich mit fixed effects Modell
-fe =  plm(verh1 ~ verhint1 + factor(wave), data = d, index = "IDsosci", model = "within")
-fe %>% 
+plm(verh1 ~ verhint1 + factor(wave), data = d, index = "IDsosci", model = "within") %>% 
   summary() %>% 
   coef()

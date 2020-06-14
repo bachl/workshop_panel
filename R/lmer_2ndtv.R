@@ -7,14 +7,13 @@ icc(m0_int1) # conditional ICC takes the fixed effects variances into account
 # Modelle mit Prädiktoren
 m1_int1 = lmer(verhint1 ~ ein1 + desnormp1 + injnormp1 + factor(wave) + (1 | IDsosci), data = d)
 m1_int1 %>% 
-  tidy(effects = "fixed") %>% 
-  mutate_if(is.numeric, round, 2)
+  summary() %>% 
+  coef()
 
 m2_int1 = lmer(verhint1 ~ ein1 + desnormp1 + injnormp1 + C_sex + factor(wave) + (1 | IDsosci), data = d)
 m2_int1 %>% 
-  tidy(effects = "fixed") %>% 
-  mutate_if(is.numeric, round, 2)
-
+  summary() %>% 
+  coef()
 
 # Modellvergleiche
 # Wald und Info-Kriterien

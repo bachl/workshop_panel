@@ -161,6 +161,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="5" data-path="hybride-within-between-modelle.html"><a href="hybride-within-between-modelle.html"><i class="fa fa-check"></i><b>5</b> Hybride <em>within-between</em> Modelle</a><ul>
 <li class="chapter" data-level="5.1" data-path="hybride-within-between-modelle.html"><a href="hybride-within-between-modelle.html#das-beste-aus-beiden-welten"><i class="fa fa-check"></i><b>5.1</b> Das Beste aus beiden Welten?</a></li>
+<li class="chapter" data-level="5.2" data-path="hybride-within-between-modelle.html"><a href="hybride-within-between-modelle.html#spezifikation-des-within-between-modells"><i class="fa fa-check"></i><b>5.2</b> Spezifikation des <em>within-between</em> Modells</a></li>
+<li class="chapter" data-level="5.3" data-path="hybride-within-between-modelle.html"><a href="hybride-within-between-modelle.html#übungsaufgaben-6"><i class="fa fa-check"></i><b>5.3</b> Übungsaufgaben 6</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="literatur.html"><a href="literatur.html"><i class="fa fa-check"></i>Literatur</a></li>
 </ul>
@@ -521,10 +523,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Zum Abschluss noch ein imaginäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.</p></li>
 <li><p>In der pooled OLS Analyse wird einfach die Regressionsgerade durch alle Beobachtung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.</p></li>
 </ul>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="workshop_panel_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <ul>
 <li>Wenn wir aber für alle acht Personen separat den Zusammenhang zwischen Bierkonsum und Kater berechnen (so genanntes no pooling Modell), ergibt sich ein anderes Bild. Für alle Personen gilt mehr oder weniger deutlich: Je mehr Bier konsumiert wurde, desto stärker fällt der Hangover aus (within).</li>
 </ul>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="workshop_panel_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <ul>
 <li><p>Dazu kommt ein systematischer Unterschied zwischen den Personen (between): Personen, die im Durchschnitt mehr Bier trinken, haben im Durchschnitt einen schwächeren Hangover. Dies könnte auf eine nicht beobachte Drittvariable auf Ebene der Personen zurück gehen:</p>
@@ -535,6 +539,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p>Mit den vorliegenden Daten können wir die Frage nach dem Prozess nicht beantworten, da wir die Drittvariable nicht gemessen haben. Wir können aber <em>alle</em> Variablen kontrollieren, die auf Personenebene liegen, z.B., indem wir wie in der Abbildung für jede Person ein separates Modell schätzen. Dann können Unterschiede zwischen den Einheiten per Modelldefinition keinen Einfluss auf die Schätzung haben. Etwas ähnliches passiert im <em>fixed effects</em> Modell, das wir im nächsten Abschnitt besprechen.</p></li>
 <li><p>An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für <span class="math inline">\(Z\)</span> kontrollieren können. Wenn wir jede Panel-Welle für sich analysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.</p></li>
 </ul>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
 <p><img src="workshop_panel_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 
 </div>

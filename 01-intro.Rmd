@@ -146,7 +146,7 @@ knitr::read_chunk("R/wrong_ols.R")
 
 * Zum Abschluss noch ein imaginäres Beispiel, um den Unterschied von intraindividuellen (within) Effekten und interindividuellen Unterschieden zu verdeutlichen. Wir führen eine Panel-Studie mit acht Personen und sechs Messzeitpunkten zum Zusammenhang von Bier-Konsum und Hangover durch. Wir interessieren uns für die kausale Frage, ob mehr Bier zu einem schlimmeren Kater führt.
 
-```{r, eval=TRUE, include=FALSE}
+```{r, eval=TRUE, include=FALSE, message=FALSE}
 source("R/example_wb.R")
 ```
 

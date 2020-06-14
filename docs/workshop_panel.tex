@@ -227,7 +227,7 @@ dplyr & 0.8.4\\
 \hline
 forcats & 0.4.0\\
 \hline
-ggplot2 & 3.2.1\\
+ggplot2 & 3.3.1\\
 \hline
 ggstance & 0.3.3\\
 \hline
@@ -657,6 +657,10 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   In der pooled OLS Analyse wird einfach die Regressionsgerade durch alle Beobachtung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
 \end{itemize}
 
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
+
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-8-1.pdf}
 
 \begin{itemize}
@@ -664,6 +668,10 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Wenn wir aber für alle acht Personen separat den Zusammenhang zwischen Bierkonsum und Kater berechnen (so genanntes no pooling Modell), ergibt sich ein anderes Bild. Für alle Personen gilt mehr oder weniger deutlich: Je mehr Bier konsumiert wurde, desto stärker fällt der Hangover aus (within).
 \end{itemize}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
 
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-9-1.pdf}
 
@@ -683,6 +691,10 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für \(Z\) kontrollieren können. Wenn wir jede Panel-Welle für sich analysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.
 \end{itemize}
+
+\begin{verbatim}
+## `geom_smooth()` using formula 'y ~ x'
+\end{verbatim}
 
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-10-1.pdf}
 
@@ -978,14 +990,14 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (\texttt{med2}) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}).
+  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben \texttt{ein3}, auf die diesbezügliche Verhaltensintention (\texttt{verhint3}).
 
   \begin{itemize}
   \tightlist
   \item
     Schätze zuerst das \emph{falsche} pooled OLS Modell.
   \item
-    Schätze dann das einfache \emph{fixed effects} Modell mit einer Spezifikation freier Wahl.
+    Schätze dann das einfache \emph{fixed effects} Modell mit einer Spezifikation deiner Wahl.
   \item
     Vergleiche schließlich die Modelle mit und ohne Periodeneffekt.
   \end{itemize}
@@ -1433,16 +1445,16 @@ By controlling out context, FE models effectively cut out much of what is going 
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (\texttt{med2}) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}). Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
+  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben \texttt{ein3}, auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
 
   \begin{itemize}
   \tightlist
   \item
     Verwende jetzt \texttt{plm} für die Schätzung.
   \item
-    Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (\texttt{med1}) in das Modell auf.
+    Nimm zusätzlich die wahrgenommene deskriptive Norm \texttt{desnormp3} in das Modell auf.
   \item
-    Prüfe, ob sich der Effekt der Information aus Zeitungen und Zeitschriften nach Geschlecht (\texttt{C\_sex}) unterscheidet.
+    Prüfe, ob sich die Effekte nach Geschlecht (\texttt{C\_sex}) unterscheiden.
   \end{itemize}
 \item
   Spezifiziere, schätze und interpretiere ein eigenes \emph{fixed effects} Modell mit Daten aus dem Beispieldatensatz. Nutze dabei alle Techniken (unterschiedliche Spezifikation, Standardfehler, Moderation, mehrere Prädiktoren), die du ausprobieren und zu denen du ggf. Fragen stellen willst.
@@ -2636,19 +2648,21 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den kausalen Effekt der Informationshäufigkeit aus öffentlich-rechtlichen TV-Programmen (\texttt{med2}) auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}), mit einem \emph{random effects} Panelmodell. Berücksichtige dabei auch die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 2.
+  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben \texttt{ein3}, auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 3.
 
   \begin{itemize}
   \tightlist
   \item
-    Schätze zuerst ein geeignetes Null-Modell als Referenz. Betrachte die ICC.
+    Schätze zuerst ein geeignetes Null-Modell mit \emph{random intercept} als Referenz. Betrachte die ICC.
   \item
-    Nimm zusätzlich die Information aus Zeitungen und Zeitschriften (\texttt{med1}) in das Modell auf.
+    Schätze dann das \emph{random intercept} Panelmodell.
+  \item
+    Nimm zusätzlich die wahrgenommene deskriptive Norm \texttt{desnormp3} in das Modell auf.
   \item
     Prüfe, ob sich die Intention zwischen Männer und Frauen unterscheidet (\texttt{C\_sex}).
   \end{itemize}
 \item
-  Spezifiziere, schätze und interpretiere ein eigenes \emph{random effects} Panelmodell mit Daten aus dem Beispieldatensatz. Gehe dabei von einem geeigneten Null-Modell aus und erweitere das Modell dann.
+  Spezifiziere, schätze und interpretiere ein eigenes \emph{random effects} Panelmodell mit \emph{random intercept} mit Daten aus dem Beispieldatensatz. Gehe dabei von einem geeigneten Null-Modell aus und erweitere das Modell dann.
 \end{enumerate}
 
 \hypertarget{variierende-koeffizienten-random-slopes-und-ebenen-uxfcberschreitende-interaktionen-cross-level-interactions}{%
@@ -2657,7 +2671,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \begin{itemize}
 \tightlist
 \item
-  Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren (\emph{varying intercepts}). Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen (\emph{varying slopes}).
+  Bisher haben wir Modelle betrachtet, in denen die Personen-Konstanten um den Populationsschätzer variieren (\emph{random intercepts}). Diese Modelle können wir erweitern, indem wir auch den Schätzer eines (oder mehrerer) Koeffizienten zwischen den Personen variieren lassen (\emph{random slopes}).
 \item
   Damit lockern wir die Annahme eines homogenen Treatment-Effekts: Wir gehen nicht mehr davon aus, dass der Effekt eines Prädiktors für alle Personen gleich ist, sondern lassen eine Streuung um den durchschnittlichen Treatment-Effekt zu.
 \item
@@ -2677,9 +2691,11 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
     \begin{itemize}
     \tightlist
     \item
-      \citet{barrRandomEffectsStructure2013} fordern, dass \textbf{alle} Koeffizienten, die dem Design einer Studie nach variieren müssen (im Panel-Design eigentlich alle Effekte von über die Zeit variierenden Prädiktoren), als \emph{random slopes} geschätzt werden sollen.
+      \citet{barrRandomEffectsStructure2013} fordern, dass \emph{alle} Koeffizienten, die dem Design einer Studie nach variieren müssen (im Panel-Design eigentlich alle Effekte von über die Zeit variierenden Prädiktoren), als \emph{random slopes} geschätzt werden sollen. Entfernt werden sollen dann nur die Varianzkomponenten, bei denen die Daten eine Varianz von (nahe) 0 nahelegen.
     \item
-      \citet{matuschekBalancingTypeError2017} sprechen sich dafür aus, sparsame Modelle zu spezifizieren, die den Daten entsprechen. Wenn die Daten keine Evidenz für bedeutsame Effekt-Heterogenität zeigen, kann das sparsamere Modell ohne \emph{random slope} bevorzugt werden. Dies ist in der (Restricted) Maximum-Likelihood-Schätzung häufig auch pragmatisch erforderlich, um die Modelle schätzbar zu machen.
+      \citet{matuschekBalancingTypeError2017} sprechen sich dafür aus, sparsame Modelle zu spezifizieren. Wenn die Theorie oder das Forschungsinteresse nicht an Effekt-Heterogenität interessiert sind, kann das sparsamere Modell ohne \emph{random slope} bevorzugt werden.
+    \item
+      Das Verzichten auf einige \emph{random slope} Terme ist in der (Restricted) Maximum-Likelihood-Schätzung häufig auch pragmatisch erforderlich, um die Modelle schätzbar zu machen.
     \end{itemize}
   \end{itemize}
 \item
@@ -2817,21 +2833,21 @@ While singular models are statistically well defined (it is theoretically sensib
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# profile confidence intervals}
-\KeywordTok{confint}\NormalTok{(m_rs)}
+\KeywordTok{confint}\NormalTok{(m_rs, }\DataTypeTok{oldNames =} \OtherTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##                2.5 % 97.5 %
-## .sig01         0.317   0.61
-## .sig02        -0.749  -0.39
-## .sig03         0.280   0.39
-## .sigma         0.770   0.83
-## (Intercept)    0.718   0.93
-## ein2           0.348   0.46
-## factor(wave)2  0.018   0.21
-## factor(wave)3  0.102   0.29
-## factor(wave)4  0.191   0.38
+##                               2.5 % 97.5 %
+## sd_(Intercept)|IDsosci        0.317   0.61
+## cor_ein2.(Intercept)|IDsosci -0.749  -0.39
+## sd_ein2|IDsosci               0.280   0.39
+## sigma                         0.770   0.83
+## (Intercept)                   0.718   0.93
+## ein2                          0.348   0.46
+## factor(wave)2                 0.018   0.21
+## factor(wave)3                 0.102   0.29
+## factor(wave)4                 0.191   0.38
 \end{verbatim}
 
 \begin{Shaded}
@@ -2871,7 +2887,7 @@ While singular models are statistically well defined (it is theoretically sensib
 \item
   Die Personen-spezifischen Effekte streuen mit einer Standardabweichung von ca. 0.3 Punkten um diesen durchschnittlichen Effekt durchaus wahrnehmbar. Die typischen Effekte (+/- 1 SD) liegen zwischen sehr geringen Effekten und deutlichen Effekten. Ein negativer Effekt der Einstellung auf die Intention ist selten.
 \item
-  Das Konfidenzintervall für die Standardabweichung des \emph{random slope} (\texttt{.sig03}) liegt deutlich über 0. Wir können davon ausgehen, dass es Heterogenität im Treatment-Effekt gibt. Manche Personen passen ihre Verhaltensintention ihren Einstellungen stärker an, bei anderen entwickeln sich Einstellung und Verhaltensintention weniger systematisch.
+  Das Konfidenzintervall für die Standardabweichung des \emph{random slope} liegt deutlich über 0. Wir können davon ausgehen, dass es Heterogenität im Treatment-Effekt gibt. Manche Personen passen ihre Verhaltensintention ihren Einstellungen stärker an, bei anderen entwickeln sich Einstellung und Verhaltensintention weniger systematisch.
 \item
   Der Likelihood-Ratio-Test und die Informationskriterien zeigen, dass das Modell mit \emph{random slope} wesentlich besser zu den Daten passt als das Modell nur mit \emph{random intercept}.
 \item
@@ -3043,18 +3059,18 @@ While singular models are statistically well defined (it is theoretically sensib
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den Effekt des gesamten Medienkonsums (Summenindex aus \texttt{med1} bis \texttt{med5} auf die Intention, weniger als 1.5m Abstand zu einer Person zu halten, die nicht im eigenen Haushalt lebt (\texttt{verhint3}), mit einem \emph{random effects} Panelmodell. Um Probleme beim Schätzen zu vermeiden, muss der Medienkonsum-Index z-transformiert werden. Berücksichtige auch die Periodeneffekte der Panelwellen.
+  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben \texttt{ein3}, auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 4.
 
   \begin{itemize}
   \tightlist
   \item
-    Schätze zuerst ein Modell mit \emph{random intercept}.
+    Schätze zuerst ein geeignetes Null-Modell mit \emph{random intercept} als Referenz.
   \item
-    Schätze dann ein Modell mit einem \emph{random slope} für den Medienkonsum.
+    Schätze dann das \emph{random intercept} Panelmodell.
   \item
-    Nimm zusätzlich das Geschlecht in das Modell auf (\texttt{C\_sex}).
+    Lasse den Effekt nun um den durchschnittlichen Effekt variieren. Prüfe, ob die Daten für Effekt-Heterogenität sprechen.
   \item
-    Prüfe, ob sich der Effekt der Intention zwischen Männer und Frauen unterscheidet.
+    Prüfe, ob sich der Effekt zwischen Personen ab 50 Jahren und Jüngeren unterscheidet. Wie stark kann das Berücksichtigen dieser Interaktion die Effekt-Heterogenität verringern?
   \end{itemize}
 \item
   Spezifiziere, schätze und interpretiere ein eigenes \emph{random effects} Panelmodell mit \emph{random slope} und \emph{cross-level interaction} mit Daten aus dem Beispieldatensatz. Beachte dabei, dass wir hier an die Grenzen der Informationshaltigkeit der Daten für eine ML-Schätzung stoßen. Es ist recht wahrscheinlich, dass singuläre Fits oder nicht konvergierte Modelle vorkommen werden.
@@ -3141,16 +3157,26 @@ While singular models are statistically well defined (it is theoretically sensib
 \begin{itemize}
 \tightlist
 \item
-  Die Verhaltensintention erklärt sowohl 81\% der Varianz zwischen den Personen als auch 16\% der Varianz innerhalb der Personen. Trotzdem erhalten wir nur einen Koeffizienten, in dem der \emph{within-person} Effekt und der \emph{between-person} Unterschied untrennbar vermischt sind.
+  Die Verhaltensintention erklärt sowohl 81\% der Varianz zwischen den Personen als auch 16\% der Varianz innerhalb der Personen. Wir erhalten aber nur einen Koeffizienten, in dem der \emph{within-person} Effekt und der \emph{between-person} Unterschied untrennbar vermischt sind.
 \end{itemize}
 
 \hypertarget{spezifikation-des-within-between-modells}{%
-\subsection*{\texorpdfstring{Spezifikation des \emph{within-between} Modells}{Spezifikation des within-between Modells}}\label{spezifikation-des-within-between-modells}}
-\addcontentsline{toc}{subsection}{Spezifikation des \emph{within-between} Modells}
+\section{\texorpdfstring{Spezifikation des \emph{within-between} Modells}{Spezifikation des within-between Modells}}\label{spezifikation-des-within-between-modells}}
+
+\hypertarget{within-between-modell-mit-random-intercept}{%
+\subsection*{\texorpdfstring{\emph{within-between} Modell mit \emph{random intercept}}{within-between Modell mit random intercept}}\label{within-between-modell-mit-random-intercept}}
+\addcontentsline{toc}{subsection}{\emph{within-between} Modell mit \emph{random intercept}}
+
+\begin{itemize}
+\item
+  Wir untersuchen wieder den Effekt der Intention, die Wohnung ohne triftigen Grund zu verlassen, auf den Bericht, dies getan zu haben.
+\item
+  Zuerst transformieren wir den Prädiktor \texttt{verhint1} in einen \emph{within}-Prädiktor \texttt{verhint1\_w} und einen \emph{between}-Prädiktor \texttt{verhint1\_b}.
+\end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{# Transformation: Trennen von within- und between-Präditor}
+\CommentTok{# Transformation: Trennen von within- und between-Prädiktor}
 \NormalTok{d =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{group_by}\NormalTok{(IDsosci) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{verhint1_w =}\NormalTok{ verhint1 }\OperatorTok{-}\StringTok{ }\KeywordTok{mean}\NormalTok{(verhint1), }\CommentTok{# within}
@@ -3177,6 +3203,23 @@ While singular models are statistically well defined (it is theoretically sensib
 ## 8 050IPY      4        5          1          4
 \end{verbatim}
 
+\begin{itemize}
+\item
+  Am Beispiel von zwei Personen können wir sehen, dass \texttt{verhint1\_b} der Mittelwert der Person über die vier Wellen ist und \texttt{verhint1\_w} der Messwert in einer Welle bereinigt um den Mittelwert. Es wird auch direkt deutlich, dass \texttt{verhint1\_b} nun per Transformationslogik eine über die Zeit konstante Personeneigenschaft ist.
+\item
+  Die Spezifikation des Modells mit \texttt{lme4::lmer()} folgt derselben Logik wie das \emph{random effects} Panelmodell in Abschnitt 4.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Als Referenz ziehen wir das entsprechende Null-Modell inklusive der \emph{fixed effects} für die Panelwellen heran.
+  \item
+    Wir beginnen wieder mit einem \emph{random intercept} Modell, \texttt{(1\ \textbar{}\ IDsosci)}.
+  \item
+    \texttt{verhint1\_w} und \texttt{verhint1\_b} werden als Prädiktoren in das Modell aufgenommen.
+  \end{itemize}
+\end{itemize}
+
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Null-Modell als Referenz}
@@ -3184,8 +3227,7 @@ While singular models are statistically well defined (it is theoretically sensib
 
 \CommentTok{# Within-between Modell mit random intercept}
 \NormalTok{wb_ri =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_w }\OperatorTok{+}\StringTok{ }\NormalTok{verhint1_b }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
-\NormalTok{wb_ri }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation=}\OtherTok{FALSE}\NormalTok{)}
+\NormalTok{wb_ri }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3222,7 +3264,7 @@ While singular models are statistically well defined (it is theoretically sensib
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Varianzreduktion}
-\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(wb_ri)}\OperatorTok{^}\DecValTok{2} \OperatorTok{/}\StringTok{ }\KeywordTok{sigma}\NormalTok{(wb_}\DecValTok{0}\NormalTok{)}\OperatorTok{^}\DecValTok{2}\NormalTok{) }\CommentTok{# L1}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{sigma}\NormalTok{(wb_ri)}\OperatorTok{^}\DecValTok{2}\OperatorTok{/}\KeywordTok{sigma}\NormalTok{(wb_}\DecValTok{0}\NormalTok{)}\OperatorTok{^}\DecValTok{2}\NormalTok{)  }\CommentTok{# L1}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3232,7 +3274,7 @@ While singular models are statistically well defined (it is theoretically sensib
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_ri)}\OperatorTok{$}\NormalTok{IDsosci) }\OperatorTok{/}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_}\DecValTok{0}\NormalTok{)}\OperatorTok{$}\NormalTok{IDsosci)) }\CommentTok{# L2}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_ri)}\OperatorTok{$}\NormalTok{IDsosci)}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_}\DecValTok{0}\NormalTok{)}\OperatorTok{$}\NormalTok{IDsosci))  }\CommentTok{# L2}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3243,10 +3285,8 @@ While singular models are statistically well defined (it is theoretically sensib
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Vergleich mit fixed effects Modell}
-\NormalTok{fe =}\StringTok{  }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{)}
-\NormalTok{fe }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{summary}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
-\StringTok{  }\KeywordTok{coef}\NormalTok{()}
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summary}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -3257,6 +3297,348 @@ While singular models are statistically well defined (it is theoretically sensib
 ## factor(wave)3     0.14      0.034     4.2  3.4e-05
 ## factor(wave)4     0.12      0.034     3.4  6.5e-04
 \end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Kausaler Effekt: Wenn die Intention um einen Punkt steigt, dann wird das Verhalten um 0.3 Punkte häufiger. Der Effekt erklärt 18\% der Varianz innerhalb der Personen.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Der Koeffizient des \emph{within}-Prädiktors entspricht genau dem Koeffizienten eines klassischen \emph{fixed effects} Modell, wie wir es z.B. mit \texttt{plm} geschätzt haben.
+  \end{itemize}
+\item
+  Unterschiede zwischen Personen: Zwei Personen, deren durchschnittliche Intention sich um einen Punkt unterscheidet, unterscheiden sich um 0.7 Punkte in ihrer mittleren Häufigkeit, das Haus ohne triftigen Grund zu verlassen. Dieser Zusammenhang erklärt 87\% der Varianz zwischen den Personen.
+\end{itemize}
+
+\hypertarget{within-between-modell-mit-random-slope-und-cross-level-interaktion}{%
+\subsection*{\texorpdfstring{\emph{within-between} Modell mit \emph{random slope} und \emph{cross-level} Interaktion}{within-between Modell mit random slope und cross-level Interaktion}}\label{within-between-modell-mit-random-slope-und-cross-level-interaktion}}
+\addcontentsline{toc}{subsection}{\emph{within-between} Modell mit \emph{random slope} und \emph{cross-level} Interaktion}
+
+\begin{itemize}
+\tightlist
+\item
+  Im \emph{within-between} Modell können wir den Koeffizienten des \emph{within}-Prädiktors zwischen den Personen variieren lassen. Dadurch lassen wir Heterogenität um den durchschnittlichen Treatment-Effekt zu. In der Formel ergänzen wir \texttt{(verhint\_w\ \textbar{}\ IDsosci)}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \citet{bellFixedRandomEffects2019} empfehlen, im Idealfall die Koeffizienten aller, zumindest aber die der wichtigsten \emph{within}-Prädiktoren zwischen den Personen variieren zu lassen.
+  \end{itemize}
+\item
+  In der Folge können wir testen, auf welche Personenmerkmale sich die unspezifische Heterogenität zurückführen lässt. Hier prüfen wir, ob der kausale Effekt sich nach dem Geschlecht unterscheidet: \texttt{verhint1\_w\ *\ C\_sex}.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Random slope für within-Effekt}
+\NormalTok{wb_rs =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_w }\OperatorTok{+}\StringTok{ }\NormalTok{verhint1_b }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(verhint1_w }\OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }
+    \DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{wb_rs }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1_w + verhint1_b + factor(wave) + (verhint1_w |  
+##     IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4057
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -6.003 -0.334 -0.068  0.130  7.005 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr
+##  IDsosci  (Intercept) 0.0942   0.307        
+##           verhint1_w  0.0968   0.311    0.63
+##  Residual             0.2429   0.493        
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                 Estimate Std. Error         df t value     Pr(>|t|)    
+## (Intercept)      0.21851    0.03766 1037.67349    5.80 0.0000000087 ***
+## verhint1_w       0.40642    0.02469  295.92758   16.46      < 2e-16 ***
+## verhint1_b       0.69774    0.01556  605.59516   44.85      < 2e-16 ***
+## factor(wave)2    0.00409    0.03043 1616.73231    0.13      0.89316    
+## factor(wave)3    0.10461    0.03056 1620.45144    3.42      0.00063 ***
+## factor(wave)4    0.09744    0.03159 1654.47637    3.09      0.00207 ** 
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modellvergleich}
+\KeywordTok{anova}\NormalTok{(wb_ri, wb_rs)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: d
+## Models:
+## wb_ri: verh1 ~ verhint1_w + verhint1_b + factor(wave) + (1 | IDsosci)
+## wb_rs: verh1 ~ verhint1_w + verhint1_b + factor(wave) + (verhint1_w | 
+## wb_rs:     IDsosci)
+##       Df  AIC  BIC logLik deviance Chisq Chi Df Pr(>Chisq)    
+## wb_ri  8 4284 4330  -2134     4268                            
+## wb_rs 10 4042 4100  -2011     4022   246      2     <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Interaktion des within-Prädiktors mit Geschlecht}
+\NormalTok{wb_rs_ia =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_w }\OperatorTok{*}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\NormalTok{verhint1_b }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(verhint1_w }\OperatorTok{|}\StringTok{ }
+\StringTok{    }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{wb_rs_ia }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: 
+## verh1 ~ verhint1_w * C_sex + verhint1_b + factor(wave) + (verhint1_w |  
+##     IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4062
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -5.975 -0.338 -0.049  0.149  7.028 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr
+##  IDsosci  (Intercept) 0.0935   0.306        
+##           verhint1_w  0.0973   0.312    0.63
+##  Residual             0.2428   0.493        
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                    Estimate Std. Error         df t value     Pr(>|t|)    
+## (Intercept)         0.26512    0.04446  876.66346    5.96 0.0000000036 ***
+## verhint1_w          0.43310    0.03847  280.85689   11.26      < 2e-16 ***
+## C_sex              -0.06732    0.03377  571.52249   -1.99      0.04664 *  
+## verhint1_b          0.69476    0.01563  604.19894   44.44      < 2e-16 ***
+## factor(wave)2       0.00402    0.03043 1616.08075    0.13      0.89483    
+## factor(wave)3       0.10435    0.03056 1619.50527    3.41      0.00065 ***
+## factor(wave)4       0.09741    0.03158 1653.82795    3.08      0.00207 ** 
+## verhint1_w:C_sex   -0.04512    0.04882  272.73255   -0.92      0.35619    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Modellvergleich}
+\KeywordTok{anova}\NormalTok{(wb_ri, wb_rs, wb_rs_ia)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Data: d
+## Models:
+## wb_ri: verh1 ~ verhint1_w + verhint1_b + factor(wave) + (1 | IDsosci)
+## wb_rs: verh1 ~ verhint1_w + verhint1_b + factor(wave) + (verhint1_w | 
+## wb_rs:     IDsosci)
+## wb_rs_ia: verh1 ~ verhint1_w * C_sex + verhint1_b + factor(wave) + (verhint1_w | 
+## wb_rs_ia:     IDsosci)
+##          Df  AIC  BIC logLik deviance  Chisq Chi Df Pr(>Chisq)    
+## wb_ri     8 4284 4330  -2134     4268                             
+## wb_rs    10 4042 4100  -2011     4022 245.62      2     <2e-16 ***
+## wb_rs_ia 12 4042 4111  -2009     4018   4.15      2       0.13    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz in random slope durch Interaktion}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_rs_ia)}\OperatorTok{$}\NormalTok{IDsosci[}\StringTok{"verhint1_w"}\NormalTok{, }\StringTok{"verhint1_w"}\NormalTok{]}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_rs)}\OperatorTok{$}\NormalTok{IDsosci[}\StringTok{"verhint1_w"}\NormalTok{, }
+    \StringTok{"verhint1_w"}\NormalTok{])))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.0049
+\end{verbatim}
+
+\begin{itemize}
+\tightlist
+\item
+  Es gibt substantiell bedeutsame, statistisch signifikante Heterogenität um den durchschnittlichen Effekt der Intention auf das Verhalten.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Der durchschnittliche kausale \emph{within}-Effekt und der Unterschied zwischen den Personen bleiben substantiell unverändert.
+  \item
+    Die typischen Effekte (\emph{fixed effect} von \texttt{verhint1\_w} \(\pm 1 SD\)) schwanken zwischen kleinen und deutlichen Effekten.
+  \item
+    Die Aufnahme des \emph{random slope} verbessert das Modell nach allen Kriterien deutlich.
+  \end{itemize}
+\item
+  Der kausale Effekt ist nicht wesentlich vom Geschlecht abhängig. Er fällt für Frauen unwesentlich und nicht statistisch signifikant schwächer aus als für Männer.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Die Standardabweichung des \emph{random slope} aus dem Modell ohne Interaktion hilft, die Effektstärke der Interaktion einzuordnen. Die mittlere Abweichung vom durchschnittlichen Effekt beträgt 0.3 Punkte. Die Effekte für Frauen und Männer unterscheiden sich um 0.04 Punkte. Gemessen an der Gesamt-Heterogenität ist die Heterogenität zwischen den Geschlechtern zu vernachlässigen. Dies zeigt sich auch an der (nicht existenten) Reduktion der Varianz im \emph{random slope}.
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{spezialfall-interaktion-von-within--und-between-pruxe4diktor}{%
+\subsection*{\texorpdfstring{Spezialfall: Interaktion von \emph{within}- und \emph{between}-Prädiktor}{Spezialfall: Interaktion von within- und between-Prädiktor}}\label{spezialfall-interaktion-von-within--und-between-pruxe4diktor}}
+\addcontentsline{toc}{subsection}{Spezialfall: Interaktion von \emph{within}- und \emph{between}-Prädiktor}
+
+\begin{itemize}
+\tightlist
+\item
+  Eine Interaktion des \emph{within}- mit dem \emph{between}-Prädiktor erlaubt es zu untersuchen, ob sich der kausale Effekt eines Prädiktors in Abhängigkeit der durchschnittlichen Ausprägung unterscheidet. Im vorliegenden Beispiel können wir testen, ob sich die Verhaltensintention stärker bei den Personen zu einer Handlung führt, die allgemein eher vorhaben, diese Handlung auszuüben.
+\item
+  Um die Koeffizienten in einem Modell mit einem Interaktionsterm aus zwei kontinuierlichen Variablen besser interpretierbar zu machen, zentrieren wir den \emph{between}-Prädiktor um seinen Mittelwert. Der Mittelwert des \emph{within}-Prädiktors ist durch die \emph{within}-Transformation bereits gleich 0.
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Zentrieren des between-Prädiktors}
+\NormalTok{d =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{verhint1_bc =}\NormalTok{ verhint1_b }\OperatorTok{-}\StringTok{ }\KeywordTok{mean}\NormalTok{(verhint1_b))}
+
+\CommentTok{# Interaktion von within- und between Prädiktor}
+\NormalTok{wb_rs_iawb =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_w }\OperatorTok{*}\StringTok{ }\NormalTok{verhint1_bc }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(verhint1_w }\OperatorTok{|}\StringTok{ }
+\StringTok{    }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
+\NormalTok{wb_rs_iawb }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{(}\DataTypeTok{correlation =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Linear mixed model fit by REML. t-tests use Satterthwaite's method [
+## lmerModLmerTest]
+## Formula: verh1 ~ verhint1_w * verhint1_bc + factor(wave) + (verhint1_w |  
+##     IDsosci)
+##    Data: d
+## 
+## REML criterion at convergence: 4037
+## 
+## Scaled residuals: 
+##    Min     1Q Median     3Q    Max 
+## -6.056 -0.374 -0.062  0.144  7.028 
+## 
+## Random effects:
+##  Groups   Name        Variance Std.Dev. Corr
+##  IDsosci  (Intercept) 0.0940   0.307        
+##           verhint1_w  0.0864   0.294    0.66
+##  Residual             0.2423   0.492        
+## Number of obs: 2304, groups:  IDsosci, 576
+## 
+## Fixed effects:
+##                          Estimate Std. Error         df t value   Pr(>|t|)    
+## (Intercept)               1.47593    0.02509 1933.84933   58.82    < 2e-16 ***
+## verhint1_w                0.32919    0.02825  400.16941   11.65    < 2e-16 ***
+## verhint1_bc               0.71534    0.01594  574.00586   44.86    < 2e-16 ***
+## factor(wave)2             0.00342    0.03033 1626.70386    0.11    0.91014    
+## factor(wave)3             0.10593    0.03045 1631.33777    3.48    0.00052 ***
+## factor(wave)4             0.10152    0.03146 1664.84967    3.23    0.00128 ** 
+## verhint1_w:verhint1_bc    0.13744    0.02701  345.59075    5.09 0.00000059 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Reduktion der Varianz in random slope durch Interaktion}
+\DecValTok{1} \OperatorTok{-}\StringTok{ }\NormalTok{(}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_rs_iawb)}\OperatorTok{$}\NormalTok{IDsosci[}\StringTok{"verhint1_w"}\NormalTok{, }\StringTok{"verhint1_w"}\NormalTok{]}\OperatorTok{/}\KeywordTok{as.numeric}\NormalTok{(}\KeywordTok{VarCorr}\NormalTok{(wb_rs)}\OperatorTok{$}\NormalTok{IDsosci[}\StringTok{"verhint1_w"}\NormalTok{, }
+    \StringTok{"verhint1_w"}\NormalTok{])))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.11
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Plot des kausalen Effekts als Funktion des between-Prädiktors}
+\KeywordTok{tibble}\NormalTok{(}\DataTypeTok{b1 =} \KeywordTok{fixef}\NormalTok{(wb_rs_iawb)[}\StringTok{"verhint1_w"}\NormalTok{], }\DataTypeTok{b3 =} \KeywordTok{fixef}\NormalTok{(wb_rs_iawb)[}\StringTok{"verhint1_w:verhint1_bc"}\NormalTok{], }
+    \DataTypeTok{Z =} \KeywordTok{quantile}\NormalTok{(}\KeywordTok{model.frame}\NormalTok{(wb_rs_iawb)[, }\StringTok{"verhint1_bc"}\NormalTok{], }\DataTypeTok{probs =}\NormalTok{ (}\DecValTok{0}\OperatorTok{:}\DecValTok{10}\NormalTok{)}\OperatorTok{/}\DecValTok{10}\NormalTok{), }\DataTypeTok{theta =}\NormalTok{ b1 }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\NormalTok{Z }\OperatorTok{*}\StringTok{ }\NormalTok{b3, }\DataTypeTok{se_b1 =} \KeywordTok{coef}\NormalTok{(}\KeywordTok{summary}\NormalTok{(wb_rs_iawb))[}\StringTok{"verhint1_w"}\NormalTok{, }\DecValTok{2}\NormalTok{], }\DataTypeTok{COV_b1b3 =} \KeywordTok{vcov}\NormalTok{(wb_rs_iawb)[}\StringTok{"verhint1_w"}\NormalTok{, }
+        \StringTok{"verhint1_w:verhint1_bc"}\NormalTok{], }\DataTypeTok{se_b3 =} \KeywordTok{coef}\NormalTok{(}\KeywordTok{summary}\NormalTok{(wb_rs_iawb))[}\StringTok{"verhint1_w:verhint1_bc"}\NormalTok{, }
+        \DecValTok{2}\NormalTok{], }\DataTypeTok{se_theta =} \KeywordTok{sqrt}\NormalTok{(se_b1}\OperatorTok{^}\DecValTok{2} \OperatorTok{+}\StringTok{ }\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{Z }\OperatorTok{*}\StringTok{ }\NormalTok{COV_b1b3 }\OperatorTok{+}\StringTok{ }\NormalTok{Z}\OperatorTok{^}\DecValTok{2} \OperatorTok{*}\StringTok{ }\NormalTok{se_b3}\OperatorTok{^}\DecValTok{2}\NormalTok{), }\DataTypeTok{ci.lo_theta =}\NormalTok{ theta }\OperatorTok{+}\StringTok{ }
+\StringTok{        }\KeywordTok{qt}\NormalTok{(}\FloatTok{0.05}\OperatorTok{/}\DecValTok{2}\NormalTok{, }\KeywordTok{df.residual}\NormalTok{(wb_rs_iawb)) }\OperatorTok{*}\StringTok{ }\NormalTok{se_theta, }\DataTypeTok{ci.hi_theta =}\NormalTok{ theta }\OperatorTok{+}\StringTok{ }\KeywordTok{qt}\NormalTok{(}\DecValTok{1} \OperatorTok{-}\StringTok{ }
+\StringTok{        }\FloatTok{0.05}\OperatorTok{/}\DecValTok{2}\NormalTok{, }\KeywordTok{df.residual}\NormalTok{(wb_rs_iawb)) }\OperatorTok{*}\StringTok{ }\NormalTok{se_theta) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\KeywordTok{aes}\NormalTok{(Z, theta, }\DataTypeTok{ymin =}\NormalTok{ ci.lo_theta, }
+    \DataTypeTok{ymax =}\NormalTok{ ci.hi_theta)) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_ribbon}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.2}\NormalTok{) }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_line}\NormalTok{() }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_rug}\NormalTok{(}\DataTypeTok{data =} \KeywordTok{filter}\NormalTok{(d, }
+\NormalTok{    wave }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{), }\KeywordTok{aes}\NormalTok{(verhint1_bc, }\DecValTok{0}\NormalTok{), }\DataTypeTok{sides =} \StringTok{"b"}\NormalTok{, }\DataTypeTok{inherit.aes =}\NormalTok{ F, }\DataTypeTok{position =} \KeywordTok{position_jitter}\NormalTok{(}\DataTypeTok{width =} \FloatTok{0.1}\NormalTok{, }
+    \DataTypeTok{height =} \DecValTok{0}\NormalTok{), }\DataTypeTok{alpha =} \FloatTok{0.2}\NormalTok{, }\DataTypeTok{length =} \KeywordTok{unit}\NormalTok{(}\DecValTok{1}\NormalTok{, }\StringTok{"cm"}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Verhaltensintention Between (zentriert)"}\NormalTok{, }
+    \DataTypeTok{y =} \StringTok{" Within-Effekt der Verhaltensintention"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{workshop_panel_files/figure-latex/wb3-1.pdf}
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{verhint1\_w}: Der kausale \emph{within}-Effekt für Personen, \emph{deren mittlere Verhaltensintention dem Stichprobenmittelwert entspricht}, beträgt 0.3 Punkte.
+\item
+  \texttt{verhint1\_b}: Zwei Personen, deren mittlere Verhaltensintention sich um einen Punkt unterscheidet, unterscheiden sich \emph{dann, wenn ihre aktuelle Verhaltensintention ihrer mittleren Verhaltensintention entspricht}, um 0.7 Punkte.
+\item
+  \texttt{verhint1\_w:verhint1\_bc}: Der kausale Effekt unterscheidet sich zwischen zwei Personen, deren mittlere Verhaltensintention sich um einen Punkt unterscheidet, um 0.1 Punkte. Die Interaktion verringert die Varianz im \emph{random slope} um 11\%.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Wie sich der kausale Effekt in Abhängigkeit der mittleren Verhaltensintention verändert, ist in der Abbildung dargestellt. Die ``Barcodes'' am unteren Rand zeigen die Verteilung des \emph{between}-Prädiktors in der Stichprobe. Die graue Fläche um die Linie ist ein 95\%-Konfidenzintervall.
+  \item
+    Bei Personen, die über die Wellen hinweg eine größere Intention zeigen (= auf \emph{between}-Prädiktor höhere Werte haben), führt eine Steigerung der Intention zu einer deutlicheren Steigerung der Handlungshäufigkeit. Bei Personen, die insgesamt nur eine geringe Intention haben, nach draußen zu gehen (die deutliche Mehrheit in der Stichprobe), ist der kausale Effekt schwächer ausgeprägt.
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{zusammenfassung}{%
+\subsection*{Zusammenfassung}\label{zusammenfassung}}
+\addcontentsline{toc}{subsection}{Zusammenfassung}
+
+\begin{quote}
+We hope the discussion above has convinced readers of the superiority of the REWB model, except perhaps when the within and between effects are approximately equal, in which case the standard RE model (without separated within and between effects) might be preferable for reasons of efficiency. Even then, the REWB model should be considered first, or as an alternative, since the equality of the within and between coefficients should not be assumed. As for FE, except for simplicity there is nothing that such models offer that a REWB model does not. --- \citet{bellFixedRandomEffects2019}
+\end{quote}
+
+\hypertarget{uxfcbungsaufgaben-6}{%
+\section{Übungsaufgaben 6}\label{uxfcbungsaufgaben-6}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi})}
+\tightlist
+\item
+  Schätze den kausalen Effekt der Einstellung \texttt{ein3} und der wahrgenommenen deskriptiven Norm \texttt{desnormp3} mit Bezug zum Einhalten des Abstands von 1.5m zu anderen Personen auf die Intention, diese Verhaltensregel zu befolgen. Untersuche auch den Zusammenhang zwischen den über die Zeit stabilen Anteilen der Prädiktoren und dem Kriterium.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Transformiere zuerst die Prädiktoren in jeweils einen \emph{within}- und einen \emph{between}-Prädiktor.
+  \item
+    Schätze ein geeignetes Null-Modell mit \emph{random intercept} als Referenz.
+  \item
+    Schätze das hybride \emph{within-between} Panelmodell mit \emph{random intercept}.
+  \item
+    Nimm zusätzlich das eine Dummy-Variable für Ab-50-Jährige als Prädiktor auf.
+  \item
+    Prüfe, ob sich die kausale Effekte zwischen ab und unter 50-Jährigen unterscheiden.
+  \item
+    Schätze das hybride \emph{within-between} Panelmodell mit \emph{random slope} für die kausalen Effekte.
+  \item
+    Prüfe auch anhand dieser Modelle, ob sich die kausale Effekte zwischen ab und unter 50-Jährigen unterscheiden.
+  \item
+    Prüfe, ob sich die kausalen Effekte der Einstellung und der wahrgenommenen deskriptiven Norm nach dem mittleren Personen-Niveau des jeweiligen Prädiktors unterscheiden.
+  \end{itemize}
+\item
+  Spezifiziere, schätze und interpretiere ein eigenes hybrides \emph{within-between} Panelmodell mit Daten aus dem Beispieldatensatz.
+\end{enumerate}
 
   \bibliography{book.bib,packages.bib,references.bib}
 
