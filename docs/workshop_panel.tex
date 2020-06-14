@@ -132,9 +132,11 @@
 \item
   Der Mini-Workshop bietet eine \emph{pragmatische} Einführung in die Analyse von Panel-Daten aus Erhebungen mit mindestens drei Wellen. Konkret liegt der Fokus auf so genannten \emph{micro panels}, also Datensätzen mit relativ vielen Fällen und relativ wenigen Messzeitpunkten (das klassische Befragungspanel).
 \item
-  In der Analyse beschränken uns hier auf Varianten der \emph{linearen} Regressionsmodelle. Wir beginnen mit den grundlegenden \emph{fixed effects} und \emph{random effects} Modellen. Dann betrachten wir das \emph{within-between} Modell, das als eine Integration des \emph{fixed effects} Modell in das \emph{random effects} Modell verstanden werden kann. Dies ist auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.
+  In der Analyse beschränken uns hier auf Varianten der \emph{linearen} Regressionsmodelle. Wir beginnen mit den grundlegenden \emph{fixed effects} und \emph{random effects} Modellen. Dann betrachten wir das \emph{within-between} Modell, das als eine Integration des \emph{fixed effects} Modell in das \emph{random effects} Modell verstanden werden kann.
 \item
-  Wir schätzen die Modelle mit etablierten \emph{least-squares} und \emph{maximum likelihood} Methoden. Gerade bei den \emph{within-between} Modellen sind bayesianische Schätzmethoden, z.B. \emph{MCMC sampling} (implementiert in \href{https://mc-stan.org/}{Stan}), unabhängig von statistisch-philosophischen Überlegungen sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.
+  Die Inhalte sind hoffentlich auch eine gute Grundlage für den Einstieg in verschiedene Erweiterungen, zum Beispiel zu verallgemeinerten linearen Modellen oder zu Wachstumskurvenmodellen. Diese sind aber nicht Teil dieses Mini-Workshops.
+\item
+  Wir schätzen die Modelle mit etablierten \emph{least-squares} und \emph{maximum likelihood} Methoden. Gerade bei den \emph{random effects} und \emph{within-between} Modellen sind bayesianische Schätzmethoden, z.B. \emph{MCMC sampling} (implementiert in \href{https://mc-stan.org/}{Stan}), unabhängig von statistisch-philosophischen Überlegungen sehr interessant. Bei Interesse kann ich nur empfehlen, hier einen Einstieg zu finden.
 \item
   Zur Aufbereitung der Daten, Visualisierung und Modell-Schätzung verwenden wir \texttt{R} mit dem \texttt{tidyverse} und eine kleine Zahl spezialisierter Pakete für die Modellschätzung. Der Fokus des Workshops liegt aber auf der substantiellen Arbeit mit den Modellen, nicht auf der Umsetzung in \texttt{R}.
 \end{itemize}
@@ -189,9 +191,9 @@
   \begin{itemize}
   \tightlist
   \item
-    Bei der \emph{Wiederholung} geht es darum, die Modelle leicht zu verändern (durch Anpassen der \texttt{R}-Skripte aus dem Material) und die Ergebnisse der angepassten Modelle zu interpretieren.
+    Bei der \emph{Wiederholung} geht es darum, die Modelle leicht zu verändern (durch Anpassen der \texttt{R}-Skripte aus dem Material) und die Ergebnisse der angepassten Modelle zu interpretieren (jeweils die erste Aufgabe).
   \item
-    Bei der \emph{Anwendung} geht es darum, in Anlehnung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren.
+    Bei der \emph{Anwendung} geht es darum, in Anlehnung an die Beispiele eigene Modelle zu spezifizieren und diese zu interpretieren (jeweils die zweite Aufgabe).
   \end{itemize}
 \end{itemize}
 
@@ -657,10 +659,6 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
   In der pooled OLS Analyse wird einfach die Regressionsgerade durch alle Beobachtung gelegt. Es zeigt sich ein negativer Zusammenhang. Je mehr Bier konsumiert wurde, desto schwächer fällt der Hangover aus.
 \end{itemize}
 
-\begin{verbatim}
-## `geom_smooth()` using formula 'y ~ x'
-\end{verbatim}
-
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-8-1.pdf}
 
 \begin{itemize}
@@ -668,10 +666,6 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Wenn wir aber für alle acht Personen separat den Zusammenhang zwischen Bierkonsum und Kater berechnen (so genanntes no pooling Modell), ergibt sich ein anderes Bild. Für alle Personen gilt mehr oder weniger deutlich: Je mehr Bier konsumiert wurde, desto stärker fällt der Hangover aus (within).
 \end{itemize}
-
-\begin{verbatim}
-## `geom_smooth()` using formula 'y ~ x'
-\end{verbatim}
 
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-9-1.pdf}
 
@@ -691,10 +685,6 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   An diesem Beispiel lässt sich übrigens auch schön sehen, warum uns Querschnittsdaten nicht bei der Identifikation kausaler Effekte helfen, wenn wir nicht für \(Z\) kontrollieren können. Wenn wir jede Panel-Welle für sich analysieren (die Daten also als unabhängige Querschnittserhebungen behandeln), finden wir jeweils einen negativen Zusammenhang zwischen Bierkonsum und Hangover.
 \end{itemize}
-
-\begin{verbatim}
-## `geom_smooth()` using formula 'y ~ x'
-\end{verbatim}
 
 \includegraphics{workshop_panel_files/figure-latex/unnamed-chunk-10-1.pdf}
 
@@ -720,7 +710,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Separate OLS Modelle für jede Person schätzen und Koeffizienten mitteln (no pooling).
 \item
-  Alle \(X\) und \(Y\) Variablen um die Mittelwerte der Person zentrieren (within transformation).
+  Alle \(X\) und \(Y\) Variablen um die Mittelwerte der Personen zentrieren (within transformation).
 \item
   Dummy-Variablen für jede Person in das Regressionsmodell aufnehmen (least squares dummy variables {[}LSDV{]} estimation).
 \end{enumerate}
@@ -738,14 +728,14 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
     \(y_{it}-\bar{y_{i}} = (x_{it} - \bar{x_{i}})'\beta + (u_{it} - \bar{u_{i}})\) oder \(y_{it} = \beta' x_{it}' + \alpha_i + u_{it}\)
   \end{itemize}
 \item
-  In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme homogener Treatment-Effekte (entspricht der typischen Annahme im randomisierten Between-Subject-Experiment) entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
+  In Variante 1 dürfen die kausalen within-person Effekte zwischen den Personen variieren. Unter der Annahme eines homogenen Treatment-Effekts entspricht das Ergebnis asymptotisch den Varianten 2 und 3.
 
   \begin{itemize}
   \tightlist
   \item
     Der Schätzer ist aber weniger effizient, da zufällige Unterschiede in den Effekten zwischen den Personen aufgegriffen werden.
   \item
-    Im letzten Teil des Abschnitts zum within-between-Modell kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
+    Im den Abschnitten zu \emph{random effects} und \emph{within-between} Modellen kommen wir auf diesen Punkt zurück, wenn wir die Annahme homogener Treatment-Effekte lockern.
   \end{itemize}
 \end{itemize}
 
@@ -825,8 +815,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d_wi }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lm}\NormalTok{(verh1_wi }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_wi, }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }
-\NormalTok{    round, }\DecValTok{2}\NormalTok{)}
+\KeywordTok{lm}\NormalTok{(verh1_wi }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1_wi, }\DataTypeTok{data =}\NormalTok{ d_wi) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }
+    \DecValTok{2}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -860,7 +850,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(IDsosci), }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }
+\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(IDsosci), }\DataTypeTok{data =}\NormalTok{ d) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }
 \NormalTok{    round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{n =} \DecValTok{17}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
@@ -944,8 +934,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(IDsosci), }\DataTypeTok{data =}\NormalTok{ .) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{n =} \DecValTok{17}\NormalTok{)}
+\KeywordTok{lm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(IDsosci), }\DataTypeTok{data =}\NormalTok{ d) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, }
+\NormalTok{    round, }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{print}\NormalTok{(}\DataTypeTok{n =} \DecValTok{17}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1032,7 +1022,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1040,7 +1030,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ## Oneway (individual) effect Within Model
 ## 
 ## Call:
-## plm(formula = verh1 ~ verhint1, data = ., model = "within", index = "IDsosci")
+## plm(formula = verh1 ~ verhint1, data = d, model = "within", index = "IDsosci")
 ## 
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
@@ -1106,8 +1096,8 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{, }
-    \DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{, }\DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1115,7 +1105,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ## Twoways effects Within Model
 ## 
 ## Call:
-## plm(formula = verh1 ~ verhint1, data = ., effect = "twoways", 
+## plm(formula = verh1 ~ verhint1, data = d, effect = "twoways", 
 ##     model = "within", index = c("IDsosci", "wave"))
 ## 
 ## Balanced Panel: n = 576, T = 4, N = 2304
@@ -1139,8 +1129,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mdl_pfe_pdv =}\StringTok{ }\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }
-    \DataTypeTok{model =} \StringTok{"within"}\NormalTok{)}
+\NormalTok{mdl_pfe_pdv =}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{)}
 \NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
@@ -1149,7 +1138,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ## Oneway (individual) effect Within Model
 ## 
 ## Call:
-## plm(formula = verh1 ~ verhint1 + factor(wave), data = ., model = "within", 
+## plm(formula = verh1 ~ verhint1 + factor(wave), data = d, model = "within", 
 ##     index = "IDsosci")
 ## 
 ## Balanced Panel: n = 576, T = 4, N = 2304
@@ -1192,7 +1181,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Normale SE und CI}
-\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coeftest}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coeftest}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1201,17 +1190,17 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ## t test of coefficients:
 ## 
 ##               Estimate Std. Error t value Pr(>|t|)    
-## verhint1         0.329      0.017   19.79   <2e-16 ***
-## factor(wave)2    0.020      0.034    0.60    0.552    
-## factor(wave)3    0.140      0.034    4.15   <2e-16 ***
-## factor(wave)4    0.118      0.034    3.42    0.001 ***
+## verhint1        0.3288     0.0166   19.79  < 2e-16 ***
+## factor(wave)2   0.0200     0.0336    0.60  0.55169    
+## factor(wave)3   0.1400     0.0337    4.15 0.000034 ***
+## factor(wave)4   0.1178     0.0345    3.41  0.00065 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coefci}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coefci}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1226,7 +1215,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Heteroskedasticity-robust SE and CI}
-\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coeftest}\NormalTok{(}\DataTypeTok{vcov. =}\NormalTok{ vcovHC) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coeftest}\NormalTok{(}\DataTypeTok{vcov. =}\NormalTok{ vcovHC)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1235,17 +1224,17 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 ## t test of coefficients:
 ## 
 ##               Estimate Std. Error t value Pr(>|t|)    
-## verhint1         0.329      0.028   11.87   <2e-16 ***
-## factor(wave)2    0.020      0.029    0.69     0.49    
-## factor(wave)3    0.140      0.036    3.85   <2e-16 ***
-## factor(wave)4    0.118      0.032    3.70   <2e-16 ***
+## verhint1        0.3288     0.0277   11.87  < 2e-16 ***
+## factor(wave)2   0.0200     0.0290    0.69  0.49127    
+## factor(wave)3   0.1400     0.0364    3.85  0.00012 ***
+## factor(wave)4   0.1178     0.0318    3.70  0.00022 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coefci}\NormalTok{(}\DataTypeTok{vcov. =}\NormalTok{ vcovHC) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{round}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{mdl_pfe_pdv }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coefci}\NormalTok{(}\DataTypeTok{vcov. =}\NormalTok{ vcovHC)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1265,28 +1254,26 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \item
   Die Aufnahme weiterer Prädiktoren, die über die Zeit variieren, erfolgt prinzipiell wie im bekannten OLS Modell.
 \item
-  Wichtig ist, dass es bei \emph{fixed effects} Modellen explizit um das Schätzen von kausalen Effekten geht. Entsprechend bedacht sollte die Auswahl von weiteren Prädiktoren sein. Ein ``kitchen sink'' Ansatz, den man vor allem in OLS mit Querschnittsdaten sieht, ist hier nicht angebracht. Es muss (wie eigentlich immer) darauf geachtet werden, welche Koeffizienten eines Regressionsmodells kausal interpretiert werden dürfen \citep{keeleCausalInterpretationEstimated2019}. Im \emph{fixed effects} Modell müssen wir uns das ganz explizit vergegenwärtigen und in der Ergebnisdarstellung berücksichtigen, da die Modellklasse kausale Effekte impliziert.
+  Wichtig ist, dass es bei \emph{fixed effects} Modellen explizit um das Schätzen von kausalen Effekten geht. Entsprechend bedacht sollte die Auswahl von weiteren Prädiktoren sein. Ein ``kitchen sink'' Ansatz, den man vor allem in Regressionsanalysen mit Querschnittsdaten sieht, ist hier nicht angebracht. Es muss (wie eigentlich immer) darauf geachtet werden, welche Koeffizienten eines Regressionsmodells kausal interpretiert werden dürfen \citep{keeleCausalInterpretationEstimated2019}. Im \emph{fixed effects} Modell müssen wir uns das ganz explizit vergegenwärtigen und in der Ergebnisdarstellung berücksichtigen, da die Modellklasse kausale Effekte impliziert.
 \item
   Nach der TPB dürfen wir dieses Modell annehmen, da die drei Prädiktoren auf derselben kausalen Stufe stehen: Verhaltensintention \textasciitilde{} Einstellung + Deskriptive Norm + Injunktive Norm. Hier schätzen wir das Modell für die Verhaltensintention \emph{Rausgehen ohne triftigen Grund}.
 \end{itemize}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\NormalTok{ein1 }\OperatorTok{+}\StringTok{ }\NormalTok{desnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{injnormp1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }
-    \DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\KeywordTok{plm}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\NormalTok{ein1 }\OperatorTok{+}\StringTok{ }\NormalTok{desnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{injnormp1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }
+    \DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 6 x 5
-##   term          estimate std.error statistic p.value
-##   <chr>            <dbl>     <dbl>     <dbl>   <dbl>
-## 1 ein1              0.31      0.02     12.4     0   
-## 2 desnormp1         0.05      0.03      1.56    0.12
-## 3 injnormp1         0.1       0.03      3.31    0   
-## 4 factor(wave)2     0.21      0.05      4.69    0   
-## 5 factor(wave)3     0.24      0.05      5.3     0   
-## 6 factor(wave)4     0.39      0.05      8.32    0
+##               Estimate Std. Error t-value Pr(>|t|)
+## ein1             0.311      0.025    12.5  3.8e-34
+## desnormp1        0.046      0.029     1.6  1.2e-01
+## injnormp1        0.098      0.030     3.3  9.6e-04
+## factor(wave)2    0.214      0.046     4.7  2.9e-06
+## factor(wave)3    0.245      0.046     5.3  1.3e-07
+## factor(wave)4    0.393      0.047     8.3  1.8e-16
 \end{verbatim}
 
 \begin{itemize}
@@ -1354,7 +1341,7 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 \begin{itemize}
 \tightlist
 \item
-  Within-person Transformation entfernt die gesamte between-person Varianz aus den Daten: \(\bar{y_{i}} = 0\).
+  \emph{Within-person} Transformation entfernt die gesamte \emph{between-person} Varianz aus den Daten: \(\bar{y_{i}} = 0\).
 \item
   Daher können innerhalb der Personen invariante Merkmale keine Unterschiede erklären.
 \end{itemize}
@@ -1394,20 +1381,18 @@ veruns & Ich bin verunsichert durch die Corona-Krise.\\
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{*}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
-\StringTok{    }\KeywordTok{tidy}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{*}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"within"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summary}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 5 x 5
-##   term           estimate std.error statistic p.value
-##   <chr>             <dbl>     <dbl>     <dbl>   <dbl>
-## 1 verhint1           0.34      0.03     13.2     0   
-## 2 factor(wave)2      0.02      0.03      0.59    0.55
-## 3 factor(wave)3      0.14      0.03      4.14    0   
-## 4 factor(wave)4      0.12      0.03      3.42    0   
-## 5 verhint1:C_sex    -0.01      0.03     -0.39    0.7
+##                Estimate Std. Error t-value Pr(>|t|)
+## verhint1          0.336      0.026   13.15  1.0e-37
+## factor(wave)2     0.020      0.034    0.59  5.5e-01
+## factor(wave)3     0.140      0.034    4.14  3.6e-05
+## factor(wave)4     0.118      0.034    3.42  6.5e-04
+## verhint1:C_sex   -0.013      0.033   -0.39  7.0e-01
 \end{verbatim}
 
 \begin{itemize}
@@ -1435,7 +1420,7 @@ By controlling out context, FE models effectively cut out much of what is going 
 \item
   Wir interessieren uns aber häufig (auch) für die Unterschiede zwischen Einheiten (Personen). Das \emph{fixed effects} Modell macht Antworten auf solche Fragen unmöglich.
 \item
-  Ein weiterer, damit unverbundener Nachteil des \emph{fixed effects} Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie sind nicht personenspezifisch).
+  Ein weiterer, damit unverbundener Nachteil des \emph{fixed effects} Modells ist die starke Anfälligkeit für Messfehler. Die Transformation verringert die wahre Varianz deutlich, während große Teile der Messfehlervarianz erhalten bleiben (sie ist nicht personenspezifisch).
 \end{itemize}
 
 \hypertarget{uxfcbungsaufgaben-2}{%
@@ -1445,14 +1430,14 @@ By controlling out context, FE models effectively cut out much of what is going 
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben \texttt{ein3}, auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
+  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben (\texttt{ein3}), auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 1.
 
   \begin{itemize}
   \tightlist
   \item
     Verwende jetzt \texttt{plm} für die Schätzung.
   \item
-    Nimm zusätzlich die wahrgenommene deskriptive Norm \texttt{desnormp3} in das Modell auf.
+    Nimm zusätzlich die wahrgenommene deskriptive Norm (\texttt{desnormp3}) in das Modell auf.
   \item
     Prüfe, ob sich die Effekte nach Geschlecht (\texttt{C\_sex}) unterscheiden.
   \end{itemize}
@@ -1571,7 +1556,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \item
   Nach der traditionellen Sichtweise der Ökonometrie spricht das Verwerfen der \(H_0\) im Hausman-Test gegen das Schätzen eines \emph{random effects} Modells.
 \item
-  Da das \emph{random effects} Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das \emph{fixed effects} Modell per Definition scheitert, lässt sich die Wahl des \emph{random effects} Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen.
+  Da das \emph{random effects} Modell in der Lage ist, Forschungsfragen zu beantworten, an denen das \emph{fixed effects} Modell per Definition scheitert, lässt sich die Wahl des \emph{random effects} Modells auch inhaltlich begründen --- ohne einen Hausman-Test durchzuführen \citep{bellFixedRandomEffects2019}.
 \item
   Der Hausman-Test kann mit der Funktion \texttt{plm::phtest()} durchgeführt werden.
 \end{itemize}
@@ -1609,7 +1594,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Einfaches RE Modell}
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1618,7 +1603,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 ##    (Swamy-Arora's transformation)
 ## 
 ## Call:
-## plm(formula = verh1 ~ verhint1, data = ., model = "random", index = "IDsosci")
+## plm(formula = verh1 ~ verhint1, data = d, model = "random", index = "IDsosci")
 ## 
 ## Balanced Panel: n = 576, T = 4, N = 2304
 ## 
@@ -1649,8 +1634,8 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Mit zusätzlichem Faktor Welle}
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{, }
-    \DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1, }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{, }\DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\StringTok{    }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1659,7 +1644,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 ##    (Swamy-Arora's transformation)
 ## 
 ## Call:
-## plm(formula = verh1 ~ verhint1, data = ., effect = "twoways", 
+## plm(formula = verh1 ~ verhint1, data = d, effect = "twoways", 
 ##     model = "random", index = c("IDsosci", "wave"))
 ## 
 ## Balanced Panel: n = 576, T = 4, N = 2304
@@ -1692,7 +1677,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Mit FE für Welle}
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave), }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \StringTok{"IDsosci"}\NormalTok{, }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }
 \StringTok{    }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
@@ -1702,7 +1687,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 ##    (Swamy-Arora's transformation)
 ## 
 ## Call:
-## plm(formula = verh1 ~ verhint1 + factor(wave), data = ., model = "random", 
+## plm(formula = verh1 ~ verhint1 + factor(wave), data = d, model = "random", 
 ##     index = "IDsosci")
 ## 
 ## Balanced Panel: n = 576, T = 4, N = 2304
@@ -1737,7 +1722,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{# Mit Prädiktor auf Personenebene (funktioniert nicht in FE, siehe oben)}
-\NormalTok{d }\OperatorTok{%>%}\StringTok{ }\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\NormalTok{C_sex, }\DataTypeTok{data =}\NormalTok{ ., }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{, }
+\KeywordTok{plm}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\NormalTok{verhint1 }\OperatorTok{+}\StringTok{ }\NormalTok{C_sex, }\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{index =} \KeywordTok{c}\NormalTok{(}\StringTok{"IDsosci"}\NormalTok{, }\StringTok{"wave"}\NormalTok{), }\DataTypeTok{model =} \StringTok{"random"}\NormalTok{, }
     \DataTypeTok{effect =} \StringTok{"twoways"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
@@ -1747,7 +1732,7 @@ The idea that the characteristics we don't (or can't) measure (like personality 
 ##    (Swamy-Arora's transformation)
 ## 
 ## Call:
-## plm(formula = verh1 ~ verhint1 + C_sex, data = ., effect = "twoways", 
+## plm(formula = verh1 ~ verhint1 + C_sex, data = d, effect = "twoways", 
 ##     model = "random", index = c("IDsosci", "wave"))
 ## 
 ## Balanced Panel: n = 576, T = 4, N = 2304
@@ -1812,9 +1797,9 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 
 \begin{itemize}
 \item
-  Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
+  Historische Gründe und disziplinäre Entwicklungen: z.B. Ökonometriker*innen bevorzugen fast immer Least Squares, andere Disziplinen Maximum Likelihood oder Bayesianische Methoden.
 \item
-  Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effekte, \ldots{} . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die Ökonometriker umtreiben.
+  Viele Sozialwissenschaften haben kompliziertere Datenstrukturen als das typische ökonometrische Panel, z.B. mehr als zwei Ebenen, nicht-hierarchische Datenstrukturen, heterogene Treatment-Effekte, \ldots{} . Die flexible Modellierung solcher Strukturen gilt oft als wichtiger als die enger gefassten Schätz- und Identifikationsfragen, die die Ökonometrie umtreibt.
 \item
   Die Ökonometrie betrachtet Abhängigkeitsstrukturen als eine Störgröße, deren Einfluss in den Modellen beschränkt werden soll. Andere sozialwissenschaftliche Disziplinen interessieren sich (auch, gerade) für diese Strukturen und ihre Konsequenzen.
 \end{itemize}
@@ -2000,7 +1985,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \item
   Wir könnten z.B. die geographische Region, in der die Personen leben, als einen weiteren, hierarchisch oberhalb der Person angesiedelten Faktor aufnehmen. Hätten wir eine sehr große Stichprobe mit ausreichend geographischer Variation, wäre dies spannend, da wir uns durchaus regionale Unterschiede vorstellen könnten.
 \item
-  In Panel-Modellen liegt die Idee nahe, \emph{random effects} für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Spezifikation wird auch \emph{kreuzklassifiziert} / \emph{cross-classified} / \emph{crossed} genannt.
+  In Panel-Modellen liegt die Idee nahe, \emph{random effects} für die Panel-Wellen aufzunehmen. Dieser Faktor ist nicht hierarchisch zu den Personen. Stattdessen gehört jede Messung zu genau einer Person und genau einer Welle. Diese Struktur wird auch \emph{kreuzklassifiziert} / \emph{cross-classified} / \emph{crossed} genannt.
 
   \begin{itemize}
   \tightlist
@@ -2019,11 +2004,6 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \KeywordTok{lmer}\NormalTok{(verh1 }\OperatorTok{~}\StringTok{ }\DecValTok{1} \OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{wave), }\DataTypeTok{data =}\NormalTok{ d) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{icc}\NormalTok{(}\DataTypeTok{by_group =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
-## Model failed to converge with max|grad| = 0.00262857 (tol = 0.002, component 1)
-\end{verbatim}
 
 \begin{verbatim}
 ## # ICC by Group
@@ -2502,43 +2482,39 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \CommentTok{# Modelle mit Prädiktoren}
 \NormalTok{m1_int1 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\NormalTok{ein1 }\OperatorTok{+}\StringTok{ }\NormalTok{desnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{injnormp1 }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }\NormalTok{IDsosci), }
     \DataTypeTok{data =}\NormalTok{ d)}
-\NormalTok{m1_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{(}\DataTypeTok{effects =} \StringTok{"fixed"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\NormalTok{m1_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 7 x 7
-##   effect term          estimate std.error statistic    df p.value
-##   <chr>  <chr>            <dbl>     <dbl>     <dbl> <dbl>   <dbl>
-## 1 fixed  (Intercept)      0.21       0.05      3.92 1623.       0
-## 2 fixed  ein1             0.48       0.02     25.6  1950        0
-## 3 fixed  desnormp1        0.1        0.03      3.94 2297.       0
-## 4 fixed  injnormp1        0.12       0.03      4.55 2292.       0
-## 5 fixed  factor(wave)2    0.15       0.05      3.35 1686.       0
-## 6 fixed  factor(wave)3    0.18       0.05      3.85 1703.       0
-## 7 fixed  factor(wave)4    0.290      0.05      6.22 1740.       0
+##               Estimate Std. Error   df t value Pr(>|t|)
+## (Intercept)       0.21      0.053 1623     3.9  9.1e-05
+## ein1              0.48      0.019 1950    25.6 1.7e-124
+## desnormp1         0.10      0.026 2297     3.9  8.5e-05
+## injnormp1         0.12      0.026 2292     4.5  5.7e-06
+## factor(wave)2     0.15      0.046 1686     3.4  8.2e-04
+## factor(wave)3     0.18      0.047 1703     3.8  1.2e-04
+## factor(wave)4     0.29      0.047 1740     6.2  6.3e-10
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{m2_int1 =}\StringTok{ }\KeywordTok{lmer}\NormalTok{(verhint1 }\OperatorTok{~}\StringTok{ }\NormalTok{ein1 }\OperatorTok{+}\StringTok{ }\NormalTok{desnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{injnormp1 }\OperatorTok{+}\StringTok{ }\NormalTok{C_sex }\OperatorTok{+}\StringTok{ }\KeywordTok{factor}\NormalTok{(wave) }\OperatorTok{+}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{|}\StringTok{ }
 \StringTok{    }\NormalTok{IDsosci), }\DataTypeTok{data =}\NormalTok{ d)}
-\NormalTok{m2_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{tidy}\NormalTok{(}\DataTypeTok{effects =} \StringTok{"fixed"}\NormalTok{) }\OperatorTok{%>%}\StringTok{ }\KeywordTok{mutate_if}\NormalTok{(is.numeric, round, }\DecValTok{2}\NormalTok{)}
+\NormalTok{m2_int1 }\OperatorTok{%>%}\StringTok{ }\KeywordTok{summary}\NormalTok{() }\OperatorTok{%>%}\StringTok{ }\KeywordTok{coef}\NormalTok{()}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## # A tibble: 8 x 7
-##   effect term          estimate std.error statistic    df p.value
-##   <chr>  <chr>            <dbl>     <dbl>     <dbl> <dbl>   <dbl>
-## 1 fixed  (Intercept)      0.31       0.06      5.01 1211.       0
-## 2 fixed  ein1             0.48       0.02     25.6  1938.       0
-## 3 fixed  desnormp1        0.1        0.03      3.94 2296.       0
-## 4 fixed  injnormp1        0.12       0.03      4.52 2292.       0
-## 5 fixed  C_sex           -0.16       0.05     -3.24  518.       0
-## 6 fixed  factor(wave)2    0.16       0.05      3.36 1687.       0
-## 7 fixed  factor(wave)3    0.18       0.05      3.86 1704.       0
-## 8 fixed  factor(wave)4    0.290      0.05      6.23 1741.       0
+##               Estimate Std. Error   df t value Pr(>|t|)
+## (Intercept)       0.31      0.062 1211     5.0  6.3e-07
+## ein1              0.48      0.019 1938    25.6 4.4e-125
+## desnormp1         0.10      0.026 2296     3.9  8.5e-05
+## injnormp1         0.12      0.026 2292     4.5  6.6e-06
+## C_sex            -0.16      0.050  518    -3.2  1.3e-03
+## factor(wave)2     0.16      0.046 1687     3.4  8.0e-04
+## factor(wave)3     0.18      0.047 1704     3.9  1.2e-04
+## factor(wave)4     0.29      0.047 1741     6.2  5.8e-10
 \end{verbatim}
 
 \begin{Shaded}
@@ -2648,7 +2624,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben \texttt{ein3}, auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 3.
+  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben (\texttt{ein3}), auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 2.
 
   \begin{itemize}
   \tightlist
@@ -2657,7 +2633,7 @@ Econometrics deal mostly with non-experimental data. Great emphasis is put on sp
   \item
     Schätze dann das \emph{random intercept} Panelmodell.
   \item
-    Nimm zusätzlich die wahrgenommene deskriptive Norm \texttt{desnormp3} in das Modell auf.
+    Nimm zusätzlich die wahrgenommene deskriptive Norm (\texttt{desnormp3}) in das Modell auf.
   \item
     Prüfe, ob sich die Intention zwischen Männer und Frauen unterscheidet (\texttt{C\_sex}).
   \end{itemize}
@@ -3059,7 +3035,7 @@ While singular models are statistically well defined (it is theoretically sensib
 \def\labelenumi{\arabic{enumi})}
 \tightlist
 \item
-  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben \texttt{ein3}, auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 4.
+  Schätze den kausalen Effekt der Einstellung zum Verhalten, weniger als 1.5m Abstand zu Personen zu halten, die nicht im gleichen Haushalt leben (\texttt{ein3}), auf die diesbezügliche Verhaltensintention (\texttt{verhint3}). Berücksichtige dabei die Periodeneffekte der Panelwellen. Siehe dazu auch Übung 4.
 
   \begin{itemize}
   \tightlist
@@ -3084,13 +3060,13 @@ While singular models are statistically well defined (it is theoretically sensib
 
 \begin{itemize}
 \item
-  Ein häufiger Einwand gegen \emph{random effects} Panelmodelle ist, dass die Annahme nicht korrelierter über die Zeit konstanter Variablen (beobachtet wie unbeobachtet) so stark ist, dass sie in den Sozialwissenschaften eigentlich nie einzuhalten ist (siehe Abschnitt 4.1).
+  Ein häufiger Einwand gegen \emph{random effects} Panelmodelle ist, dass die Annahme nicht mit den \emph{random intercepts} korrelierter, über die Zeit konstanter Variablen (beobachtet wie unbeobachtet) so stark ist, dass sie in den Sozialwissenschaften eigentlich nie einzuhalten ist (siehe Abschnitt 4.1).
 \item
   Trotzdem sind \emph{random effects} Panelmodelle weit verbreitet, da sie uns erlauben, über die Zeit variierende Variablen und über die Zeit konstante Personenmerkmale als Prädiktoren in ein Modell aufzunehmen. Häufig sind wir eben sowohl an kausalen Effekten als auch an Unterschieden zwischen Personen interessiert.
 \item
   Außerdem ist gerade die Möglichkeit, unspezifische Heterogenität in Treatment-Effekten zuzulassen, in den Sozialwissenschaften sehr attraktiv. Eigentlich gehen wir fast immer davon aus, dass Effekte variabel sind und nicht alle Personen gleichermaßen betreffen.
 \item
-  Das hybride \emph{within-between} Modell verspricht, unverzerrte kausale \emph{within-person} Effekte der über die Zeit variierenden Prädiktoren \emph{und} \emph{between-person} Vergleiche innerhalb eines Modells zu schätzen.
+  Das hybride \emph{within-between} Modell verspricht, unverzerrte kausale \emph{within-person} Effekte der über die Zeit variierenden Prädiktoren \textbf{und} \emph{between-person} Vergleiche innerhalb eines Modells zu schätzen.
 \item
   Dazu werden die über die Zeit variierenden Prädiktoren transformiert und in zwei Variablen aufgeteilt:
 
